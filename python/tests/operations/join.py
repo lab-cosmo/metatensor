@@ -1,3 +1,4 @@
+import time
 import unittest
 from os import path
 
@@ -7,6 +8,7 @@ import equistore
 from equistore import Labels, TensorBlock, TensorMap
 
 
+# import warnings
 DATA_ROOT = path.join(path.dirname(__file__), "..", "data")
 
 
@@ -15,6 +17,7 @@ class TestJoinTensorMap(unittest.TestCase):
         self.ps = equistore.load(
             path.join(DATA_ROOT, "qm7-power-spectrum.npz"), use_numpy=True
         )
+
         self.se = equistore.load(
             path.join(DATA_ROOT, "qm7-spherical-expansion.npz"), use_numpy=True
         )
@@ -75,6 +78,51 @@ class TestJoinTensorMap(unittest.TestCase):
         tensor_prop = np.unique(ps_joined.block(0).properties["tensor"])
         self.assertEqual(set(tensor_prop), set((0, 1, 2)))
 
+    def test_performance_join_properties(self):
+        """Test performance of public join function with
+        three tensormaps along `properties`.
+        Compare it with the performance of a comparable np.vstack function"""
+
+        start = time.time()
+        ps_joined = equistore.join([self.ps, self.ps, self.ps], axis="properties")
+        t_join = time.time() - start
+
+        # print(self.ps)
+
+        start = time.time()
+        ps = self.ps.keys_to_samples("species_center")
+        ps = ps.keys_to_properties(["species_neighbor_1", "species_neighbor_2"])
+
+        np.vstack([ps.block(0).values, ps.block(0).values, ps.block(0).values])
+
+        np.vstack(
+            [
+                ps.block(0).gradient("positions").data,
+                ps.block(0).gradient("positions").data,
+                ps.block(0).gradient("positions").data,
+            ]
+        )
+        # test property names
+        t_np = time.time() - start
+
+        names = self.ps.block(0).properties.names
+        self.assertEqual(ps_joined.block(0).properties.names, ("tensor",) + names)
+
+        # test property values
+        tensor_prop = np.unique(ps_joined.block(0).properties["tensor"])
+        self.assertEqual(set(tensor_prop), set((0, 1, 2)))
+
+        """
+        if t_join > 10 * t_np:
+            warnings.warn("join is siginifcantly slower\n"\
+                          " than np.vstack t_numpy:{}, t_join: {}".format(t_np,t_join))
+
+        """
+
+        performance_threshold = 25 * t_np
+
+        self.assertLess(t_join, performance_threshold)
+
     def test_join_samples(self):
         """Test public join function with three tensormaps along `samples`."""
         ps_joined = equistore.join([self.ps, self.ps, self.ps], axis="samples")
@@ -83,6 +131,44 @@ class TestJoinTensorMap(unittest.TestCase):
         self.assertEqual(
             len(ps_joined.block(0).samples), 3 * len(self.ps.block(0).samples)
         )
+
+    def test_performance_join_samples(self):
+        """Test performance of public join function with
+        three tensormaps along `properties`.
+        Compare it with the performance of a comparable np.vstack function"""
+
+        start = time.time()
+        equistore.join([self.ps, self.ps, self.ps], axis="properties")
+        t_join = time.time() - start
+
+        # print(self.ps)
+
+        start = time.time()
+        ps = self.ps.keys_to_samples("species_center")
+        ps = ps.keys_to_properties(["species_neighbor_1", "species_neighbor_2"])
+
+        np.hstack([ps.block(0).values, ps.block(0).values, ps.block(0).values])
+
+        np.hstack(
+            [
+                ps.block(0).gradient("positions").data,
+                ps.block(0).gradient("positions").data,
+                ps.block(0).gradient("positions").data,
+            ]
+        )
+        # test property names
+        t_np = time.time() - start
+
+        """
+        if t_join > 10 * t_np:
+            warnings.warn("join is siginifcantly slower\n"\
+                          " than np.vstack t_numpy:{}, t_join: {}".format(t_np,t_join))
+
+        """
+
+        performance_threshold = 25 * t_np
+
+        self.assertLess(t_join, performance_threshold)
 
     def test_join_error(self):
         """Test error with unknown `axis` keyword."""

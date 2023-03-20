@@ -18,6 +18,14 @@ def join(tensor_maps: List[TensorMap], axis: str):
     ``axis='properties'`` it will be the joined along the properties of the
     TensorMaps and if ``axis='samples'`` it will be the along the samples.
 
+    If ``axis='properties'`` is specified, the components of the TensorBlocks
+    have to be empty.
+
+    .. code-block:: python
+
+        joined_tensor = join([tensor_a,tensor_b],axis="samples")
+        joined_tensor = join([tensor_a,tensor_b],axis="properties")
+
     Possible clashes of the meta data like the property names are resolved by
     one of the three following strategies:
 
