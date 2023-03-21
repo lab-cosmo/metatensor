@@ -86,30 +86,7 @@ class AddSuite:
     def setup(self):
         self.tm = tensor_map() # function from tests
 
-    def time_equistore_add(self):
-        equistore.add(self.tm, self.tm)
-
-    def peakmem_equistore_add(self):
-        equistore.add(self.tm, self.tm)
-
     def mem_equistore_add(self):
-        #return self.tm # crashes
-        return self.tm.blocks() # works
+        print("START", flush=True)
+        return self.tm # crashes
         #return equistore.add(self.tm, self.tm)
-
-    def time_numpy_add(self):
-        v = []
-        g = []
-        for block in self.tm.blocks():
-            v.append( block.values + block.values )
-            for _, gradient in block.gradients():
-                g.append( gradient.data + gradient.data )
-
-    def peakmem_numpy_add(self):
-        v = []
-        g = []
-        for block in self.tm.blocks():
-            v.append( block.values + block.values )
-            for _, gradient in block.gradients():
-                g.append( gradient.data + gradient.data )
-        return v, g
