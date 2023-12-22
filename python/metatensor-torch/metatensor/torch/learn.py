@@ -4,7 +4,7 @@ import sys
 import torch
 
 import metatensor.learn
-from metatensor.torch import Labels, TensorBlock, TensorMap
+from metatensor.torch import Labels, LabelsEntry, TensorBlock, TensorMap
 
 
 # ==================================================================================== #
@@ -22,6 +22,7 @@ module = importlib.util.module_from_spec(spec)
 # be made to the `metatensor/learn/_classes.py` file, which is used in non
 # TorchScript mode.
 module.__dict__["Labels"] = Labels
+module.__dict__["LabelsEntry"] = LabelsEntry
 module.__dict__["TensorBlock"] = TensorBlock
 module.__dict__["TensorMap"] = TensorMap
 module.__dict__["torch_jit_is_scripting"] = torch.jit.is_scripting

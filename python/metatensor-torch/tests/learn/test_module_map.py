@@ -1,6 +1,6 @@
 import pytest
 import torch
-from torch.nn import Module, ModuleDict, Sigmoid
+from torch.nn import Module, Sigmoid
 
 from metatensor.torch import allclose_raise
 from metatensor.torch.learn.nn import Linear, ModuleMap
@@ -35,17 +35,25 @@ class TestModuleMap:
         ],
     )
     def test_module_tensor(self, tensor):
-        module_map = ModuleDict()
+        modules = []
         for key in tensor.keys:
-            module_map[ModuleMap.module_key(key)] = MockModule(
-                in_features=len(tensor.block(key).properties), out_features=5
+            modules.append(
+                MockModule(
+                    in_features=len(tensor.block(key).properties), out_features=5
+                )
             )
-        tensor_module = ModuleMap(module_map)
+
+        tensor_module = ModuleMap(tensor.keys, modules)
         with torch.no_grad():
             out_tensor = tensor_module(tensor)
 
-        for key, block in tensor.items():
-            module = module_map[Linear.module_key(key)]
+        for i, item in enumerate(tensor.items()):
+            key, block = item
+            module = modules[i]
+            assert (
+                tensor_module.get_module(key) is module
+            ), "modules should be initialized in the same order as keys"
+
             with torch.no_grad():
                 ref_values = module(block.values)
             out_block = out_tensor.block(key)
@@ -69,8 +77,13 @@ class TestModuleMap:
         with torch.no_grad():
             out_tensor = tensor_module(tensor)
 
-        for key, block in tensor.items():
-            module = tensor_module.module_map[Linear.module_key(key)]
+        for i, item in enumerate(tensor.items()):
+            key, block = item
+            module = tensor_module.modules[i]
+            assert (
+                tensor_module.get_module(key) is module
+            ), "modules should be initialized in the same order as keys"
+
             with torch.no_grad():
                 ref_values = module(block.values)
             out_block = out_tensor.block(key)
@@ -97,8 +110,13 @@ class TestModuleMap:
         with torch.no_grad():
             out_tensor = tensor_module(tensor)
 
-        for key, block in tensor.items():
-            module = tensor_module.module_map[Linear.module_key(key)]
+        for i, item in enumerate(tensor.items()):
+            key, block = item
+            module = tensor_module.modules[i]
+            assert (
+                tensor_module.get_module(key) is module
+            ), "modules should be initialized in the same order as keys"
+
             with torch.no_grad():
                 ref_values = module(block.values)
             out_block = out_tensor.block(key)
@@ -118,18 +136,23 @@ class TestModuleMap:
         ],
     )
     def test_torchscript_module_tensor(self, tensor):
-        module_map = ModuleDict()
+        modules = []
         for key in tensor.keys:
-            module_map[ModuleMap.module_key(key)] = MockModule(
-                in_features=len(tensor.block(key).properties), out_features=5
+            modules.append(
+                MockModule(
+                    in_features=len(tensor.block(key).properties), out_features=5
+                )
             )
-        tensor_module = ModuleMap(module_map)
+        tensor_module = ModuleMap(tensor.keys, modules)
         ref_tensor = tensor_module(tensor)
 
         tensor_module_script = torch.jit.script(tensor_module)
         out_tensor = tensor_module_script(tensor)
 
         allclose_raise(ref_tensor, out_tensor)
+
+        # tests if member functions work that do not appear in forward
+        tensor_module_script.get_module(tensor.keys[0])
 
     @pytest.mark.parametrize(
         "tensor",
@@ -147,3 +170,6 @@ class TestModuleMap:
         out_tensor = tensor_module_script(tensor)
 
         allclose_raise(ref_tensor, out_tensor)
+
+        # tests if member functions work that do not appear in forward
+        tensor_module_script.get_module(tensor.keys[0])

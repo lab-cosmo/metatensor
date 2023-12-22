@@ -1,8 +1,8 @@
 from copy import deepcopy
-from typing import List, Optional, Union
+from typing import List, Optional, Sequence, Union
 
 import torch
-from torch.nn import Module, ModuleDict
+from torch.nn import Module, ModuleList
 
 from .._classes import Labels, LabelsEntry, TensorBlock, TensorMap
 
@@ -11,8 +11,8 @@ from .._classes import Labels, LabelsEntry, TensorBlock, TensorMap
 class ModuleMapInterface(torch.nn.Module):
     """
     This interface required for TorchScript to index the :py:class:`torch.nn.ModuleDict`
-    with non-literals in ModuleMap. Any module that is used with ModuleMap
-    must implement this interface to be TorchScript compilable.
+    with non-literals in ModuleMap. Any module that is used with ModuleMap must
+    implement this interface to be TorchScript compilable.
 
     Note that the *typings and argument names must match exactly* so that an interface
     is correctly implemented.
@@ -28,12 +28,20 @@ class ModuleMapInterface(torch.nn.Module):
 
 class ModuleMap(Module):
     """
-    A wrapper around a :py:class:`torch.nn.ModuleDict` to apply each module to the
-    corresponding tensor block in the map using the dict key.
+    A class imitating :py:class:`torch.nn.ModuleDict` that in its forward function
+    applies each module in :param modules: to the corresponding tensor block using
+    :param in_keys:.
 
-    :param module_map:
-        A dictionary of modules with tensor map keys as dict keys
-        each module is applied on a block
+    :param in_keys:
+        A :py:class:`metatensor.Labels` object that determines the keys of the module
+        map that are ass the TensorMaps that are assumed to be in the input tensor map
+        in the :py:meth:`forward` function.
+
+    :param modules:
+        A sequence of modules applied in the :py:meth:`forward` function on the input
+        :py:class:`TensorMap`. Each module corresponds to one :py:class:`LabelsEntry` in
+        :param in_keys: that determines on which :py:class:`TensorBlock` the module is
+        applied on.  :param modules: and :param in_keys: must match in length.
 
     :param out_tensor:
         A tensor map that is used to determine the properties labels of the output.
@@ -44,6 +52,7 @@ class ModuleMap(Module):
 
         >>> import torch
         >>> import numpy as np
+        >>> from copy import deepcopy
         >>> from metatensor import Labels, TensorBlock, TensorMap
         >>> from metatensor.learn.nn import ModuleMap
 
@@ -85,7 +94,7 @@ class ModuleMap(Module):
         ...         ),
         ...     ),
         ...     components=[],
-        ...     properties=Labels(["properties"], np.array([[0], [1], [2]])),
+        ...     properties=Labels(["properties"], np.array([[3], [4], [5]])),
         ... )
         >>> keys = Labels(names=["key"], values=np.array([[0], [1]]))
         >>> tensor = TensorMap(keys, [block_1, block_2])
@@ -96,17 +105,12 @@ class ModuleMap(Module):
         >>> with torch.no_grad():
         ...     _ = linear.weight.copy_(torch.tensor([1.0, 1.0, 1.0]))
         ...
-        >>> module_dict = torch.nn.ModuleDict(
-        ...     [
-        ...         [ModuleMap.module_key(tensor.keys[0]), linear],
-        ...         [ModuleMap.module_key(tensor.keys[1]), linear],
-        ...     ]
-        ... )
+        >>> modules = [linear, deepcopy(linear)]
         >>> # you could also extend the module by some nonlinear activation function
 
         Create ModuleMap from this ModucDict and apply it
 
-        >>> module_map = ModuleMap(module_dict)
+        >>> module_map = ModuleMap(tensor.keys, modules)
         >>> out = module_map(tensor)
         >>> out
         TensorMap with 2 blocks
@@ -140,13 +144,25 @@ class ModuleMap(Module):
         the intended output Labels.
     """
 
-    def __init__(self, module_map: ModuleDict, out_tensor: Optional[TensorMap] = None):
+    def __init__(
+        self,
+        in_keys: Labels,
+        modules: Sequence[Module],
+        out_tensor: Optional[TensorMap] = None,
+    ):
         super().__init__()
-        self._module_map = module_map
+        if len(in_keys) != len(modules):
+            raise ValueError(
+                "in_keys and modules must match in length, but found "
+                f"{len(in_keys) != len(modules)} [len(in_keys) != len(modules)]"
+            )
+        self._in_keys: Labels = in_keys
+        self._modules_list = ModuleList(modules)
         # copy to prevent undefined behavior due to inplace changes
         if out_tensor is not None:
             out_tensor = out_tensor.copy()
         self._out_tensor = out_tensor
+        # containts the orderd Labels object
 
     @classmethod
     def from_module(
@@ -161,8 +177,9 @@ class ModuleMap(Module):
         module on each tensor block.
 
         :param in_keys:
-            The keys that are assumed to be in the input tensor map in the
-            :py:meth:`forward` function.
+            A :py:class:`metatensor.Labels` object that determines the keys of the
+            module map that are ass the TensorMaps that are assumed to be in the input
+            tensor map in the :py:meth:`forward` function.
         :param module:
             The module that is applied on each block.
         :param many_to_one:
@@ -222,10 +239,9 @@ class ModuleMap(Module):
         >>> with torch.no_grad():
         ...     _ = linear.weight.copy_(torch.tensor([1.0, 1.0, 1.0]))
         ...
-        >>> module = torch.nn.Sequential(linear)
         >>> # you could also extend the module by some nonlinear activation function
         >>> from metatensor.learn.nn import ModuleMap
-        >>> module_map = ModuleMap.from_module(tensor.keys, module)
+        >>> module_map = ModuleMap.from_module(tensor.keys, linear)
         >>> out = module_map(tensor)
         >>> out[0].values
         tensor([[ 7.],
@@ -235,15 +251,14 @@ class ModuleMap(Module):
                 [11.]], grad_fn=<MmBackward0>)
         """
         module = deepcopy(module)
-        module_map = ModuleDict()
-        for key in in_keys:
-            module_key = ModuleMap.module_key(key)
+        modules = []
+        for _ in range(len(in_keys)):
             if many_to_one:
-                module_map[module_key] = module
+                modules.append(module)
             else:
-                module_map[module_key] = deepcopy(module)
+                modules.append(deepcopy(module))
 
-        return cls(module_map, out_tensor)
+        return cls(in_keys, modules, out_tensor)
 
     def forward(self, tensor: TensorMap) -> TensorMap:
         """
@@ -270,8 +285,11 @@ class ModuleMap(Module):
         return TensorMap(tensor.keys, out_blocks)
 
     def forward_block(self, key: LabelsEntry, block: TensorBlock) -> TensorBlock:
-        module_key: str = ModuleMap.module_key(key)
-        module: ModuleMapInterface = self._module_map[module_key]
+        position = self._in_keys.position(key)
+        if position is None:
+            raise KeyError(f"key {key} not found in modules.")
+        module_idx: int = position
+        module: ModuleMapInterface = self._modules_list[module_idx]
         out_values = module.forward(block.values)
         if self._out_tensor is None:
             properties = Labels.range("_", out_values.shape[-1])
@@ -285,13 +303,37 @@ class ModuleMap(Module):
         )
 
     @property
-    def module_map(self):
+    def modules(self):
         """
-        The :py:class:`torch.nn.ModuleDict` that maps hashed module keys to a module
-        (see :py:func:`ModuleMap.module_key`)
+        :return modules:
+            torch.nn.ModulesList that was given by initialization. It is not a copy, so
+            its utility functionalities can be used to e.g. move it to GPU, so the
+            whole module map acts on tensor maps on GPU.
         """
         # type annotation in function signature had to be removed because of TorchScript
-        return self._module_map
+        return self._modules_list
+
+    @torch.jit.export
+    def get_module(self, key: LabelsEntry):
+        """
+        :param key:
+            key of module which should be returned
+
+        :return module:
+            returns he torch.nn.Module corresponding to the :param key:
+        """
+        # type annotation in function signature had to be removed because of TorchScript
+        position = self._in_keys.position(key)
+        if position is None:
+            raise KeyError(f"key {key} not found in modules.")
+        module_idx: int = position
+        module: ModuleMapInterface = self._modules_list[module_idx]
+        return module
+
+    @property
+    def in_keys(self) -> Labels:
+        """ """
+        return self._in_keys
 
     @property
     def out_tensor(self) -> Optional[TensorMap]:
@@ -300,10 +342,6 @@ class ModuleMap(Module):
         forward function.
         """
         return self._out_tensor
-
-    @staticmethod
-    def module_key(key: LabelsEntry) -> str:
-        return str(key)
 
 
 class Linear(ModuleMap):
@@ -341,9 +379,8 @@ class Linear(ModuleMap):
                 for _ in in_tensor.keys
             ]
             bias = TensorMap(keys=in_tensor.keys, blocks=blocks)
-        module_map = ModuleDict()
+        modules = []
         for key, in_block in in_tensor.items():
-            module_key = ModuleMap.module_key(key)
             out_block = out_tensor.block(key)
             module = torch.nn.Linear(
                 len(in_block.properties),
@@ -352,9 +389,9 @@ class Linear(ModuleMap):
                 in_block.values.device,
                 in_block.values.dtype,
             )
-            module_map[module_key] = module
+            modules.append(module)
 
-        super().__init__(module_map, out_tensor)
+        super().__init__(in_tensor.keys, modules, out_tensor)
 
     @classmethod
     def from_module(
@@ -406,9 +443,8 @@ class Linear(ModuleMap):
         :param bias:
             The weight tensor map from which we create the linear layers.
         """
-        module_map = ModuleDict()
+        modules = []
         for key, weights_block in weights.items():
-            module_key = ModuleMap.module_key(key)
             module = torch.nn.Linear(
                 len(weights_block.samples),
                 len(weights_block.properties),
@@ -419,9 +455,9 @@ class Linear(ModuleMap):
             module.weight = torch.nn.Parameter(weights_block.values.T)
             if bias is not None:
                 module.bias = torch.nn.Parameter(bias.block(key).values)
-            module_map[module_key] = module
+            modules.append(module)
 
-        return ModuleMap(module_map, weights)
+        return ModuleMap(weights.keys, modules, weights)
 
     def forward(self, tensor: TensorMap) -> TensorMap:
         # added to appear in doc, :inherited-members: is not compatible with torch
