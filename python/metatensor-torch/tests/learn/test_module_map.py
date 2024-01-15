@@ -5,7 +5,7 @@ from torch.nn import Module, Sigmoid
 from metatensor.torch import allclose_raise
 from metatensor.torch.learn.nn import Linear, ModuleMap
 
-from .utils import random_single_block_no_components_tensor_map
+from .utils import TORCH_KWARGS, random_single_block_no_components_tensor_map
 
 
 class MockModule(Module):
@@ -27,6 +27,8 @@ class TestModuleMap:
         in this file and the number of parameters of the test.
         """
         torch.random.manual_seed(122578741812)
+        torch.set_default_device(TORCH_KWARGS["device"])
+        torch.set_default_dtype(TORCH_KWARGS["dtype"])
 
     @pytest.mark.parametrize(
         "tensor",

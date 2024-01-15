@@ -1,8 +1,13 @@
-import functools
+from functools import partial
+
+import pytest
 
 
-# PR COMMENT maybe we can use such a function later from metatensor-operations
-#            like metatensor.operations.tests.generate_tensor_map
+torch = pytest.importorskip("torch")
+
+TORCH_KWARGS = {"device": "cpu", "dtype": torch.float32}
+
+
 def random_single_block_no_components_tensor_map(use_torch, use_metatensor_torch):
     """
     Create a dummy tensor map to be used in tests. This is the same one as the
@@ -17,18 +22,18 @@ def random_single_block_no_components_tensor_map(use_torch, use_metatensor_torch
 
         from metatensor.torch import Labels, TensorBlock, TensorMap
 
-        create_int32_array = functools.partial(torch.tensor, dtype=torch.int32)
+        create_int32_array = partial(torch.tensor, dtype=torch.int32)
     else:
         import numpy as np
 
         from metatensor import Labels, TensorBlock, TensorMap
 
-        create_int32_array = functools.partial(np.array, dtype=np.int32)
+        create_int32_array = partial(np.array, dtype=np.int32)
 
     if use_torch:
         import torch
 
-        create_random_array = torch.rand
+        create_random_array = partial(torch.rand, **TORCH_KWARGS)
     else:
         import numpy as np
 

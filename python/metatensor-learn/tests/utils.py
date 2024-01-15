@@ -15,7 +15,8 @@ from metatensor import Labels, TensorBlock, TensorMap  # noqa: E402
 from metatensor.learn.data import Dataset, IndexedDataset  # noqa: E402
 
 
-TORCH_KWARGS = {"device": "cpu", "dtype": torch.float64}
+TORCH_KWARGS = {"device": "cpu", "dtype": torch.float32}
+
 
 def random_single_block_no_components_tensor_map(use_torch, use_metatensor_torch):
     """
@@ -95,6 +96,7 @@ def random_single_block_no_components_tensor_map(use_torch, use_metatensor_torch
     block_1.add_gradient("cell", cell_gradient)
 
     return TensorMap(Labels.single(), [block_1])
+
 
 def tensor(sample_indices):
     """A dummy tensor map to be used in tests"""
