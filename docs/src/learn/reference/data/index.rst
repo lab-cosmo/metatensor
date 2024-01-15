@@ -12,16 +12,19 @@ Data utilites
 Dataset
 -------
 
-.. autofunction:: metatensor.learn.data.Dataset
+.. autoclass:: metatensor.learn.data.Dataset
+   :members:
 
-.. autofunction:: metatensor.learn.data.IndexedDataset
+.. autoclass:: metatensor.learn.data.IndexedDataset
+   :members:
 
 .. _learn-data-dataloader:
 
 Dataloader
 ----------
 
-.. autofunction:: metatensor.learn.data.DataLoader
+.. autoclass:: metatensor.learn.data.DataLoader
+   :members:
 
 .. _learn-data-collate:
 
