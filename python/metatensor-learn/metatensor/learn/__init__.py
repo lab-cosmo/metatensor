@@ -3,6 +3,16 @@ import importlib.metadata
 
 __version__ = importlib.metadata.version("metatensor-learn")
 
-from . import nn
+try:
+    import torch
+    HAS_TORCH = True
+except ImportError:
 
-__all__ = ["nn"]
+    HAS_TORCH = False
+
+
+if HAS_TORCH:
+    from . import nn
+    __all__ = ["nn"]
+
+__all__ = []
