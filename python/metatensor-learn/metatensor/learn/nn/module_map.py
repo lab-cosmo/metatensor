@@ -28,9 +28,9 @@ class ModuleMapInterface(torch.nn.Module):
 
 class ModuleMap(Module):
     """
-    A class imitating :py:class:`torch.nn.ModuleDict` that in its forward function
-    applies each module in :param modules: to the corresponding tensor block using
-    :param in_keys:.
+    A class that imitates :py:class:`torch.nn.ModuleDict`. In its forward function the
+    module at position `i` given on construction by :param modules: is applied to the
+    tensor block that corresponding to the`i`th key in :param in_keys:.
 
     :param in_keys:
         A :py:class:`metatensor.Labels` object that determines the keys of the module
@@ -307,8 +307,7 @@ class ModuleMap(Module):
         """
         :return modules:
             torch.nn.ModulesList that was given by initialization. It is not a copy, so
-            its utility functionalities can be used to e.g. move it to GPU, so the
-            whole module map acts on tensor maps on GPU.
+            its utility functionalities can be used to e.g. move the module map to GPU
         """
         # type annotation in function signature had to be removed because of TorchScript
         return self._modules_list
@@ -406,6 +405,11 @@ class Linear(ModuleMap):
         out_tensor: Optional[TensorMap] = None,
     ):
         """
+        Simplified constructor if the same module should be applied on all blocks in the
+        tensor map. It can be chosen if the separate module copies should act on the
+        blocks or exactly the same module. This effects the type of computational graph
+        created.
+
         :param in_keys:
             The keys that are assumed to be in the input tensor map in the
             :py:meth:`forward` function.
@@ -435,6 +439,8 @@ class Linear(ModuleMap):
     @classmethod
     def from_weights(cls, weights: TensorMap, bias: Optional[TensorMap] = None):
         """
+        Construct a linear module map from a tensor map.
+
         :param weights:
             The weight tensor map from which we create the linear modules.  The
             properties of the tensor map describe the input dimension and the samples
