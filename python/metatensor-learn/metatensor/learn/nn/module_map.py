@@ -1,5 +1,5 @@
 from copy import deepcopy
-from typing import List, Optional, Sequence, Union
+from typing import List, Optional, Sequence, Union, Dict
 
 import torch
 from torch.nn import Module, ModuleList
@@ -43,9 +43,9 @@ class ModuleMap(ModuleList):
         :param in_keys: that determines on which :py:class:`TensorBlock` the module is
         applied on.  :param modules: and :param in_keys: must match in length.
 
-    :param out_tensor:
-        A tensor map that is used to determine the properties labels of the output.
-        Because an arbitrary module can change the number of properties, the labels of
+    :param out_properties:
+        A dictionary of labels that is used to determine the properties labels of the
+        output.  Because a module could change the number of properties, the labels of
         the properties cannot be persevered. By default the output properties are
         relabeled using Labels.range.
 
@@ -148,7 +148,7 @@ class ModuleMap(ModuleList):
         self,
         in_keys: Labels,
         modules: Sequence[Module],
-        out_tensor: Optional[TensorMap] = None,
+        out_properties: Dict[LabelsEntry, Labels] = None
     ):
         super().__init__(modules)
         if len(in_keys) != len(modules):
@@ -157,11 +157,7 @@ class ModuleMap(ModuleList):
                 f"{len(in_keys) != len(modules)} [len(in_keys) != len(modules)]"
             )
         self._in_keys: Labels = in_keys
-        # copy to prevent undefined behavior due to inplace changes
-        if out_tensor is not None:
-            out_tensor = out_tensor.copy()
-        self._out_tensor = out_tensor
-        # containts the orderd Labels object
+        self._out_properties = out_properties
 
     @classmethod
     def from_module(
@@ -169,7 +165,7 @@ class ModuleMap(ModuleList):
         in_keys: Labels,
         module: Module,
         many_to_one: bool = True,
-        out_tensor: Optional[TensorMap] = None,
+        out_properties: Dict[LabelsEntry, Labels] = None
     ):
         """
         A wrapper around one :py:class:`torch.nn.Module` applying the same type of
@@ -185,10 +181,10 @@ class ModuleMap(ModuleList):
             Specifies if a separate module for each block is used. If `False` the module
             is deep copied for each key in the :py:attr:`in_keys`. otherwise the same
             module is used over all keys connecting the optimization of the weights.
-        :param out_tensor:
-            A tensor map that is used to determine the properties labels of the output.
-            Because an arbitrary module can change the number of properties, the labels
-            of the properties cannot be persevered. By default the output properties are
+        :param out_properties:
+            A dictionary of labels that is used to determine the properties labels of the
+            output.  Because a module could change the number of properties, the labels of
+            the properties cannot be persevered. By default the output properties are
             relabeled using Labels.range.
 
         >>> import torch
@@ -257,7 +253,7 @@ class ModuleMap(ModuleList):
             else:
                 modules.append(deepcopy(module))
 
-        return cls(in_keys, modules, out_tensor)
+        return cls(in_keys, modules, out_properties)
 
     def forward(self, tensor: TensorMap) -> TensorMap:
         """
@@ -287,10 +283,10 @@ class ModuleMap(ModuleList):
         module = self.get_module(key)
 
         out_values = module.forward(block.values)
-        if self._out_tensor is None:
+        if self._out_properties is None:
             properties = Labels.range("_", out_values.shape[-1])
         else:
-            properties = self._out_tensor.block(key).properties
+            properties = self._out_properties[key]
         return TensorBlock(
             values=out_values,
             properties=properties,
@@ -321,12 +317,12 @@ class ModuleMap(ModuleList):
         return self._in_keys
 
     @property
-    def out_tensor(self) -> Optional[TensorMap]:
+    def out_properties(self) -> Dict[LabelsEntry, Labels]:
         """
-        The tensor map that is used to determine properties labels of the output of
-        forward function.
+        The dictionary of labels that is used to determine properties labels of the
+        output of forward function.
         """
-        return self._out_tensor
+        return self._out_properties
 
     def repr_as_module_dict(self) -> str:
         """
