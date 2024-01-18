@@ -81,7 +81,7 @@ class TestModuleMap:
 
         for i, item in enumerate(tensor.items()):
             key, block = item
-            module = tensor_module.modules[i]
+            module = tensor_module[i]
             assert (
                 tensor_module.get_module(key) is module
             ), "modules should be initialized in the same order as keys"
@@ -114,7 +114,7 @@ class TestModuleMap:
 
         for i, item in enumerate(tensor.items()):
             key, block = item
-            module = tensor_module.modules[i]
+            module = tensor_module[i]
             assert (
                 tensor_module.get_module(key) is module
             ), "modules should be initialized in the same order as keys"

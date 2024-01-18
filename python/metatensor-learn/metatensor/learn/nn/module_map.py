@@ -26,7 +26,7 @@ class ModuleMapInterface(torch.nn.Module):
         pass
 
 
-class ModuleMap(Module):
+class ModuleMap(ModuleList):
     """
     A class that imitates :py:class:`torch.nn.ModuleDict`. In its forward function the
     module at position `i` given on construction by :param modules: is applied to the
@@ -150,14 +150,13 @@ class ModuleMap(Module):
         modules: Sequence[Module],
         out_tensor: Optional[TensorMap] = None,
     ):
-        super().__init__()
+        super().__init__(modules)
         if len(in_keys) != len(modules):
             raise ValueError(
                 "in_keys and modules must match in length, but found "
                 f"{len(in_keys) != len(modules)} [len(in_keys) != len(modules)]"
             )
         self._in_keys: Labels = in_keys
-        self._modules_list = ModuleList(modules)
         # copy to prevent undefined behavior due to inplace changes
         if out_tensor is not None:
             out_tensor = out_tensor.copy()
@@ -299,16 +298,6 @@ class ModuleMap(Module):
             samples=block.samples,
         )
 
-    @property
-    def modules(self):
-        """
-        :return modules:
-            torch.nn.ModulesList that was given by initialization. It is not a copy, so
-            its utility functionalities can be used to e.g. move the module map to GPU
-        """
-        # type annotation in function signature had to be removed because of TorchScript
-        return self._modules_list
-
     @torch.jit.export
     def get_module(self, key: LabelsEntry):
         """
@@ -323,7 +312,7 @@ class ModuleMap(Module):
         if position is None:
             raise KeyError(f"key {key} not found in modules.")
         module_idx: int = position
-        module: ModuleMapInterface = self._modules_list[module_idx]
+        module: ModuleMapInterface = self[module_idx]
         return module
 
     @property
@@ -338,6 +327,17 @@ class ModuleMap(Module):
         forward function.
         """
         return self._out_tensor
+
+    def repr_as_module_dict(self) -> str:
+        """
+        Returns a string that is easier to read that the standard __repr__ showing the
+        mapping from label entry key to module.
+        """
+        representation = "ModuleMap(\n"
+        for i, key in enumerate(self._in_keys):
+            representation += f"  ({key!r}): {self[i]!r}\n"
+        representation += ")"
+        return representation
 
 
 class Linear(ModuleMap):
