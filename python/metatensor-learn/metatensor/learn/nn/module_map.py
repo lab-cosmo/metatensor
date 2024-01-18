@@ -285,11 +285,8 @@ class ModuleMap(Module):
         return TensorMap(tensor.keys, out_blocks)
 
     def forward_block(self, key: LabelsEntry, block: TensorBlock) -> TensorBlock:
-        position = self._in_keys.position(key)
-        if position is None:
-            raise KeyError(f"key {key} not found in modules.")
-        module_idx: int = position
-        module: ModuleMapInterface = self._modules_list[module_idx]
+        module = self.get_module(key)
+
         out_values = module.forward(block.values)
         if self._out_tensor is None:
             properties = Labels.range("_", out_values.shape[-1])
