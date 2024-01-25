@@ -47,7 +47,7 @@ class ModuleMap(ModuleList):
         A list of labels that is used to determine the properties labels of the
         output.  Because a module could change the number of properties, the labels of
         the properties cannot be persevered. By default the output properties are
-        relabeled using Labels.range.
+        relabeled using Labels.range with "_" as key.
 
 
         >>> import torch
@@ -180,7 +180,7 @@ class ModuleMap(ModuleList):
             A list of labels that is used to determine the properties labels of
             the output.  Because a module could change the number of properties, the
             labels of the properties cannot be persevered. By default the output
-            properties are relabeled using Labels.range.
+            properties are relabeled using Labels.range with "_" as key.
 
         >>> import torch
         >>> import numpy as np

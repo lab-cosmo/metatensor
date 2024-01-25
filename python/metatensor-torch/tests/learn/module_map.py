@@ -2,7 +2,7 @@ import pytest
 import torch
 from torch.nn import Module, Sigmoid
 
-from metatensor.torch import allclose_raise
+from metatensor.torch import Labels, allclose_raise
 from metatensor.torch.learn.nn import ModuleMap
 
 from .utils import TORCH_KWARGS, single_block_tensor  # noqa F401
@@ -30,7 +30,12 @@ class TestModuleMap:
         torch.set_default_device(TORCH_KWARGS["device"])
         torch.set_default_dtype(TORCH_KWARGS["dtype"])
 
-    def test_module_map_single_block_tensor(self, single_block_tensor):  # noqa F811
+    @pytest.mark.parametrize(
+        "out_properties", [None, [Labels(["a", "b"], torch.tensor([[1, 1]]))]]
+    )
+    def test_module_map_single_block_tensor(
+        self, single_block_tensor, out_properties  # noqa F811
+    ):
         modules = []
         for key in single_block_tensor.keys:
             modules.append(
@@ -40,7 +45,9 @@ class TestModuleMap:
                 )
             )
 
-        tensor_module = ModuleMap(single_block_tensor.keys, modules)
+        tensor_module = ModuleMap(
+            single_block_tensor.keys, modules, out_properties=out_properties
+        )
         with torch.no_grad():
             out_tensor = tensor_module(single_block_tensor)
 
@@ -55,6 +62,12 @@ class TestModuleMap:
                 ref_values = module(block.values)
             out_block = out_tensor.block(key)
             assert torch.allclose(ref_values, out_block.values)
+            if out_properties is None:
+                assert out_block.properties == Labels.range(
+                    "_", len(out_block.properties)
+                )
+            else:
+                assert out_block.properties == out_properties[0]
 
             for parameter, gradient in block.gradients():
                 with torch.no_grad():
@@ -62,6 +75,12 @@ class TestModuleMap:
                 assert torch.allclose(
                     ref_gradient_values, out_block.gradient(parameter).values
                 )
+                if out_properties is None:
+                    assert out_block.gradient(parameter).properties == Labels.range(
+                        "_", len(out_block.gradient(parameter).properties)
+                    )
+                else:
+                    assert out_block.gradient(parameter).properties == out_properties[0]
 
     def test_torchscript_module_map(self, single_block_tensor):  # noqa F811
         modules = []
