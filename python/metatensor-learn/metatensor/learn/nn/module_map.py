@@ -44,7 +44,7 @@ class ModuleMap(ModuleList):
         applied on.  :param modules: and :param in_keys: must match in length.
 
     :param out_properties:
-        A dictionary of labels that is used to determine the properties labels of the
+        A list of labels that is used to determine the properties labels of the
         output.  Because a module could change the number of properties, the labels of
         the properties cannot be persevered. By default the output properties are
         relabeled using Labels.range.
@@ -177,7 +177,7 @@ class ModuleMap(ModuleList):
         :param module:
             The module that is applied on each block.
         :param out_properties:
-            A dictionary of labels that is used to determine the properties labels of
+            A list of labels that is used to determine the properties labels of
             the output.  Because a module could change the number of properties, the
             labels of the properties cannot be persevered. By default the output
             properties are relabeled using Labels.range.
@@ -309,13 +309,16 @@ class ModuleMap(ModuleList):
 
     @property
     def in_keys(self) -> Labels:
-        """ """
+        """
+        A list of labels that defines the initialized keys with corresponding modules
+        of this module map.
+        """
         return self._in_keys
 
     @property
     def out_properties(self) -> Union[None, List[Labels]]:
         """
-        The dictionary of labels that is used to determine properties labels of the
+        A list of labels that is used to determine properties labels of the
         output of forward function.
         """
         return self._out_properties
@@ -363,7 +366,7 @@ class Linear(ModuleMap):
         Specifies the torch dtype of the values. If None the default torch dtype is
         taken.
     :param out_properties:
-        A dictionary of labels that is used to determine the properties labels of the
+        A list of labels that is used to determine the properties labels of the
         output.  Because a module could change the number of properties, the labels of
         the properties cannot be persevered. By default the output properties are
         relabeled using Labels.range.
