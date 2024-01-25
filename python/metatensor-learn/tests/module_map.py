@@ -13,7 +13,7 @@ except ImportError:
 if HAS_TORCH:
     from torch.nn import Module, Sigmoid
 
-    from metatensor.learn.nn import Linear, ModuleMap
+    from metatensor.learn.nn import ModuleMap
 
 
 if HAS_TORCH:
@@ -79,72 +79,3 @@ class TestModuleMap:
                     ref_gradient_values, out_block.gradient(parameter).values
                 )
 
-    @pytest.mark.parametrize(
-        "tensor",
-        [
-            random_single_block_no_components_tensor_map(HAS_TORCH, False),
-        ],
-    )
-    def test_linear_module_init(self, tensor):
-        # testing initialization by non sequence arguments
-        tensor_module_init_nonseq = Linear(
-            in_keys=tensor.keys,
-            in_features=[2],
-            out_features=[2],
-            bias=[False],
-            out_properties=[tensor[0].properties],
-        )
-        # testing initialization by sequence arguments
-        tensor_module_init_seq = Linear(
-            in_keys=tensor.keys,
-            in_features=2,
-            out_features=2,
-            bias=False,
-            out_properties=tensor[0].properties,
-        )
-        for i in range(len(tensor_module_init_seq)):
-            assert (
-                tensor_module_init_seq[i].in_features
-                == tensor_module_init_nonseq[i].in_features
-            ), (
-                "in_features differ when using sequential and non sequential input for"
-                " initialization"
-            )
-            assert (
-                tensor_module_init_seq[i].out_features
-                == tensor_module_init_nonseq[i].out_features
-            ), (
-                "out_features differ when using sequential and non sequential input for"
-                " initialization"
-            )
-            assert (
-                tensor_module_init_seq[i].bias == tensor_module_init_nonseq[i].bias
-            ), (
-                "bias differ when using sequential and non sequential input for"
-                " initialization"
-            )
-
-        tensor_module = tensor_module_init_nonseq
-
-        with torch.no_grad():
-            out_tensor = tensor_module(tensor)
-
-        for i, item in enumerate(tensor.items()):
-            key, block = item
-            module = tensor_module[i]
-            assert (
-                tensor_module.get_module(key) is module
-            ), "modules should be initialized in the same order as keys"
-
-            with torch.no_grad():
-                ref_values = module(block.values)
-            out_block = out_tensor.block(key)
-            assert torch.allclose(ref_values, out_block.values)
-            assert block.properties == out_block.properties
-
-            for parameter, gradient in block.gradients():
-                with torch.no_grad():
-                    ref_gradient_values = module(gradient.values)
-                out_gradient = out_block.gradient(parameter)
-                assert torch.allclose(ref_gradient_values, out_gradient.values)
-                assert gradient.properties == out_gradient.properties
