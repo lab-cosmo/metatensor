@@ -77,7 +77,7 @@ def random_single_block_no_components_tensor_map(use_torch, use_metatensor_torch
         ),
         components=[
             Labels(
-                ["direction_xx_yy_zz_yz_xz_xy"],
+                ["voigt_index"],
                 create_int32_array([[0], [1], [2], [3], [4], [5]]),
             )
         ],
