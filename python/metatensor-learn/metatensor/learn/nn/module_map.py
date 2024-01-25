@@ -164,7 +164,6 @@ class ModuleMap(ModuleList):
         cls,
         in_keys: Labels,
         module: Module,
-        many_to_one: bool = True,
         out_properties: List[Labels] = None,
     ):
         """
@@ -177,10 +176,6 @@ class ModuleMap(ModuleList):
             tensor map in the :py:meth:`forward` function.
         :param module:
             The module that is applied on each block.
-        :param many_to_one:
-            Specifies if a separate module for each block is used. If `False` the module
-            is deep copied for each key in the :py:attr:`in_keys`. otherwise the same
-            module is used over all keys connecting the optimization of the weights.
         :param out_properties:
             A dictionary of labels that is used to determine the properties labels of
             the output.  Because a module could change the number of properties, the
@@ -248,10 +243,7 @@ class ModuleMap(ModuleList):
         module = deepcopy(module)
         modules = []
         for _ in range(len(in_keys)):
-            if many_to_one:
-                modules.append(module)
-            else:
-                modules.append(deepcopy(module))
+            modules.append(deepcopy(module))
 
         return cls(in_keys, modules, out_properties)
 
@@ -370,10 +362,6 @@ class Linear(ModuleMap):
     :param dtype:
         Specifies the torch dtype of the values. If None the default torch dtype is
         taken.
-    :param many_to_one:
-        Specifies if a separate module for each block is used. If `False` the module is
-        deep copied for each key in the :py:attr:`in_keys`. otherwise the same module is
-        used over all keys connecting the optimization of the weights.
     :param out_properties:
         A dictionary of labels that is used to determine the properties labels of the
         output.  Because a module could change the number of properties, the labels of
@@ -389,7 +377,6 @@ class Linear(ModuleMap):
         bias: Union[bool, List[bool]] = True,
         device: torch.device = None,
         dtype: torch.dtype = None,
-        many_to_one: bool = False,
         out_properties: List[Labels] = None,
     ):
         if isinstance(in_features, int):
