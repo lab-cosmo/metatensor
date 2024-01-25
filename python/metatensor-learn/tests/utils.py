@@ -257,3 +257,11 @@ def indexed_dataset_mixed_mem_disk(sample_indices):
         output=outputs,
         auxiliary=partial(transform, filename="auxiliary"),
     )
+
+
+@pytest.fixture(scope="class")
+def single_block_tensor_torch():
+    """
+    random tensor map with no components using torch as array backend
+    """
+    return random_single_block_no_components_tensor_map(True, False)

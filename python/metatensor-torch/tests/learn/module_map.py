@@ -5,7 +5,7 @@ from torch.nn import Module, Sigmoid
 from metatensor.torch import allclose_raise
 from metatensor.torch.learn.nn import ModuleMap
 
-from .utils import TORCH_KWARGS, random_single_block_no_components_tensor_map
+from .utils import TORCH_KWARGS, single_block_tensor  # noqa F401
 
 
 class MockModule(Module):
@@ -18,8 +18,9 @@ class MockModule(Module):
     def forward(self, input: torch.Tensor) -> torch.Tensor:
         return self._last_layer(self._activation(self._linear(input)))
 
+
 class TestModuleMap:
-    @pytest.fixture(autouse=True)
+    @pytest.fixture(scope="class", autouse=True)
     def set_random_generator(self):
         """Set the random generator to same seed before each test is run.
         Otherwise test behaviour is dependend on the order of the tests
@@ -29,26 +30,21 @@ class TestModuleMap:
         torch.set_default_device(TORCH_KWARGS["device"])
         torch.set_default_dtype(TORCH_KWARGS["dtype"])
 
-    @pytest.mark.parametrize(
-        "tensor",
-        [
-            random_single_block_no_components_tensor_map(True, True),
-        ],
-    )
-    def test_module_tensor(self, tensor):
+    def test_module_map_single_block_tensor(self, single_block_tensor):  # noqa F811
         modules = []
-        for key in tensor.keys:
+        for key in single_block_tensor.keys:
             modules.append(
                 MockModule(
-                    in_features=len(tensor.block(key).properties), out_features=5
+                    in_features=len(single_block_tensor.block(key).properties),
+                    out_features=5,
                 )
             )
 
-        tensor_module = ModuleMap(tensor.keys, modules)
+        tensor_module = ModuleMap(single_block_tensor.keys, modules)
         with torch.no_grad():
-            out_tensor = tensor_module(tensor)
+            out_tensor = tensor_module(single_block_tensor)
 
-        for i, item in enumerate(tensor.items()):
+        for i, item in enumerate(single_block_tensor.items()):
             key, block = item
             module = modules[i]
             assert (
@@ -67,27 +63,22 @@ class TestModuleMap:
                     ref_gradient_values, out_block.gradient(parameter).values
                 )
 
-    @pytest.mark.parametrize(
-        "tensor",
-        [
-            random_single_block_no_components_tensor_map(True, True),
-        ],
-    )
-    def test_torchscript_module_tensor(self, tensor):
+    def test_torchscript_module_map(self, single_block_tensor):  # noqa F811
         modules = []
-        for key in tensor.keys:
+        for key in single_block_tensor.keys:
             modules.append(
                 MockModule(
-                    in_features=len(tensor.block(key).properties), out_features=5
+                    in_features=len(single_block_tensor.block(key).properties),
+                    out_features=5,
                 )
             )
-        tensor_module = ModuleMap(tensor.keys, modules)
-        ref_tensor = tensor_module(tensor)
+        tensor_module = ModuleMap(single_block_tensor.keys, modules)
+        ref_tensor = tensor_module(single_block_tensor)
 
         tensor_module_script = torch.jit.script(tensor_module)
-        out_tensor = tensor_module_script(tensor)
+        out_tensor = tensor_module_script(single_block_tensor)
 
         allclose_raise(ref_tensor, out_tensor)
 
         # tests if member functions work that do not appear in forward
-        tensor_module_script.get_module(tensor.keys[0])
+        tensor_module_script.get_module(single_block_tensor.keys[0])

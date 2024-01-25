@@ -86,3 +86,8 @@ def random_single_block_no_components_tensor_map(use_torch, use_metatensor_torch
     block_1.add_gradient("cell", cell_gradient)
 
     return TensorMap(Labels.single(), [block_1])
+
+
+@pytest.fixture(scope="class")
+def single_block_tensor():
+    return random_single_block_no_components_tensor_map(True, True)

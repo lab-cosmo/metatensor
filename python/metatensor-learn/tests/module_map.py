@@ -1,6 +1,6 @@
 import pytest
 
-from .utils import TORCH_KWARGS, random_single_block_no_components_tensor_map
+from .utils import TORCH_KWARGS, single_block_tensor_torch  # noqa F411
 
 
 try:
@@ -41,26 +41,23 @@ class TestModuleMap:
         torch.set_default_device(TORCH_KWARGS["device"])
         torch.set_default_dtype(TORCH_KWARGS["dtype"])
 
-    @pytest.mark.parametrize(
-        "tensor",
-        [
-            random_single_block_no_components_tensor_map(HAS_TORCH, False),
-        ],
-    )
-    def test_module_tensor(self, tensor):
+    def test_module_map_single_block_tensor(
+        self, single_block_tensor_torch  # noqa F811
+    ):
         modules = []
-        for key in tensor.keys:
+        for key in single_block_tensor_torch.keys:
             modules.append(
                 MockModule(
-                    in_features=len(tensor.block(key).properties), out_features=5
+                    in_features=len(single_block_tensor_torch.block(key).properties),
+                    out_features=5,
                 )
             )
 
-        tensor_module = ModuleMap(tensor.keys, modules)
+        tensor_module = ModuleMap(single_block_tensor_torch.keys, modules)
         with torch.no_grad():
-            out_tensor = tensor_module(tensor)
+            out_tensor = tensor_module(single_block_tensor_torch)
 
-        for i, item in enumerate(tensor.items()):
+        for i, item in enumerate(single_block_tensor_torch.items()):
             key, block = item
             module = modules[i]
             assert (
@@ -78,4 +75,3 @@ class TestModuleMap:
                 assert torch.allclose(
                     ref_gradient_values, out_block.gradient(parameter).values
                 )
-
