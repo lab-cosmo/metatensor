@@ -148,7 +148,7 @@ class ModuleMap(ModuleList):
         self,
         in_keys: Labels,
         modules: List[Module],
-        out_properties: List[Labels] = None,
+        out_properties: Optional[List[Labels]] = None,
     ):
         super().__init__(modules)
         if len(in_keys) != len(modules):
@@ -164,7 +164,7 @@ class ModuleMap(ModuleList):
         cls,
         in_keys: Labels,
         module: Module,
-        out_properties: List[Labels] = None,
+        out_properties: Optional[List[Labels]] = None,
     ):
         """
         A wrapper around one :py:class:`torch.nn.Module` applying the same type of

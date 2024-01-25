@@ -2,8 +2,9 @@ from typing import List, Optional, Union
 
 import torch
 
+from .._classes import Labels, TensorMap
 from .module_map import ModuleMap
-from .._classes import Labels, LabelsEntry, TensorBlock, TensorMap
+
 
 class Linear(ModuleMap):
     """
@@ -48,9 +49,9 @@ class Linear(ModuleMap):
         in_features: Union[int, List[int]],
         out_features: Union[int, List[int]],
         bias: Union[bool, List[bool]] = True,
-        device: torch.device = None,
-        dtype: torch.dtype = None,
-        out_properties: List[Labels] = None,
+        device: Optional[torch.device] = None,
+        dtype: Optional[torch.dtype] = None,
+        out_properties: Optional[List[Labels]] = None,
     ):
         if isinstance(in_features, int):
             in_features = [in_features] * len(in_keys)
