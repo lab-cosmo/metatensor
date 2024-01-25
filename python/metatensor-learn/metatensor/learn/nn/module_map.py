@@ -1,5 +1,5 @@
 from copy import deepcopy
-from typing import List, Optional, Sequence, Union, Dict
+from typing import List, Optional, Union
 
 import torch
 from torch.nn import Module, ModuleList
@@ -147,8 +147,8 @@ class ModuleMap(ModuleList):
     def __init__(
         self,
         in_keys: Labels,
-        modules: Sequence[Module],
-        out_properties: Dict[LabelsEntry, Labels] = None
+        modules: List[Module],
+        out_properties: List[Labels] = None,
     ):
         super().__init__(modules)
         if len(in_keys) != len(modules):
@@ -165,7 +165,7 @@ class ModuleMap(ModuleList):
         in_keys: Labels,
         module: Module,
         many_to_one: bool = True,
-        out_properties: Dict[LabelsEntry, Labels] = None
+        out_properties: List[Labels] = None,
     ):
         """
         A wrapper around one :py:class:`torch.nn.Module` applying the same type of
@@ -182,10 +182,10 @@ class ModuleMap(ModuleList):
             is deep copied for each key in the :py:attr:`in_keys`. otherwise the same
             module is used over all keys connecting the optimization of the weights.
         :param out_properties:
-            A dictionary of labels that is used to determine the properties labels of the
-            output.  Because a module could change the number of properties, the labels of
-            the properties cannot be persevered. By default the output properties are
-            relabeled using Labels.range.
+            A dictionary of labels that is used to determine the properties labels of
+            the output.  Because a module could change the number of properties, the
+            labels of the properties cannot be persevered. By default the output
+            properties are relabeled using Labels.range.
 
         >>> import torch
         >>> import numpy as np
@@ -280,13 +280,17 @@ class ModuleMap(ModuleList):
         return TensorMap(tensor.keys, out_blocks)
 
     def forward_block(self, key: LabelsEntry, block: TensorBlock) -> TensorBlock:
-        module = self.get_module(key)
+        position = self._in_keys.position(key)
+        if position is None:
+            raise KeyError(f"key {key} not found in modules.")
+        module_idx: int = position
+        module: ModuleMapInterface = self[module_idx]
 
         out_values = module.forward(block.values)
         if self._out_properties is None:
             properties = Labels.range("_", out_values.shape[-1])
         else:
-            properties = self._out_properties[key]
+            properties = self._out_properties[module_idx]
         return TensorBlock(
             values=out_values,
             properties=properties,
@@ -317,7 +321,7 @@ class ModuleMap(ModuleList):
         return self._in_keys
 
     @property
-    def out_properties(self) -> Dict[LabelsEntry, Labels]:
+    def out_properties(self) -> Union[None, List[Labels]]:
         """
         The dictionary of labels that is used to determine properties labels of the
         output of forward function.
@@ -338,96 +342,108 @@ class ModuleMap(ModuleList):
 
 class Linear(ModuleMap):
     """
-    :param in_tensor:
-        A tensor map that will be accepted in the :py:meth:`forward` function. It is
-        used to determine the keys input shape, device and dtype of the input to create
-        linear modules for tensor maps.
+    Construct a module map with only linear modules.
 
-    :param out_tensor:
-        A tensor map that is used to determine the properties labels and shape of the
-        output tensor map.  Because a linear module can change the number of
-        properties, the labels of the properties cannot be persevered.
-
+    :param in_keys:
+        The keys that are assumed to be in the input tensor map in the
+        :py:meth:`forward` function.
+    :param in_features:
+        Specifies the dimensionality of the input after it has been applied on the input
+        tensor map. If a list of integers is given, it specifies the input dimension for
+        each block, therefore it should have the same length as :param in_keys:.  If
+        only one integer is given, it is assumed that the same be applied on each block.
+    :param out_features:
+        Specifies the dimensionality of the output after it has been applied on the
+        input tensor map. If a list of integers is given, it specifies the output
+        dimension for each block, therefore it should have the same length as :param
+        in_keys:.  If only one integer is given, it is assumed that the same be applied
+        on each block.
     :param bias:
-        See :py:class:`torch.nn.Linear` for bool as input. For each TensorMap key the
-        bias can be also individually tuend by using a TensorMap with one value for the
-        bool.
+        Specifies if a bias term (offset) should be applied on the input tensor map in
+        the forward function. If a list of bools is given, it specifies the bias term
+        for each block, therefore it should have the same length as :param in_keys:.  If
+        only one bool value is given, it is assumed that the same be applied on each
+        block.
+    :param device:
+        Specifies the torch device of the values. If None the default torch device is
+        taken.
+    :param dtype:
+        Specifies the torch dtype of the values. If None the default torch dtype is
+        taken.
+    :param many_to_one:
+        Specifies if a separate module for each block is used. If `False` the module is
+        deep copied for each key in the :py:attr:`in_keys`. otherwise the same module is
+        used over all keys connecting the optimization of the weights.
+    :param out_properties:
+        A dictionary of labels that is used to determine the properties labels of the
+        output.  Because a module could change the number of properties, the labels of
+        the properties cannot be persevered. By default the output properties are
+        relabeled using Labels.range.
     """
 
     def __init__(
         self,
-        in_tensor: TensorMap,
-        out_tensor: TensorMap,
-        bias: Union[bool, TensorMap] = True,
+        in_keys: Labels,
+        in_features: Union[int, List[int]],
+        out_features: Union[int, List[int]],
+        bias: Union[bool, List[bool]] = True,
+        device: torch.device = None,
+        dtype: torch.dtype = None,
+        many_to_one: bool = False,
+        out_properties: List[Labels] = None,
     ):
+        if isinstance(in_features, int):
+            in_features = [in_features] * len(in_keys)
+        elif not (isinstance(in_features, List)):
+            raise TypeError(
+                "`in_features` must be integer or List of integers, but not"
+                f" {type(in_features)}."
+            )
+        elif len(in_keys) != len(in_features):
+            raise ValueError(
+                "`in_features` must have same length as `in_keys`, but"
+                f" len(in_features) != len(in_keys) [{len(in_features)} !="
+                f" {len(in_keys)}]"
+            )
+
+        if isinstance(out_features, int):
+            out_features = [out_features] * len(in_keys)
+        elif not (isinstance(out_features, List)):
+            raise TypeError(
+                "`out_features` must be integer or List of integers, but not"
+                f" {type(out_features)}."
+            )
+        elif len(in_keys) != len(out_features):
+            raise ValueError(
+                "`out_features` must have same length as `in_keys`, but"
+                f" len(out_features) != len(in_keys) [{len(out_features)} !="
+                f" {len(in_keys)}]"
+            )
+
         if isinstance(bias, bool):
-            blocks = [
-                TensorBlock(
-                    values=torch.tensor(bias).reshape(1, 1),
-                    samples=Labels.range("_", 1),
-                    components=[],
-                    properties=Labels.range("_", 1),
-                )
-                for _ in in_tensor.keys
-            ]
-            bias = TensorMap(keys=in_tensor.keys, blocks=blocks)
+            bias = [bias] * len(in_keys)
+        elif not (isinstance(bias, List)):
+            raise TypeError(
+                f"`bias` must be bool or List of bools, but not {type(bias)}."
+            )
+        elif len(in_keys) != len(bias):
+            raise ValueError(
+                "`bias` must have same length as `in_keys`, but len(bias) !="
+                f" len(in_keys) [{len(bias)} != {len(in_keys)}]"
+            )
+
         modules = []
-        for key, in_block in in_tensor.items():
-            out_block = out_tensor.block(key)
+        for i in range(len(in_keys)):
             module = torch.nn.Linear(
-                len(in_block.properties),
-                len(out_block.properties),
-                bias.block(key).values.flatten()[0],
-                in_block.values.device,
-                in_block.values.dtype,
+                in_features[i],
+                out_features[i],
+                bias[i],
+                device,
+                dtype,
             )
             modules.append(module)
 
-        super().__init__(in_tensor.keys, modules, out_tensor)
-
-    @classmethod
-    def from_module(
-        cls,
-        in_keys: Labels,
-        in_features: int,
-        out_features: int,
-        bias: bool = True,
-        device: torch.device = None,
-        dtype: torch.dtype = None,
-        many_to_one: bool = True,
-        out_tensor: Optional[TensorMap] = None,
-    ):
-        """
-        Simplified constructor if the same module should be applied on all blocks in the
-        tensor map. It can be chosen if the separate module copies should act on the
-        blocks or exactly the same module. This effects the type of computational graph
-        created.
-
-        :param in_keys:
-            The keys that are assumed to be in the input tensor map in the
-            :py:meth:`forward` function.
-        :param in_features:
-            See :py:class:`torch.nn.Linear`
-        :param out_features:
-            See :py:class:`torch.nn.Linear`
-        :param bias:
-            See :py:class:`torch.nn.Linear`
-        :param device:
-            See :py:class:`torch.nn.Linear`
-        :param dtype:
-            See :py:class:`torch.nn.Linear`
-        :param many_to_one:
-            Specifies if a separate module for each block is used. If `False` the module
-            is deep copied for each key in the :py:attr:`in_keys`. otherwise the same
-            module is used over all keys connecting the optimization of the weights.
-        :param out_tensor:
-            A tensor map that is used to determine the properties labels of the output.
-            Because an arbitrary module can change the number of properties, the labels
-            of the properties cannot be persevered. By default the output properties are
-            relabeled using Labels.range.
-        """
-        module = torch.nn.Linear(in_features, out_features, bias, device, dtype)
-        return ModuleMap.from_module(in_keys, module, many_to_one, out_tensor)
+        super().__init__(in_keys, modules, out_properties)
 
     @classmethod
     def from_weights(cls, weights: TensorMap, bias: Optional[TensorMap] = None):
@@ -457,7 +473,3 @@ class Linear(ModuleMap):
             modules.append(module)
 
         return ModuleMap(weights.keys, modules, weights)
-
-    def forward(self, tensor: TensorMap) -> TensorMap:
-        # added to appear in doc, :inherited-members: is not compatible with torch
-        return super().forward(tensor)
