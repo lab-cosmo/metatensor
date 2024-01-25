@@ -119,18 +119,20 @@ class Linear(ModuleMap):
         :param bias:
             The weight tensor map from which we create the linear layers.
         """
-        modules = []
-        for key, weights_block in weights.items():
-            module = torch.nn.Linear(
-                len(weights_block.samples),
-                len(weights_block.properties),
-                bias=False,
-                device=weights_block.values.device,
-                dtype=weights_block.values.dtype,
-            )
-            module.weight = torch.nn.Parameter(weights_block.values.T)
+        linear = cls(weights.keys,
+                   in_features = [len(weights[i].samples) for i in range(len(weights))],
+                   out_features = [len(weights[i].properties) for i in range(len(weights))],
+                   bias = False,
+                   device = weights.device,
+                   dtype =  weights.dtype,
+                   out_properties = [weights[i].properties for i in range(len(weights))],
+                )
+        for i in range(len(weights)):
+            key = weights.keys[i]
+            weights_block = weights[i]
+            linear[i].weight = torch.nn.Parameter(weights_block.values.T)
             if bias is not None:
-                module.bias = torch.nn.Parameter(bias.block(key).values)
-            modules.append(module)
+                linear[i].bias = torch.nn.Parameter(bias.block(key).values)
 
-        return ModuleMap(weights.keys, modules, weights)
+        return linear
+

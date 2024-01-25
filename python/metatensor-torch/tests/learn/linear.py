@@ -1,6 +1,9 @@
 import pytest
 import torch
+import numpy as np
 
+import metatensor
+from metatensor import Labels
 from metatensor.torch import allclose_raise
 from metatensor.torch.learn.nn import Linear
 
@@ -82,12 +85,22 @@ class TestLinearMap:
                 assert torch.allclose(ref_gradient_values, out_gradient.values)
                 assert gradient.properties == out_gradient.properties
 
+    def test_linear_from_weight(self, single_block_tensor):  # noqa F811
+        weights = metatensor.torch.slice(single_block_tensor,
+                axis="samples",
+                labels=Labels(["sample", "structure"], np.array([[0, 0], [1, 1]])))
+        #weights = metatensor.remove_gradients(weights)
+        module = Linear.from_weights(weights)
+        module(single_block_tensor)
+        breakpoint()
+
     def test_torchscript_linear(self, single_block_tensor):  # noqa F811
         tensor_module = Linear(
             single_block_tensor.keys,
             in_features=len(single_block_tensor[0].properties),
             out_features=5,
         )
+        breakpoint()
         ref_tensor = tensor_module(single_block_tensor)
 
         tensor_module_script = torch.jit.script(tensor_module)
