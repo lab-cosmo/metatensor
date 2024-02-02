@@ -7,7 +7,7 @@ from metatensor import Labels, TensorBlock, TensorMap
 
 @pytest.fixture
 def tensor():
-    # swapped samples from correct order in block_1
+    # samples are descending, components and properties are ascending
     block_1 = TensorBlock(
         values=np.array([[3, 5], [1, 2]]),
         samples=Labels(["s"], np.array([[2], [0]])),
@@ -15,14 +15,10 @@ def tensor():
         properties=Labels(["p"], np.array([[0], [1]])),
     )
 
-    # fmt: off
     block_1.add_gradient(
         parameter="g",
         gradient=TensorBlock(
-            values=np.array([[[8, 3],
-                              [9, 4]],
-                             [[6, 1],
-                              [7, 2]]]),
+            values=np.array([[[8, 3], [9, 4]], [[6, 1], [7, 2]]]),
             samples=Labels(["sample", "g"], np.array([[1, 1], [0, 1]])),
             components=[
                 Labels(["c"], np.array([[0], [1]])),
@@ -30,30 +26,23 @@ def tensor():
             properties=block_1.properties,
         ),
     )
-    # fmt: on
 
-    # swapped components from correct order in block_1
+    # samples are disordered, components are ascending, properties are descending
     block_2 = TensorBlock(
-        values=np.array([[2, 1], [4, 3], [6, 5]]),
-        samples=Labels(["s"], np.array([[0], [2], [7]])),
+        values=np.array([[3, 4], [5, 6], [1, 2]]),
+        samples=Labels(["s"], np.array([[7], [0], [2]])),
         components=[],
         properties=Labels(["p"], np.array([[1], [0]])),
     )
-    # fmt: off
     block_2.add_gradient(
         parameter="g",
         gradient=TensorBlock(
             values=np.array(
-                [[[11, 10],
-                  [13, 12]],
-                 [[15, 14],
-                  [11, 10]],
-                 [[13, 12],
-                  [15, 14]]]
+                [[[15, 14], [11, 10]], [[13, 12], [15, 14]], [[11, 10], [13, 12]]]
             ),
             samples=Labels(
                 ["sample", "g"],
-                np.array([[0, 1], [1, 1], [2, 1]]),
+                np.array([[1, 1], [2, 1], [0, 1]]),
             ),
             components=[
                 Labels(["c"], np.array([[0], [1]])),
@@ -61,13 +50,17 @@ def tensor():
             properties=block_2.properties,
         ),
     )
-    # fmt: on
     keys = Labels(names=["key_1", "key_2"], values=np.array([[1, 0], [0, 0]]))
+    # block order is descending
     return TensorMap(keys, [block_2, block_1])
 
 
 @pytest.fixture
-def tensor_sorted():
+def tensor_sorted_ascending():
+    """
+    This is the `tensor` fixture sorted in ascending order how it should be returned
+    when applying metatensor.operations.sort with `descending=False` option.
+    """
     block_1 = TensorBlock(
         values=np.array([[1, 2], [3, 5]]),
         samples=Labels(["s"], np.array([[0], [2]])),
@@ -75,14 +68,10 @@ def tensor_sorted():
         properties=Labels(["p"], np.array([[0], [1]])),
     )
 
-    # fmt: off
     block_1.add_gradient(
         parameter="g",
         gradient=TensorBlock(
-            values=np.array([[[6, 1],
-                              [7, 2]],
-                             [[8, 3],
-                              [9, 4]]]),
+            values=np.array([[[8, 3], [9, 4]], [[6, 1], [7, 2]]]),
             samples=Labels(["sample", "g"], np.array([[0, 1], [1, 1]])),
             components=[
                 Labels(["c"], np.array([[0], [1]])),
@@ -90,24 +79,19 @@ def tensor_sorted():
             properties=block_1.properties,
         ),
     )
-    # fmt: on
     block_2 = TensorBlock(
-        values=np.array([[1, 2], [3, 4], [5, 6]]),
+        values=np.array([[6, 5], [2, 1], [4, 3]]),
         samples=Labels(["s"], np.array([[0], [2], [7]])),
         components=[],
         properties=Labels(["p"], np.array([[0], [1]])),
     )
 
-    # fmt: off
     block_2.add_gradient(
         parameter="g",
         gradient=TensorBlock(
-            values=np.array([[[10, 11],
-                              [12, 13]],
-                             [[14, 15],
-                              [10, 11]],
-                             [[12, 13],
-                              [14, 15]]]),
+            values=np.array(
+                [[[14, 15], [10, 11]], [[12, 13], [14, 15]], [[10, 11], [12, 13]]]
+            ),
             samples=Labels(
                 ["sample", "g"],
                 np.array([[0, 1], [1, 1], [2, 1]]),
@@ -118,37 +102,85 @@ def tensor_sorted():
             properties=block_2.properties,
         ),
     )
-    # fmt: on
 
     keys = Labels(names=["key_1", "key_2"], values=np.array([[0, 0], [1, 0]]))
     return TensorMap(keys, [block_1, block_2])
 
 
-def test_sort(tensor, tensor_sorted):
-    metatensor.allclose_block_raise(
-        metatensor.sort_block(tensor.block(0)), tensor_sorted.block(1)
+@pytest.fixture
+def tensor_sorted_descending():
+    """
+    This is the `tensor` fixture sorted in descending order how it should be returned
+    when applying metatensor.operations.sort with `descending=True` option.
+    """
+    block_1 = TensorBlock(
+        values=np.array([[3, 5], [1, 2]]),
+        samples=Labels(["s"], np.array([[2], [0]])),
+        components=[],
+        properties=Labels(["p"], np.array([[1], [0]])),
     )
-    metatensor.allclose_block_raise(
-        metatensor.sort_block(tensor.block(1)), tensor_sorted.block(0)
-    )
 
-    metatensor.allclose_raise(metatensor.sort(tensor), tensor_sorted)
-
-
-def test_sort_descending(tensor, tensor_sorted):
-    metatensor.allclose_block_raise(
-        tensor.block(0),
-        metatensor.sort_block(
-            tensor_sorted.block(1), axes="properties", descending=True
+    block_1.add_gradient(
+        parameter="g",
+        gradient=TensorBlock(
+            values=np.array([[[4, 9], [3, 8]], [[2, 7], [1, 6]]]),
+            samples=Labels(["sample", "g"], np.array([[1, 1], [0, 1]])),
+            components=[
+                Labels(["c"], np.array([[1], [0]])),
+            ],
+            properties=block_1.properties,
         ),
     )
+
+    block_2 = TensorBlock(
+        values=np.array([[3, 4], [1, 2], [5, 6]]),
+        samples=Labels(["s"], np.array([[7], [2], [0]])),
+        components=[],
+        properties=Labels(["p"], np.array([[1], [0]])),
+    )
+    block_2.add_gradient(
+        parameter="g",
+        gradient=TensorBlock(
+            values=np.array(
+                [[[11, 10], [15, 14]], [[15, 14], [13, 12]], [[13, 12], [11, 10]]]
+            ),
+            samples=Labels(
+                ["sample", "g"],
+                np.array([[2, 1], [1, 1], [0, 1]]),
+            ),
+            components=[
+                Labels(["c"], np.array([[1], [0]])),
+            ],
+            properties=block_2.properties,
+        ),
+    )
+    keys = Labels(names=["key_1", "key_2"], values=np.array([[1, 0], [0, 0]]))
+    return TensorMap(keys, [block_2, block_1])
+
+
+def test_sort(tensor, tensor_sorted_ascending):
     metatensor.allclose_block_raise(
-        tensor.block(1),
-        metatensor.sort_block(tensor_sorted.block(0), axes="samples", descending=True),
+        metatensor.sort_block(tensor.block(0)), tensor_sorted_ascending.block(1)
+    )
+    metatensor.allclose_block_raise(
+        metatensor.sort_block(tensor.block(1)), tensor_sorted_ascending.block(0)
+    )
+
+    metatensor.allclose_raise(metatensor.sort(tensor), tensor_sorted_ascending)
+
+
+def test_sort_descending(tensor, tensor_sorted_descending):
+    metatensor.allclose_block_raise(
+        tensor_sorted_descending.block(0),
+        metatensor.sort_block(tensor.block(0), descending=True),
+    )
+    metatensor.allclose_block_raise(
+        tensor_sorted_descending.block(0),
+        metatensor.sort_block(tensor.block(0), descending=True),
     )
 
 
-def test_raise_error(tensor, tensor_sorted):
+def test_raise_error(tensor, tensor_sorted_ascending):
     error_message = (
         "axes` must be one of 'samples', 'components' or 'properties', not 'error'"
     )

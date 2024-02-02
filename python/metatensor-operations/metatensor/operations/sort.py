@@ -4,6 +4,84 @@ from . import _dispatch
 from ._classes import Labels, TensorBlock, TensorMap, torch_jit_is_scripting
 
 
+def _sort_single_gradient_block(
+    block: TensorBlock,
+    gradient_block: TensorBlock,
+    axes: List[str],
+    descending: bool,
+) -> TensorBlock:
+    """
+    Sorts a single gradient tensor block given the tensor block which the gradients are
+    attached to. This function does not check the user input.  This is different from
+    `_sort_single_block` because we need to update the sample differently (since
+    gradient samples are pointers into the values samples).
+    """
+
+    sample_names = gradient_block.samples.names
+    sample_values = gradient_block.samples.values
+
+    component_names: List[List[str]] = []
+    components_values = []
+    for component in gradient_block.components:
+        component_names.append(component.names)
+        components_values.append(component.values)
+
+    property_names = gradient_block.properties.names
+    properties_values = gradient_block.properties.values
+
+    values = gradient_block.values
+    if "samples" in axes:
+        # we first need to get the mapping induced by the sorting in its parent block
+        # so we can change the sample column label entries so it matches the ones of
+        # the parent block
+        block_sample_values = block.samples.values
+        # sample index -> sample labels
+        sorted_idx = _dispatch.argsort_labels_values(
+            block_sample_values, reverse=descending
+        )
+        # obtain inverse mapping sample labels -> sample index
+        sorted_idx_inverse = _dispatch.empty_like(sorted_idx, shape=(len(sorted_idx),))
+        sorted_idx_inverse[sorted_idx] = _dispatch.int_array_like(
+            list(range(len(sorted_idx))), sorted_idx
+        )
+        # adapt sample column in gradient samples to the one of the sorted values of
+        # the gradient_block the gradient is attached to
+        sample_values = _dispatch.copy(sample_values)
+        sample_values[:, 0] = sorted_idx_inverse[sample_values[:, 0]]
+
+        # sort the samples in gradient regularly moving the rows considering all columns
+        sorted_idx = _dispatch.argsort_labels_values(sample_values, reverse=descending)
+        sample_values = sample_values[sorted_idx]
+        values = values[sorted_idx]
+    if "components" in axes:
+        for i, _ in enumerate(gradient_block.components):
+            sorted_idx = _dispatch.argsort_labels_values(
+                components_values[i], reverse=descending
+            )
+            components_values[i] = components_values[i][sorted_idx]
+            values = _dispatch.take(values, sorted_idx, axis=i + 1)
+    if "properties" in axes:
+        sorted_idx = _dispatch.argsort_labels_values(
+            properties_values, reverse=descending
+        )
+        properties_values = properties_values[sorted_idx]
+        values = _dispatch.take(values, sorted_idx, axis=-1)
+
+    samples_labels = Labels(names=sample_names, values=sample_values)
+    properties_labels = Labels(names=property_names, values=properties_values)
+    components_labels = [
+        Labels(names=component_names[i], values=components_values[i])
+        for i in range(len(component_names))
+    ]
+
+    return TensorBlock(
+        values=values,
+        samples=samples_labels,
+        components=components_labels,
+        properties=properties_labels,
+    )
+
+
 def _sort_single_block(
     block: TensorBlock,
     axes: List[str],
@@ -172,7 +250,9 @@ def sort_block(
 
         result_block.add_gradient(
             parameter=parameter,
-            gradient=_sort_single_block(gradient, axes_list, descending),
+            gradient=_sort_single_gradient_block(
+                block, gradient, axes_list, descending
+            ),
         )
 
     return result_block
