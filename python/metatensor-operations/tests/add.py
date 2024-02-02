@@ -3,6 +3,30 @@ import pytest
 
 import metatensor
 from metatensor import Labels, TensorBlock, TensorMap
+from metatensor.operations.testing import (
+    cartesian_cubic,
+    cartesian_linear,
+    finite_differences,
+)
+
+
+try:
+    import torch  # noqa
+
+    HAS_TORCH = True
+except ImportError:
+    HAS_TORCH = False
+
+
+@pytest.fixture(scope="module", autouse=True)
+def set_random_generator():
+    """Set the random generator to same seed before each test is run.
+    Otherwise test behaviour is dependend on the order of the tests
+    in this file and the number of parameters of the test.
+    """
+    np.random.seed(1225787)
+    if HAS_TORCH:
+        torch.manual_seed(1225787)
 
 
 @pytest.fixture
@@ -258,3 +282,24 @@ def test_self_add_error():
     )
     with pytest.raises(TypeError, match=message):
         metatensor.add(tensor, np.ones((3, 4)))
+
+
+def test_add_finite_difference():
+    def add_callable(cartesian_vectors, compute_grad=False):
+        tensor1 = cartesian_linear(cartesian_vectors, compute_grad)
+        tensor2 = cartesian_cubic(cartesian_vectors, compute_grad)
+        return metatensor.add(tensor1, tensor2)
+
+    input_array = np.random.rand(5, 3)
+    finite_differences(add_callable, input_array, "positions")
+
+
+@pytest.mark.skipif(not HAS_TORCH, reason="requires torch")
+def test_torch_add_finite_difference():
+    def add_callable(cartesian_vectors, compute_grad=False):
+        tensor1 = cartesian_linear(cartesian_vectors, compute_grad)
+        tensor2 = cartesian_cubic(cartesian_vectors, compute_grad)
+        return metatensor.add(tensor1, tensor2)
+
+    input_array = torch.rand(5, 3, dtype=torch.float64)
+    finite_differences(add_callable, input_array, "positions")

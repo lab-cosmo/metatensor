@@ -27,3 +27,4 @@ API reference
     manipulation/index
     math/index
     set/index
+    testing/index
