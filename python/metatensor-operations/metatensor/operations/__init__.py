@@ -61,4 +61,4 @@ from .subtract import subtract  # noqa
 from .unique_metadata import unique_metadata, unique_metadata_block  # noqa
 from .zeros_like import zeros_like, zeros_like_block  # noqa
 
-from . import testing  # noqa
+from . import _testing  # noqa

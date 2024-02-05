@@ -3,7 +3,7 @@ import pytest
 
 import metatensor
 from metatensor import Labels, TensorBlock, TensorMap
-from metatensor.operations.testing import (
+from metatensor.operations._testing import (
     cartesian_cubic,
     cartesian_linear,
     finite_differences,
