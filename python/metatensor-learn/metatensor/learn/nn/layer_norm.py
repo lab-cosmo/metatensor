@@ -147,6 +147,9 @@ class LayerNorm(ModuleMap):
         for i in range(len(in_keys)):
             module = torch.nn.LayerNorm(
                 normalized_shape=normalized_shape[i],
+                eps=eps[i],
+                elementwise_affine=elementwise_affine[i],
+                bias=bias[i],
                 device=device,
                 dtype=dtype,
             )
