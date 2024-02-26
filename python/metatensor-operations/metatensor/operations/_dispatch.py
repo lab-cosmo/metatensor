@@ -3,7 +3,7 @@ from typing import List, Optional, Union
 
 import numpy as np
 
-# from ._backend import torch_jit_is_scripting
+from ._backend import torch_jit_is_scripting
 
 
 try:
@@ -195,8 +195,8 @@ def concatenate(arrays: List[TorchTensor], axis: int):
 
 def is_contiguous_array(array):
     """
-    Checks if a given array is contiguous. 
-    
+    Checks if a given array is contiguous.
+
     In the case of numpy, C order is used for consistency with torch. As such,
     only C-contiguity is checked.
     """
@@ -208,7 +208,8 @@ def is_contiguous_array(array):
 
     else:
         raise TypeError(UNKNOWN_ARRAY_TYPE)
-    
+
+
 def make_contiguous_array(array):
     """
     Returns a contiguous array.
@@ -226,9 +227,8 @@ def make_contiguous_array(array):
         return np.ascontiguousarray(array)
     else:
         raise TypeError(UNKNOWN_ARRAY_TYPE)
-    
-    
-    
+
+
 def copy(array):
     """Returns a copy of ``array``.
     The new data is not shared with the original array"""

@@ -15,11 +15,11 @@ from .allclose import (  # noqa
     allclose_raise,
 )
 from .block_from_array import block_from_array  # noqa
-from .contiguous import (
-    is_contiguous, 
-    is_contiguous_block, 
-    make_contiguous, 
-    make_contiguous_block 
+from .contiguous import (  # noqa: F401
+    is_contiguous,
+    is_contiguous_block,
+    make_contiguous,
+    make_contiguous_block,
 )
 from .detach import detach, detach_block  # noqa
 from .divide import divide  # noqa

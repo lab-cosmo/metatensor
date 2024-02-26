@@ -1,27 +1,26 @@
 from . import _dispatch
-from ._backend import (
-    Labels,
+from ._backend import (  # torch_jit_is_scripting,; torch_jit_script,
     TensorBlock,
     TensorMap,
-    torch_jit_is_scripting,
-    torch_jit_script,
 )
 
-def is_contiguous(tensor: TensorMap) -> bool:
-    r"""
-    Checks contiguity of values and gradients in  a :py:class:`TensorMap`
-    
-    :param A: the input :py:class:`TensorMap`.
 
-    :return: a boolean indicating (non-)contiguity of values in ``A``.
+def is_contiguous(tensor: TensorMap) -> bool:
+    """
+    Checks contiguity of values and gradients in  a :py:class:`TensorMap`
+
+    :param tensor: the input :py:class:`TensorMap`.
+
+    :return: a boolean indicating (non-)contiguity of values in ``tensor``. Returns true
+        if all values and gradients arrays in the input ``tensor`` are contiguous, false
+        otherwise.
     """
     check_contiguous = True
-    for key, block in tensor.items():
-        # Here, call another function: def is_contiguous_block(block: TensorBlock) -> bool
+    for _key, block in tensor.items():
         if not is_contiguous_block(block):
             check_contiguous = False
 
-        for param, gradient in block.gradients():
+        for _param, gradient in block.gradients():
             if not is_contiguous_block(gradient):
                 check_contiguous = False
 
@@ -29,12 +28,11 @@ def is_contiguous(tensor: TensorMap) -> bool:
 
 
 def is_contiguous_block(block: TensorBlock) -> bool:
-    r"""
-    Checks contiguity of values in  a :py:class:`TensorBlock`
-    
-    :param A: the input :py:class:`TensorBlock`.
+    """
+    :param block: the input :py:class:`TensorBlock`.
 
-    :return: a boolean indicating (non-)contiguity of values in ``A``.
+    :return: a boolean indicating (non-)contiguity of values in `TensorBlock` supplied
+        as input.
     """
     check_contiguous = True
     if not _dispatch.is_contiguous_array(block.values):
@@ -44,19 +42,19 @@ def is_contiguous_block(block: TensorBlock) -> bool:
 
 
 def make_contiguous(tensor: TensorMap) -> TensorMap:
-    r"""
+    """
     Return a new :py:class:`TensorMap` where the values are made to be contiguous.
 
-    :param A: the input :py:class:`TensorMap`.
+    :param tensor: the input :py:class:`TensorMap`.
 
-    :return: a new :py:class:`TensorMap` with the same metadata as ``A`` and
-        contiguous values of ``A``.
+    :return: a new :py:class:`TensorMap` with the same data and metadata as ``tensor``
+    and contiguous values of ``tensor``.
     """
-    
+
     keys = tensor.keys
     contiguous_blocks = []
 
-    for key, block in tensor.items():
+    for _key, block in tensor.items():
         contiguous_block = make_contiguous_block(block)
         contiguous_blocks.append(contiguous_block)
 
@@ -64,12 +62,13 @@ def make_contiguous(tensor: TensorMap) -> TensorMap:
 
 
 def make_contiguous_block(block: TensorBlock) -> TensorBlock:
-    r"""
+    """
     Return a new :py:class:`TensorBlock` where the values are made to be contiguous.
 
-    :param A: the input :py:class:`TensorBlock`.
+    :param block: the input :py:class:`TensorBlock`.
 
-    :return: a new :py:class:`TensorBlock` where values are contiguous.
+    :return: a new :py:class:`TensorBlock` where all the values and gradients arrays (if
+        present) are contiguous.
     """
     contiguous_block = TensorBlock(
         values=_dispatch.make_contiguous_array(block.values.copy()),
@@ -77,6 +76,7 @@ def make_contiguous_block(block: TensorBlock) -> TensorBlock:
         components=block.components,
         properties=block.properties,
     )
+
     # Make gradients non-contig
     for param, gradient in block.gradients():
 
