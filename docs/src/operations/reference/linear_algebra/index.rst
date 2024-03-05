@@ -7,3 +7,4 @@ Linear algebra
     dot() <dot>
     lstsq() <lstsq>
     solve() <solve>
+    transpose() <transpose>
