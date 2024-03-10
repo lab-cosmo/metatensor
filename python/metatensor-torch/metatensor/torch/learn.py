@@ -4,7 +4,14 @@ import sys
 import torch
 
 import metatensor.learn
-from metatensor.torch import Labels, LabelsEntry, TensorBlock, TensorMap
+from metatensor.torch import (
+    Labels,
+    LabelsEntry,
+    TensorBlock,
+    TensorMap,
+    equal_metadata,
+    equal_metadata_block,
+)
 
 
 # ==================================================================================== #
@@ -25,6 +32,8 @@ module.__dict__["Labels"] = Labels
 module.__dict__["LabelsEntry"] = LabelsEntry
 module.__dict__["TensorBlock"] = TensorBlock
 module.__dict__["TensorMap"] = TensorMap
+module.__dict__["equal_metadata"] = equal_metadata
+module.__dict__["equal_metadata_block"] = equal_metadata_block
 module.__dict__["torch_jit_is_scripting"] = torch.jit.is_scripting
 
 
