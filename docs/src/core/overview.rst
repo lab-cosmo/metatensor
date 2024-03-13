@@ -3,6 +3,11 @@
 Overview
 ========
 
+This page presents the core classes of metatensor from the ground-up in a
+somewhat abstract way, without being tied to any programming language API
+specifics. If you prefer to read concrete examples and tutorials, you should
+start with our :ref:`first steps <core-tutorial-first-steps>` tutorial instead!
+
 .. py:currentmodule:: metatensor
 
 .. _concept-TensorMap:
@@ -84,7 +89,7 @@ Labels on the left has two dimensions (``structure`` and ``center``), and 10
 entries (10 rows); while the Labels on the right has four dimensions and 8
 entries. Depending on the language you use, :py:class:`Labels` entries and
 dimensions' names can be accessed and manipulated in different ways, please
-refer to the corresponding :ref:`API documentation <python-api-reference>` for
+refer to the corresponding :ref:`API documentation <python-api-core>` for
 more information.
 
 .. _concept-TensorBlock:

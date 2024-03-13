@@ -25,6 +25,11 @@ API reference
         :url-suffix: reference/operations/index.html
 
 
+All operations are automatically re-exported from
+``metatensor.operations.<xxx>`` as ``metatensor.<xxx>`` when using the Python
+backend; and as ``metatensor.torch.<xxx>``` when using the :ref:`TorchScript
+backend <operations-and-torch>`.
+
 .. toctree::
     :maxdepth: 2
 

@@ -1,4 +1,4 @@
-.. _learn-api-reference:
+.. _python-api-learn:
 
 API reference
 =============

@@ -1,4 +1,4 @@
-.. _torch-cxx-api-reference:
+.. _cxx-api-torch:
 
 TorchScript C++ API reference
 =============================

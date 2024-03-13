@@ -1,9 +1,15 @@
 Metatensor
 ==========
 
-Metatensor is a specialized data storage format for all your atomistic machine
-learning needs, and more. Think numpy ``ndarray`` or pytorch ``Tensor`` equipped
-with extra metadata for atomic — and other particles — systems.
+``metatensor`` is a library for defining, manipulating, storing, and sharing
+arrays with many, potentially sparse, indices. Think numpy's ``ndarray`` or
+PyTorch's ``Tensor`` with additional metadata and block-sparse storage.
+
+``metatensor`` was designed to work with data in atomistic machine learning and
+makes it easy, memory efficient and fast to keep track of spherical harmonics
+orders, neighboring atoms indices, atomic types, and much more. It can also
+store gradients, keeping them together with the associated values.
+
 
 .. grid::
 
@@ -20,8 +26,8 @@ with extra metadata for atomic — and other particles — systems.
         +++
         |Python-32x32| |Cxx-32x32| |C-32x32| |Rust-32x32|
 
-    .. grid-item-card:: 💡 What is metatensor
-        :link: about
+    .. grid-item-card:: 💡 Our goals
+        :link: goals
         :link-type: ref
         :columns: 12 12 6 6
         :margin: 0 3 0 0
@@ -29,7 +35,7 @@ with extra metadata for atomic — and other particles — systems.
         Learn about the core goals of metatensor, and what the library is about:
 
         - an exchange format for ML data;
-        - a prototyping tool for new models;
+        - a tool to develop new ML models;
         - an interface for atomistic simulations.
 
     .. grid-item-card:: 🛠️ Core classes
@@ -105,7 +111,7 @@ with extra metadata for atomic — and other particles — systems.
    :maxdepth: 2
    :hidden:
 
-   about
+   goals
    installation
    core/index
    operations/index

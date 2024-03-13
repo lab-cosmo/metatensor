@@ -5,12 +5,15 @@ Learning utilities
 
 One important target application for the metatensor data format is its usage in
 machine learning models. This submodule contains building blocks and utilities
-that facilitate the construction and training of such models.
+that facilitate the construction and training of such models, for both the
+standard and TorchScript backends of metatensor.
+
+This part of the code is still in it's early days, and will be improved as we go!
 
 .. grid::
 
     .. grid-item-card:: |Python-16x16| API reference
-        :link: learn-api-reference
+        :link: python-api-learn
         :link-type: ref
         :columns: 12 12 6 6
         :margin: 0 3 0 0

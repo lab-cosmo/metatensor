@@ -16,7 +16,7 @@ model itself, and to allow any model architecture to be used.
 This part of metatensor focusses on exporting and importing fully working,
 already trained models. There are some tools elsewhere to define new models (in
 the :ref:`operations <python-api-operations>` and :ref:`learn
-<learn-api-reference>` submodules). If you want to train existing architectures
+<python-api-learn>` submodules). If you want to train existing architectures
 with new data or re-use existing trained models, look into the (work in
 progress!) metatensor-models_ project instead.
 

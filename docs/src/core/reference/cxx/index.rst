@@ -1,4 +1,4 @@
-.. _cxx-api-reference:
+.. _cxx-api-core:
 
 C++ API reference
 =================
@@ -31,7 +31,7 @@ C++ API reference
       :tag-prefix: metatensor-core-v
       :url-suffix: reference/cxx/index.html
 
-Metatensor offers a C++ API, built on top of the :ref:`C API <c-api-reference>`.
+Metatensor offers a C++ API, built on top of the :ref:`C API <c-api-core>`.
 You can the provided classes and functions in your own code by :ref:`installing
 the corresponding shared library and header <install-c>`, and then including
 ``metatensor.hpp`` and linking with ``-lmetatensor``. Alternatively, we provide

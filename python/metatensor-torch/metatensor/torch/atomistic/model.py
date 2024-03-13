@@ -100,6 +100,9 @@ class ModelInterface(torch.nn.Module):
         """
 
 
+# This class name is prefixed with `Metatensor` because we are checking the class name
+# before loading a saved model `check_atomistic_model`, to try to prevent people from
+# loading arbitrary pytorch models inside the metatensor interface.
 class MetatensorAtomisticModel(torch.nn.Module):
     """
     :py:class:`MetatensorAtomisticModel` is the main entry point for atomistic machine

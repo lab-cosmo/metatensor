@@ -1,4 +1,4 @@
-.. _rust-api-reference:
+.. _rust-api-core:
 
 Rust API reference
 ==================
