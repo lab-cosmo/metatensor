@@ -1,7 +1,7 @@
 .. _metatensor-torch:
 
-TorchScript interface
-=====================
+TorchScript backend
+===================
 
 .. toctree::
     :maxdepth: 2
@@ -26,7 +26,7 @@ Python and C++ sides of this library.
 .. grid::
 
     .. grid-item-card:: |Python-16x16| TorchScript Python API reference
-        :link: torch-api-reference
+        :link: python-api-torch
         :link-type: ref
         :columns: 12 12 6 6
         :margin: 0 3 0 0
@@ -38,7 +38,7 @@ Python and C++ sides of this library.
         Documentation for version |metatensor-torch-version|
 
     .. grid-item-card:: |Cxx-16x16| TorchScript C++ API reference
-        :link: torch-cxx-api-reference
+        :link: cxx-api-torch
         :link-type: ref
         :columns: 12 12 6 6
         :margin: 0 3 0 0
@@ -49,34 +49,10 @@ Python and C++ sides of this library.
         +++
         Documentation for version |metatensor-torch-version|
 
-The classes and functions in the TorchScript API are kept as close as possible
-to the classes and functions of the pure Python API, with the explicit goal that
-changing from
-
-.. code-block:: python
-
-    import metatensor
-    from metatensor import TensorMap, TensorBlock, Labels
-
-to
-
-.. code-block:: python
-
-    import metatensor.torch as metatensor
-    from metatensor.torch import TensorMap, TensorBlock, Labels
-
-should be 80% of the work required to make a model developed in Python with
-:py:mod:`metatensor.operations` compatible with TorchScript. In particular, all
-the :ref:`operations <python-api-operations>` are also available in the
-``metatensor.torch`` module under the same name. All the functions have the same
-behavior, but the versions in ``metatensor.torch`` are annotated with the types
-from ``metatensor.torch``, and compatible with TorchScript compilation. For
-example :py:func:`metatensor.add()` is available as ``metatensor.torch.add()``.
-
 .. _python-vs-torch:
 
-Differences between Python and TorchScript API
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Differences between Python and TorchScript
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The Python and TorchScript interfaces to metatensor are very similar, and have
 some level of overlap (it is possible to store data in torch ``Tensor`` with the

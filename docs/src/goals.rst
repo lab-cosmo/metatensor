@@ -1,28 +1,26 @@
-.. _about:
+.. _goals:
 
-What is metatensor
+Metatensor's goals
 ==================
 
-With the creation of metatensor, we have three main use cases in mind:
+At its core, ``metatensor`` provides tools to efficiently store and manipulate
+sparse arrays and their associated metadata. You can learn more about this in
+the :ref:`core classes overview <core-classes-overview>`. With the creation of
+metatensor, we have three main use cases in mind:
 
 1. provide an exchange format for the atomistic machine learning ecosystem,
    making different players in this ecosystem more interoperable with one
-   another and enhancing collaboration: :ref:`metatensor-goal-exchange`;
-2. make it easier and faster to prototype new machine learning representations,
-   models and algorithms applied to atomistic modeling:
-   :ref:`metatensor-goal-prototype`;
+   another and enhancing collaboration: see :ref:`metatensor-goal-exchange`;
+2. make it easier and faster to develop new machine learning representations,
+   models and algorithms: see :ref:`metatensor-goal-models`;
 3. run large scale simulations using machine learning interatomic potentials,
    with fully customizable potentials, directly defined by the researchers
-   running the simulations: :ref:`metatensor-goal-simulation`;
-
-If you agree with any of these goals, you might find metatensor useful! We try to
-make metatensor usable for any single one of these goals, it is perfectly fine to
-only use it for a subset of its capacities.
+   running the simulations: see :ref:`metatensor-goal-simulation`;
 
 .. _metatensor-goal-exchange:
 
-Metatensor as an exchange format
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Exchanging data
+^^^^^^^^^^^^^^^
 
 First, metatensor is a format to exchange data between different libraries in the
 atomistic machine learning ecosystem. There is currently an explosion of
@@ -76,48 +74,60 @@ the metatensor ecosystem!
       post-processing tasks for Quantum Machine Learning; can output some of its
       data in metatensor format;
 
-.. _metatensor-goal-prototype:
+.. _metatensor-goal-models:
 
-Metatensor as a prototyping tool
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Defining custom models
+^^^^^^^^^^^^^^^^^^^^^^
 
-The second objective of metatensor is to provide functionalities to be a
-prototyping tool for new models. While it is possible to use metatensor to only
-exchange data between libraries (and immediately convert everything to library
-specific format); we also provide tools to operate on metatensor data, staying in
-the metatensor format.
+The second objective of metatensor is to provide functionalities to be a tool
+for developing new models. While it is possible to use metatensor to only
+exchange data between libraries (and immediately convert everything to
+library-specific formats); we also provide tools to operate directly on
+metatensor data. This enable models to handle sparse data and have low memory
+consumption; as well as keeping rich metadata around for easier debugging and
+understanding of the model behavior.
 
-We call these tools :ref:`operations <python-api-operations>`, and they
-available in the Python interface to metatensor. By using combining multiple
-operations, you can build custom machine learning models, using data and
-representations coming from arbitrary metatensor-compatible libraires in the
-ecosystem. Using these operations allow you to keep your data in metatensor
-format across the whole ML pipeline; meaning the metadata is kept up to date
-with the data, and arbitrary gradients are automatically updated to stay
-consistent with the values.
+One part of these tools is the set of low-level :ref:`operations
+<metatensor-operations>` we provide as part of the Python interface to
+metatensor. By using combining multiple operations, you can build custom machine
+learning models, using data and representations coming from arbitrary
+metatensor-compatible libraires in the ecosystem. Using these operations allow
+you to keep your data in metatensor format across the whole ML pipeline;
+ensuring the metadata is kept up to date with the data, and gradients are
+automatically updated to stay consistent with the values.
+
+Another part of these tools is the :ref:`learning utilities <metatensor-learn>`,
+which provide high level building blocks for machine learning models, with API
+similar to PyTorch or scikit-learn. These blocks enable you do define and train
+models with a few lines of code and a familiar API.
+
+.. warning::
+
+    The learning utilities are still an early work in progress, with a lot more
+    building blocks to be included.
 
 .. table:: Where similar functionalities is provided by different packages
     :widths: auto
 
-    +-------------+----------------------------------+---------------------------+--------------------------------------+
-    |  Package    | Core data class                  |  Operations               |  Machine learning models facilities  |
-    +=============+==================================+===========================+======================================+
-    |  numpy      | :py:class:`numpy.ndarray`        | :py:func:`numpy.sum`      |  `scikit-learn`_                     |
-    +-------------+----------------------------------+---------------------------+--------------------------------------+
-    |  torch      | :py:class:`torch.Tensor`         | :py:func:`torch.add`      | :py:class:`torch.nn.Module`,         |
-    |             |                                  |                           | :py:class:`torch.utils.data.Dataset` |
-    +-------------+----------------------------------+---------------------------+--------------------------------------+
-    |  metatensor | :py:class:`metatensor.TensorMap` | :py:func:`metatensor.add` | Work in progress, will be part of    |
-    |             |                                  |                           | the ``metatensor-learn`` package     |
-    +-------------+----------------------------------+---------------------------+--------------------------------------+
+    +-------------+----------------------------------+---------------------------+----------------------------------------------+
+    |  Package    | Core data class                  |  Operations               |  Machine learning models facilities          |
+    +=============+==================================+===========================+==============================================+
+    |  numpy      | :py:class:`numpy.ndarray`        | :py:func:`numpy.sum`      |  `scikit-learn`_                             |
+    +-------------+----------------------------------+---------------------------+----------------------------------------------+
+    |  torch      | :py:class:`torch.Tensor`         | :py:func:`torch.add`      | :py:class:`torch.nn.Module`,                 |
+    |             |                                  |                           | :py:class:`torch.utils.data.Dataset`         |
+    +-------------+----------------------------------+---------------------------+----------------------------------------------+
+    |  metatensor | :py:class:`metatensor.TensorMap` | :py:func:`metatensor.add` | :py:class:`metatensor.learn.nn.ModuleMap`,   |
+    |             |                                  |                           | :py:class:`metatensor.learn.Dataset`         |
+    +-------------+----------------------------------+---------------------------+----------------------------------------------+
 
 
 .. _scikit-learn: https://scikit-learn.org/
 
 .. _metatensor-goal-simulation:
 
-Metatensor for atomistic simulations
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Running atomistic simulations
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 One particularly interesting class of machine learning model for atomistic
 modelling is machine learning interatomic potentials (MLIPs). Using the

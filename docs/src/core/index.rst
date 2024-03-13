@@ -34,7 +34,7 @@ below.
 .. grid::
 
     .. grid-item-card:: |Python-16x16| Python API reference
-        :link: python-api-reference
+        :link: python-api-core
         :link-type: ref
         :columns: 12 12 6 6
         :margin: 0 3 0 0
@@ -46,7 +46,7 @@ below.
         Documentation for version |metatensor-core-version|
 
     .. grid-item-card:: |Cxx-16x16| C++ API reference
-        :link: cxx-api-reference
+        :link: cxx-api-core
         :link-type: ref
         :columns: 12 12 6 6
         :margin: 0 3 0 0
@@ -58,7 +58,7 @@ below.
         Documentation for version |metatensor-core-version|
 
     .. grid-item-card:: |C-16x16| C API reference
-        :link: c-api-reference
+        :link: c-api-core
         :link-type: ref
         :columns: 12 12 6 6
         :margin: 0 3 0 0
@@ -70,7 +70,7 @@ below.
         Documentation for version |metatensor-core-version|
 
     .. grid-item-card:: |Rust-16x16| Rust API reference
-        :link: rust-api-reference
+        :link: rust-api-core
         :link-type: ref
         :columns: 12 12 6 6
         :margin: 0 3 0 0

@@ -18,28 +18,27 @@ except ImportError:
 
 
 if HAS_TORCH:
-    # This NewType is only used for typechecking and documentation purposes
+    # This NewType is only used for typechecking and documentation purposes. If you are
+    # trying to add support for new array types, see `data.array.ArrayWrapper` instead.
     Array = NewType("Array", Union[np.ndarray, torch.Tensor])
 else:
     Array = NewType("Array", np.ndarray)
 
 Array.__doc__ = """
-An ``Array`` contains the actual data stored in a
-:py:class:`metatensor.TensorBlock`.
+An ``Array`` contains the actual data stored in a :py:class:`metatensor.TensorBlock`.
 
-This data is manipulated by ``metatensor`` in a completely opaque way: this
-library does not know what's inside the arrays appart from a small set of
-constrains:
+This data is manipulated by ``metatensor`` in a completely opaque way: this library does
+not know what's inside the arrays appart from a small set of constrains:
 
-- the array contains numeric data (loading and saving
-  :py:class:`metatensor.TensorMap` additionally assumes arrays of 64-bit IEEE-754
+- the array contains numeric data (:py:func:`metatensor.load` and
+  :py:func:`metatensor.save` additionally requires contiguous arrays of 64-bit IEEE-754
   floating points numbers);
 - they are stored as row-major, n-dimensional arrays with at least 2 dimensions;
 - it is possible to create new arrays and move data from one array to another.
 
-The actual type of an ``Array`` depends on how the
-:py:class:`metatensor.TensorBlock` was created. Currently,
-:py:class:`numpy.ndarray` and :py:class:`torch.Tensor` are supported.
+The actual type of an ``Array`` depends on how the :py:class:`metatensor.TensorBlock`
+was created. Currently, :py:class:`numpy.ndarray` and :py:class:`torch.Tensor` are
+supported.
 """
 
 
@@ -50,14 +49,15 @@ def register_external_data_wrapper(origin, klass):
     """
     Register a non-Python data origin and the corresponding class wrapper.
 
-    The wrapper class constructor must take two arguments (raw ``mts_array`` and
-    python ``parent`` object) and return a subclass of either
-    :py:class:`numpy.ndarray` or :py:class:`torch.Tensor`, which keeps
-    ``parent`` alive. The :py:class:`metatensor.data.ExternalCpuArray` class
-    should provide the right behavior for data living in CPU memory, and can
-    serve as an example for more advanced custom arrays.
+    The wrapper class constructor must take two arguments (raw ``mts_array`` and python
+    ``parent`` object) and return a subclass of either :py:class:`numpy.ndarray` or
+    :py:class:`torch.Tensor`, which keeps ``parent`` alive. The
+    :py:class:`metatensor.data.ExternalCpuArray` class should provide the right behavior
+    for data living in CPU memory, and can serve as an example for more advanced custom
+    arrays.
 
-    :param origin: new origin to register as a string
+    :param origin: data origin name as a string, corresponding to the output of
+        :c:func:`mts_array_t.origin`
     :param klass: wrapper class to use for this origin
     """
 

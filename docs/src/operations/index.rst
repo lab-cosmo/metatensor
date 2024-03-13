@@ -3,17 +3,36 @@
 Operations
 ==========
 
-The Python API for metatensor also provides functions which operate on
-:py:class:`metatensor.TensorMap`, :py:class:`metatensor.TensorBlock`, and
-:py:class:`metatensor.Labels` and can be used to build your own Machine Learning
-models. These operations are provided in the ``metatensor-operations`` python
-package, which is installed by default when doing ``pip install metatensor``.
+.. py:currentmodule:: metatensor
 
-The list of all operations currently implemented is available below. If you need
-any other operation, please `open an issue
+The Python API for metatensor also provides functions which operate on
+:py:class:`TensorMap`, :py:class:`TensorBlock`, and :py:class:`Labels` and can
+be used to build your own Machine Learning models. These operations are provided
+in the ``metatensor-operations`` python package, which is installed by default
+when doing ``pip install metatensor``.
+
+The operations are implemented in Python, and handle the extra metadata
+(including sparsity and gradients) of metatensor. Actual manipulations of the
+data itself will call the corresponding functions from `numpy`_ or `PyTorch`_,
+depending on how the arrays are stored in the various :py:class:`TensorBlock`.
+
+.. _numpy: https://numpy.org/
+.. _PyTorch: https://pytorch.org/
+
+The list of all operations currently implemented is available in the API
+reference below. If you need any other operation, please `open an issue
 <https://github.com/lab-cosmo/metatensor/issues>`_!
 
 .. grid::
+
+    .. grid-item-card:: 🔥 Using the operations with PyTorch
+        :link: operations-and-torch
+        :link-type: ref
+        :columns: 12 12 6 6
+        :margin: 0 3 0 0
+
+        Learn how the operations interact with PyTorch, and in particular with
+        PyTorch's automatic differentiation framework when handling gradients.
 
     .. grid-item-card:: |Python-16x16| Operations API reference
         :link: python-api-operations
@@ -31,6 +50,7 @@ any other operation, please `open an issue
     :maxdepth: 2
     :hidden:
 
+    torch
     reference/index
 
 .. toctree::
@@ -38,31 +58,3 @@ any other operation, please `open an issue
     :hidden:
 
     CHANGELOG.md
-
-
-Using operations with PyTorch
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-`PyTorch`_ is a very popular framework for machine learning, providing multiple
-tools to make writing and training models easier. There are two ways to use
-the operations with PyTorch:
-
-- Using the pure Python version of metatensor, one can store values in a
-  :py:class:`metatensor.TensorBlock` using :py:class:`torch.Tensor`. In this
-  case, all operations will be compatible with torch autograd (automatic
-  gradient tracking and differentiation). This allows to train models from
-  Python, but not to export the models to run without the Python interpreter.
-  When running a model with the pure Python version of metatensor, you should use
-  the operations from ``metatensor.<operation_name>``.
-
-- When using the :ref:`TorchScript version of metatensor <torch-api-reference>`,
-  one can also compile the Python code to TorchScript and then run the model
-  without a Python interpreter. This is particularly useful to export and then
-  use an already trained model, for example to run molecular simulations. If you
-  want to do this, you should use classes and operations from
-  ``metatensor.torch``, i.e. :py:class:`metatensor.torch.TensorMap` and using the
-  operation from ``metatensor.torch.<operation_name>``. All the operation above
-  are available in the ``metatensor.torch`` module, but some might not yet be
-  fully TorchScript compatible.
-
-.. _PyTorch: https://pytorch.org/

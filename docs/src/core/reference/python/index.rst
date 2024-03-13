@@ -1,4 +1,4 @@
-.. _python-api-reference:
+.. _python-api-core:
 
 Python API reference
 ====================
@@ -46,6 +46,13 @@ provided in ``metatensor`` can be grouped as follows:
     block
     labels
     io
+
+Some modules are part of the advanced API that most users should not need to
+interact with:
+
+.. toctree::
+    :maxdepth: 1
+
     data
     misc
 
