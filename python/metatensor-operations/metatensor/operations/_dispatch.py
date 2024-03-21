@@ -203,6 +203,42 @@ def concatenate(arrays: List[TorchTensor], axis: int):
         raise TypeError(UNKNOWN_ARRAY_TYPE)
 
 
+def is_contiguous_array(array):
+    """
+    Checks if a given array is contiguous.
+
+    In the case of numpy, C order is used for consistency with torch. As such,
+    only C-contiguity is checked.
+    """
+    if isinstance(array, TorchTensor):
+        return array.is_contiguous()
+
+    elif isinstance(array, np.ndarray):
+        return array.flags["C_CONTIGUOUS"]
+
+    else:
+        raise TypeError(UNKNOWN_ARRAY_TYPE)
+
+
+def make_contiguous_array(array):
+    """
+    Returns a contiguous array.
+    It is equivalent of np.ascontiguousarray(array) and tensor.contiguous(). In
+    the case of numpy, C order is used for consistency with torch. As such, only
+    C-contiguity is checked.
+    """
+    if isinstance(array, TorchTensor):
+        if array.is_contiguous():
+            return array
+        return array.contiguous()
+    elif isinstance(array, np.ndarray):
+        if array.flags["C_CONTIGUOUS"]:
+            return array
+        return np.ascontiguousarray(array)
+    else:
+        raise TypeError(UNKNOWN_ARRAY_TYPE)
+
+
 def copy(array):
     """Returns a copy of ``array``.
     The new data is not shared with the original array"""
