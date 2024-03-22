@@ -10,12 +10,16 @@ if os.environ.get("METATENSOR_IMPORT_FOR_SPHINX", "0") != "0":
     from .documentation import Labels, LabelsEntry, TensorBlock, TensorMap
     from .documentation import load, load_labels, load_labels_buffer, load_buffer
     from .documentation import save, save_buffer
+    from .documentation import version, dtype_name
 else:
     _load_library()
     Labels = torch.classes.metatensor.Labels
     LabelsEntry = torch.classes.metatensor.LabelsEntry
     TensorBlock = torch.classes.metatensor.TensorBlock
     TensorMap = torch.classes.metatensor.TensorMap
+
+    version = torch.ops.metatensor.version
+    dtype_name = torch.ops.metatensor.dtype_name
 
     load = torch.ops.metatensor.load
     load_buffer = torch.ops.metatensor.load_buffer

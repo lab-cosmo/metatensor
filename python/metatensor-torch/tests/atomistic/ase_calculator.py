@@ -21,6 +21,12 @@ from metatensor.torch.atomistic import (
 from metatensor.torch.atomistic.ase_calculator import MetatensorCalculator
 
 
+STR_TO_DTYPE = {
+    "float32": torch.float32,
+    "float64": torch.float64,
+}
+
+
 class LennardJones(torch.nn.Module):
     """
     Implementation of Lennard-Jones potential using the ``MetatensorAtomisticModule``
@@ -31,11 +37,12 @@ class LennardJones(torch.nn.Module):
         super().__init__()
         self._nl_options = NeighborsListOptions(cutoff=cutoff, full_list=False)
 
-        self._epsilon = epsilon
-        self._sigma = sigma
+        self.register_buffer("_epsilon", torch.tensor([epsilon]))
+        self.register_buffer("_sigma", torch.tensor([sigma]))
 
         # shift the energy to 0 at the cutoff
-        self._shift = 4 * epsilon * ((sigma / cutoff) ** 12 - (sigma / cutoff) ** 6)
+        shift = 4 * epsilon * ((sigma / cutoff) ** 12 - (sigma / cutoff) ** 6)
+        self.register_buffer("_shift", torch.tensor([shift]))
 
     def forward(
         self,
@@ -49,12 +56,18 @@ class LennardJones(torch.nn.Module):
         per_atoms = outputs["energy"].per_atom
 
         all_energies = []
+
+        dtype = torch.float64
+        device = torch.device("cpu")
         for system_i, system in enumerate(systems):
+            device = system.device
+            dtype = system.positions.dtype
+
             neighbors = system.get_neighbors_list(self._nl_options)
             all_i = neighbors.samples.column("first_atom").to(torch.long)
             all_j = neighbors.samples.column("second_atom").to(torch.long)
 
-            energy = torch.zeros(len(system), dtype=system.positions.dtype)
+            energy = torch.zeros(len(system), dtype=dtype, device=device)
 
             distances = neighbors.values.reshape(-1, 3)
 
@@ -85,20 +98,27 @@ class LennardJones(torch.nn.Module):
                     for a in range(len(system)):
                         samples_list.append([s, a])
 
-                samples = Labels(["system", "atom"], torch.tensor(samples_list))
+                samples = Labels(
+                    ["system", "atom"], torch.tensor(samples_list, device=device)
+                )
             else:
                 samples = selected_atoms
         else:
-            samples = Labels(["system"], torch.arange(len(systems)).reshape(-1, 1))
+            samples = Labels(
+                ["system"], torch.arange(len(systems), device=device).reshape(-1, 1)
+            )
 
         block = TensorBlock(
             values=torch.vstack(all_energies).reshape(-1, 1),
             samples=samples,
             components=torch.jit.annotate(List[Labels], []),
-            properties=Labels(["energy"], torch.tensor([[0]])),
+            properties=Labels(["energy"], torch.tensor([[0]], device=device)),
         )
         return {
-            "energy": TensorMap(Labels("_", torch.tensor([[0]])), [block]),
+            "energy": TensorMap(
+                keys=Labels("_", torch.tensor([[0]], device=device)),
+                blocks=[block],
+            ),
         }
 
     def requested_neighbors_lists(self) -> List[NeighborsListOptions]:
@@ -127,7 +147,7 @@ def model():
                 explicit_gradients=[],
             ),
         },
-        supported_devices=["cpu"],
+        supported_devices=["cpu", "mps", "cuda"],
         dtype="float64",
     )
 
@@ -308,3 +328,43 @@ def test_serialize_ase(tmpdir, model, atoms):
 
         atoms = ase.io.read("file.traj", "-1")
         assert atoms.calc is not None
+
+
+def test_dtype_device(tmpdir, model, atoms):
+    ref = atoms.copy()
+    ref.calc = ase.calculators.lj.LennardJones(
+        sigma=SIGMA, epsilon=EPSILON, rc=CUTOFF, ro=CUTOFF, smooth=False
+    )
+    expected = ref.get_potential_energy()
+    path = os.path.join(tmpdir, "exported-model.pt")
+
+    dtype_device = [
+        ("float64", "cpu"),
+        ("float32", "cpu"),
+    ]
+
+    if (
+        hasattr(torch.backends, "mps")
+        and torch.backends.mps.is_built()
+        and torch.backends.mps.is_available()
+    ):
+        dtype_device.append(("float32", "mps"))
+
+    if torch.cuda.is_available():
+        dtype_device.append(("float32", "cuda"))
+        dtype_device.append(("float64", "cuda"))
+
+    for dtype, device in dtype_device:
+        capabilities = model.capabilities()
+        capabilities.dtype = dtype
+
+        # re-create the model with a different dtype
+        dtype_model = MetatensorAtomisticModel(
+            model._module.to(STR_TO_DTYPE[dtype]),
+            model.metadata(),
+            capabilities,
+        )
+
+        dtype_model.export(path)
+        atoms.calc = MetatensorCalculator(path, check_consistency=True, device=device)
+        assert np.allclose(atoms.get_potential_energy(), expected)

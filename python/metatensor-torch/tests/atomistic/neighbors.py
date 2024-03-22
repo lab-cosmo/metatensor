@@ -69,7 +69,9 @@ def test_neighbors_autograd():
             cell=cell.detach().numpy(),
             pbc=True,
         )
-        neighbors = _compute_ase_neighbors(atoms, options, dtype=torch.float64)
+        neighbors = _compute_ase_neighbors(
+            atoms, options, dtype=torch.float64, device="cpu"
+        )
 
         system = System(
             torch.from_numpy(atoms.numbers).to(torch.int32), positions, cell
@@ -109,7 +111,9 @@ def test_neighbors_autograd_errors():
         pbc=True,
     )
     options = NeighborsListOptions(cutoff=2.0, full_list=False)
-    neighbors = _compute_ase_neighbors(atoms, options, dtype=torch.float64)
+    neighbors = _compute_ase_neighbors(
+        atoms, options, dtype=torch.float64, device="cpu"
+    )
     system = System(torch.from_numpy(atoms.numbers).to(torch.int32), positions, cell)
     register_autograd_neighbors(system, neighbors)
 
@@ -126,12 +130,16 @@ def test_neighbors_autograd_errors():
         "\\[0.489917, 1.24926, 0.102936\\] but has a distance vector of "
         "\\[1.46975, 3.74777, 0.308807\\]"
     )
-    neighbors = _compute_ase_neighbors(atoms, options, dtype=torch.float64)
+    neighbors = _compute_ase_neighbors(
+        atoms, options, dtype=torch.float64, device="cpu"
+    )
     neighbors.values[:] *= 3
     with pytest.raises(ValueError, match=message):
         register_autograd_neighbors(system, neighbors, check_consistency=True)
 
-    neighbors = _compute_ase_neighbors(atoms, options, dtype=torch.float64)
+    neighbors = _compute_ase_neighbors(
+        atoms, options, dtype=torch.float64, device="cpu"
+    )
     message = (
         "`system` and `neighbors` must have the same dtype, "
         "got torch.float32 and torch.float64"

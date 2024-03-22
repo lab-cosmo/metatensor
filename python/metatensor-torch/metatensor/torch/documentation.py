@@ -1241,6 +1241,19 @@ class TensorMap:
         """
 
 
+def version() -> str:
+    """Get the version of the underlying metatensor_torch library"""
+
+
+def dtype_name(dtype: torch.dtype) -> str:
+    """
+    Get the name of a dtype.
+
+    This is intended to be used in error message in TorchScript mode, where all dtypes
+    are converted to integers.
+    """
+
+
 def load(path: str) -> TensorMap:
     """
     Load a previously saved :py:class:`TensorMap` from the given path.

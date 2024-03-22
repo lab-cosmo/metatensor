@@ -2,7 +2,7 @@ from typing import Dict, List, Optional
 
 import torch
 
-from .. import Labels, TensorMap
+from .. import Labels, TensorMap, dtype_name
 from . import ModelOutput, System
 
 
@@ -32,7 +32,8 @@ def _check_outputs(
             if output_dtype != expected_dtype:
                 raise ValueError(
                     f"wrong dtype for the {name} output: "
-                    f"the model promised {expected_dtype}, we got {output_dtype}"
+                    f"the model promised {dtype_name(expected_dtype)}, "
+                    f"we got {dtype_name(output_dtype)}"
                 )
 
     for name, request in requested.items():
@@ -60,6 +61,7 @@ def _check_energy(
             "invalid keys for 'energy' output: expected `Labels('_', [[0]])`"
         )
 
+    device = energy.device
     energy_block = energy.block_by_id(0)
 
     if request.per_atom:
@@ -81,8 +83,7 @@ def _check_energy(
                 expected_values.append([s, a])
 
         expected_samples = Labels(
-            ["system", "atom"],
-            torch.tensor(expected_values, device=energy_block.values.device),
+            ["system", "atom"], torch.tensor(expected_values, device=device)
         )
         if selected_atoms is not None:
             expected_samples = expected_samples.intersection(selected_atoms)
@@ -94,7 +95,9 @@ def _check_energy(
             )
 
     else:
-        expected_samples = Labels("system", torch.arange(len(systems)).reshape(-1, 1))
+        expected_samples = Labels(
+            "system", torch.arange(len(systems), device=device).reshape(-1, 1)
+        )
         if selected_atoms is not None:
             selected_systems = Labels(
                 "system", torch.unique(selected_atoms.column("system")).reshape(-1, 1)
@@ -112,7 +115,7 @@ def _check_energy(
             "invalid components for 'energy' output: components should be empty"
         )
 
-    if energy_block.properties != Labels("energy", torch.tensor([[0]])):
+    if energy_block.properties != Labels("energy", torch.tensor([[0]], device=device)):
         raise ValueError(
             "invalid properties for 'energy' output: expected `Labels('energy', [[0]])`"
         )
@@ -121,6 +124,7 @@ def _check_energy(
         if parameter not in ["strain", "positions"]:
             raise ValueError(f"invalid gradient for 'energy' output: {parameter}")
 
+        xyz = torch.tensor([[0], [1], [2]], device=device)
         # strain gradient checks
         if parameter == "strain":
             if gradient.samples.names != ["sample"]:
@@ -135,13 +139,13 @@ def _check_energy(
                     "expected two components"
                 )
 
-            if gradient.components[0] != Labels("xyz_1", torch.tensor([[0], [1], [2]])):
+            if gradient.components[0] != Labels("xyz_1", xyz):
                 raise ValueError(
                     "invalid components for 'energy' output 'strain' gradients: "
                     "expected Labels('xyz_1', [[0], [1], [2]]) for the first component"
                 )
 
-            if gradient.components[1] != Labels("xyz_2", torch.tensor([[0], [1], [2]])):
+            if gradient.components[1] != Labels("xyz_2", xyz):
                 raise ValueError(
                     "invalid components for 'energy' output 'strain' gradients: "
                     "expected Labels('xyz_2', [[0], [1], [2]]) for the second component"
@@ -162,7 +166,7 @@ def _check_energy(
                     "expected one component"
                 )
 
-            if gradient.components[0] != Labels("xyz", torch.tensor([[0], [1], [2]])):
+            if gradient.components[0] != Labels("xyz", xyz):
                 raise ValueError(
                     "invalid components for 'energy' output 'positions' gradients: "
                     "expected Labels('xyz', [[0], [1], [2]]) for the first component"

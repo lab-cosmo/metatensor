@@ -6,6 +6,8 @@
 #include "metatensor/torch/misc.hpp"
 #include "metatensor/torch/atomistic.hpp"
 
+#include "internal/utils.hpp"
+
 using namespace metatensor_torch;
 
 
@@ -70,7 +72,6 @@ static torch::Tensor save_ivalue_buffer(torch::IValue data) {
         + data.type()->str()
     );
 }
-
 
 TORCH_LIBRARY(metatensor, m) {
     // There is no way to access the docstrings from Python, so we don't bother
@@ -271,6 +272,7 @@ TORCH_LIBRARY(metatensor, m) {
 
     // standalone functions
     m.def("version() -> str", metatensor_torch::version);
+    m.def("dtype_name(ScalarType dtype) -> str", scalar_type_name);
 
     m.def(
         "load(str path) -> __torch__.torch.classes.metatensor.TensorMap",

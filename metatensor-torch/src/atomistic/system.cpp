@@ -155,7 +155,7 @@ torch::Tensor NeighborsAutograd::forward(
             auto expected_distance = positions[atom_j] - positions[atom_i] + cell_shift.matmul(cell);
 
             auto diff_norm = (actual_distance - expected_distance).norm();
-            if (diff_norm.to(torch::kF64).item<double>() > 1e-6) {
+            if (diff_norm.to(torch::kCPU).to(torch::kF64).item<double>() > 1e-6) {
                 std::ostringstream oss;
 
                 oss << "one neighbor pair does not match its metadata: ";

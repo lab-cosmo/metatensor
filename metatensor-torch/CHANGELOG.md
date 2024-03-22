@@ -31,6 +31,9 @@ a changelog](https://keepachangelog.com/en/1.1.0/) format. This project follows
 - `ModelCapabilities.dtype`, used by the model to communicate the dtype it
   wants to use for inputs and outputs.
 
+- The `device` that should be used by a model inside the ASE's
+  `MetatensorCalculator` can now be specified by the user.
+
 
 ## [Version 0.3.0](https://github.com/lab-cosmo/metatensor/releases/tag/metatensor-torch-v0.3.0) - 2024-03-01
 

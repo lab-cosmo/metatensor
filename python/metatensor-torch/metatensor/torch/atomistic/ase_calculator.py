@@ -1,5 +1,7 @@
+import logging
 import os
 import pathlib
+import warnings
 from typing import Dict, List, Optional, Union
 
 import numpy as np
@@ -33,6 +35,14 @@ if os.environ.get("METATENSOR_IMPORT_FOR_SPHINX", "0") == "0":
 
 FilePath = Union[str, bytes, pathlib.PurePath]
 
+LOGGER = logging.getLogger(__name__)
+
+
+STR_TO_DTYPE = {
+    "float32": torch.float32,
+    "float64": torch.float64,
+}
+
 
 class MetatensorCalculator(ase.calculators.calculator.Calculator):
     """
@@ -46,11 +56,9 @@ class MetatensorCalculator(ase.calculators.calculator.Calculator):
 
     def __init__(
         self,
-        model: Union[
-            FilePath,
-            MetatensorAtomisticModel,
-        ],
+        model: Union[FilePath, MetatensorAtomisticModel],
         check_consistency=False,
+        device=None,
     ):
         """
         :param model: model to use for the calculation. This can be a file path, a
@@ -58,6 +66,8 @@ class MetatensorCalculator(ase.calculators.calculator.Calculator):
             :py:func:`torch.jit.script` on :py:class:`MetatensorAtomisticModel`.
         :param check_consistency: should we check the model for consistency when
             running, defaults to False.
+        :param device: torch device to use for the calculation. If ``None``, we will try
+            the options in the model's ``supported_device`` in order.
         """
         super().__init__()
 
@@ -65,41 +75,67 @@ class MetatensorCalculator(ase.calculators.calculator.Calculator):
             "check_consistency": check_consistency,
         }
 
+        # Load the model
         if isinstance(model, (str, bytes, pathlib.PurePath)):
             if not os.path.exists(model):
                 raise InputError(f"given model path '{model}' does not exist")
 
-            check_atomistic_model(model)
-            self._model = torch.jit.load(model)
             self.parameters["model_path"] = str(model)
+            check_atomistic_model(model)
+            model = torch.jit.load(model)
+
         elif isinstance(model, torch.jit.RecursiveScriptModule):
             if model.original_name != "MetatensorAtomisticModel":
                 raise InputError(
                     "torch model must be 'MetatensorAtomisticModel', "
                     f"got '{model.original_name}' instead"
                 )
-            self._model = model
         elif isinstance(model, MetatensorAtomisticModel):
-            self._model = model
+            # nothing to do
+            pass
         else:
             raise TypeError(f"unknown type for model: {type(model)}")
 
-        capabilities = self._model.capabilities()
-        if check_consistency:
-            if "cpu" not in capabilities.supported_devices:
+        self.parameters["device"] = str(device) if device is not None else None
+        # check if the model supports the requested device
+        capabilities = model.capabilities()
+        if device is None:
+            device = _find_best_device(capabilities.supported_devices)
+        else:
+            device = torch.device(device)
+            device_is_supported = False
+
+            for supported in capabilities.supported_devices:
+                try:
+                    supported = torch.device(supported)
+                except RuntimeError as e:
+                    warnings.warn(
+                        "the model contains an invalid device in `supported_devices`: "
+                        f"{e}",
+                        stacklevel=2,
+                    )
+                    continue
+
+                if supported.type == device.type:
+                    device_is_supported = True
+                    break
+
+            if not device_is_supported:
                 raise ValueError(
-                    "ASE calculator only supports CPU device for now, "
-                    "but the model does not"
+                    f"This model does not support the requested device ({device}), "
+                    "the following devices are supported: "
+                    f"{capabilities.supported_devices}"
                 )
 
-        if capabilities.dtype == "float32":
-            self._dtype = torch.float32
-        elif capabilities.dtype == "float64":
-            self._dtype = torch.float64
+        if capabilities.dtype in STR_TO_DTYPE:
+            self._dtype = STR_TO_DTYPE[capabilities.dtype]
         else:
-            raise ValueError(f"unknown dtype: {capabilities.dtype}")
+            raise ValueError(
+                f"found unexpected dtype in model capabilities: {capabilities.dtype}"
+            )
 
-        self._model = self._model.to(device="cpu", dtype=self._dtype)
+        self._device = device
+        self._model = model.to(device=self._device)
 
         # We do our own check to verify if a property is implemented in `calculate()`,
         # so we pretend to be able to compute all properties ASE knows about.
@@ -117,7 +153,11 @@ class MetatensorCalculator(ase.calculators.calculator.Calculator):
 
     @classmethod
     def fromdict(cls, data):
-        return MetatensorCalculator(data["model_path"], data["check_consistency"])
+        return MetatensorCalculator(
+            model=data["model_path"],
+            check_consistency=data["check_consistency"],
+            device=data["device"],
+        )
 
     def metadata(self) -> ModelMetadata:
         """Get the metadata of the underlying model"""
@@ -147,12 +187,16 @@ class MetatensorCalculator(ase.calculators.calculator.Calculator):
         :param outputs: outputs of the model that should be predicted
         :param selected_atoms: subset of atoms on which to run the calculation
         """
-        types, positions, cell = _ase_to_torch_data(atoms, dtype=self._dtype)
+        types, positions, cell = _ase_to_torch_data(
+            atoms=atoms, dtype=self._dtype, device=self._device
+        )
         system = System(types, positions, cell)
 
         # Compute the neighbors lists requested by the model using ASE NL
         for options in self._model.requested_neighbors_lists():
-            neighbors = _compute_ase_neighbors(atoms, options, dtype=self._dtype)
+            neighbors = _compute_ase_neighbors(
+                atoms, options, dtype=self._dtype, device=self._device
+            )
             register_autograd_neighbors(
                 system,
                 neighbors,
@@ -200,7 +244,9 @@ class MetatensorCalculator(ase.calculators.calculator.Calculator):
                     "support it"
                 )
 
-        types, positions, cell = _ase_to_torch_data(atoms, dtype=self._dtype)
+        types, positions, cell = _ase_to_torch_data(
+            atoms=atoms, dtype=self._dtype, device=self._device
+        )
 
         do_backward = False
         if "forces" in properties:
@@ -210,7 +256,7 @@ class MetatensorCalculator(ase.calculators.calculator.Calculator):
         if "stress" in properties:
             do_backward = True
 
-            scaling = torch.eye(3, requires_grad=True, dtype=cell.dtype)
+            scaling = torch.eye(3, requires_grad=True, dtype=self._dtype)
 
             positions = positions @ scaling
             positions.retain_grad()
@@ -223,7 +269,9 @@ class MetatensorCalculator(ase.calculators.calculator.Calculator):
         # convert from ase.Atoms to metatensor.torch.atomistic.System
         system = System(types, positions, cell)
         for options in self._model.requested_neighbors_lists():
-            neighbors = _compute_ase_neighbors(atoms, options, dtype=self._dtype)
+            neighbors = _compute_ase_neighbors(
+                atoms, options, dtype=self._dtype, device=self._device
+            )
             register_autograd_neighbors(
                 system,
                 neighbors,
@@ -286,6 +334,49 @@ class MetatensorCalculator(ase.calculators.calculator.Calculator):
             self.results["stress"] = _full_3x3_to_voigt_6_stress(stress_values.numpy())
 
 
+def _find_best_device(devices: List[str]) -> torch.device:
+    """
+    Find the best device from the list of ``devices`` that is available to the current
+    PyTorch installation.
+    """
+
+    for device in devices:
+        if device == "cpu":
+            return torch.device("cpu")
+        elif device == "cuda":
+            if torch.cuda.is_available():
+                return torch.device("cuda")
+            else:
+                LOGGER.warning(
+                    "the model suggested to use CUDA devices before CPU, "
+                    "but we are unable to find it"
+                )
+        elif device == "mps":
+            if (
+                hasattr(torch.backends, "mps")
+                and torch.backends.mps.is_built()
+                and torch.backends.mps.is_available()
+            ):
+                return torch.device("mps")
+            else:
+                LOGGER.warning(
+                    "the model suggested to use MPS devices before CPU, "
+                    "but we are unable to find it"
+                )
+        else:
+            warnings.warn(
+                f"unknown device in the model's `supported_devices`: '{device}'",
+                stacklevel=2,
+            )
+
+    warnings.warn(
+        "could not find a valid device in the model's `supported_devices`, "
+        "falling back to CPU",
+        stacklevel=2,
+    )
+    return torch.device("cpu")
+
+
 def _ase_properties_to_metatensor_outputs(properties):
     energy_properties = []
     for p in properties:
@@ -313,7 +404,7 @@ def _ase_properties_to_metatensor_outputs(properties):
     return {"energy": output}
 
 
-def _compute_ase_neighbors(atoms, options, dtype):
+def _compute_ase_neighbors(atoms, options, dtype, device):
     engine_cutoff = options.engine_cutoff(engine_length_unit="angstrom")
     nl = ase.neighborlist.NeighborList(
         cutoffs=[engine_cutoff] * len(atoms),
@@ -342,13 +433,13 @@ def _compute_ase_neighbors(atoms, options, dtype):
                 continue
 
             samples.append((i, j, offset[0], offset[1], offset[2]))
-            distances.append(distance.to(dtype=dtype))
+            distances.append(distance.to(dtype=dtype, device=device))
 
     if len(distances) == 0:
-        distances = torch.zeros((0, 3), dtype=dtype)
-        samples = torch.zeros((0, 5))
+        distances = torch.zeros((0, 3), dtype=dtype, device=device)
+        samples = torch.zeros((0, 5), dtype=torch.int32, device=device)
     else:
-        samples = torch.tensor(samples)
+        samples = torch.tensor(samples, device=device)
         distances = torch.vstack(distances)
 
     return TensorBlock(
@@ -363,26 +454,26 @@ def _compute_ase_neighbors(atoms, options, dtype):
             ],
             values=samples,
         ),
-        components=[Labels.range("xyz", 3)],
-        properties=Labels.range("distance", 1),
+        components=[Labels.range("xyz", 3).to(device)],
+        properties=Labels.range("distance", 1).to(device),
     )
 
 
-def _ase_to_torch_data(atoms, dtype):
+def _ase_to_torch_data(atoms, dtype, device):
     """Get the positions and cell from ASE atoms as torch tensors"""
 
-    types = torch.from_numpy(atoms.numbers).to(dtype=torch.int32)
-    positions = torch.from_numpy(atoms.positions).to(dtype=dtype)
+    types = torch.from_numpy(atoms.numbers).to(dtype=torch.int32, device=device)
+    positions = torch.from_numpy(atoms.positions).to(dtype=dtype, device=device)
 
     if np.all(atoms.pbc):
-        cell = torch.from_numpy(atoms.cell[:]).to(dtype=dtype)
+        cell = torch.from_numpy(atoms.cell[:]).to(dtype=dtype, device=device)
     elif np.any(atoms.pbc):
         raise ValueError(
             f"partial PBC ({atoms.pbc}) are not currently supported in "
             "metatensor atomistic models"
         )
     else:
-        cell = torch.zeros((3, 3), dtype=dtype)
+        cell = torch.zeros((3, 3), dtype=dtype, device=device)
 
     return types, positions, cell
 

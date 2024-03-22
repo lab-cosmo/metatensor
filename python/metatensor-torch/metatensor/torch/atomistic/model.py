@@ -13,6 +13,7 @@ import torch
 
 from .. import Labels, TensorBlock, TensorMap
 from .. import __version__ as metatensor_version
+from .. import dtype_name
 from . import (
     ModelCapabilities,
     ModelEvaluationOptions,
@@ -281,7 +282,7 @@ class MetatensorAtomisticModel(torch.nn.Module):
         elif capabilities.dtype == "float64":
             self._model_dtype = torch.float64
         else:
-            raise ValueError(f"unknown dtype: {capabilities.dtype}")
+            raise ValueError(f"unknown dtype in capabilities: {capabilities.dtype}")
 
     def wrapped_module(self) -> torch.nn.Module:
         """Get the module wrapped in this :py:class:`MetatensorAtomisticModel`"""
@@ -594,8 +595,8 @@ def _check_inputs(
 
     if global_dtype != expected_dtype:
         raise ValueError(
-            "wrong dtype for the data: "
-            f"the model wants {expected_dtype}, we got {global_dtype}"
+            f"wrong dtype for the data: the model wants {dtype_name(expected_dtype)}, "
+            f"we got {dtype_name(global_dtype)}"
         )
 
     # check that the requested outputs match what the model can do
