@@ -40,6 +40,7 @@ follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Fixed
 
 - Removal of usage of Labels.range in nn modules to support torch.jit.save (#410)
+- Set correct device for output of when torch default device is different than input device (#496)
 
 ## [Version 0.1.0](https://github.com/lab-cosmo/metatensor/releases/tag/metatensor-learn-v0.1.0) - 2024-01-26
 

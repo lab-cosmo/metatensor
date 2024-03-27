@@ -15,6 +15,15 @@ def single_block_tensor():
     return random_single_block_no_components_tensor_map()
 
 
+try:
+    if torch.cuda.is_available():
+        HAS_CUDA = True
+    else:
+        HAS_CUDA = False
+except ImportError:
+    HAS_CUDA = False
+
+
 class MockModule(Module):
     def __init__(self, in_features, out_features):
         super().__init__()
@@ -26,7 +35,7 @@ class MockModule(Module):
         return self._last_layer(self._activation(self._linear(input)))
 
 
-@pytest.fixture(scope="module", autouse=True)
+@pytest.fixture(scope="function", autouse=True)
 def set_random_generator():
     """Set the random generator to same seed before each test is run.
     Otherwise test behaviour is dependent on the order of the tests
@@ -84,6 +93,75 @@ def test_module_map_single_block_tensor(single_block_tensor, out_properties):
                 assert out_block.gradient(parameter).properties == out_properties[0]
 
 
+@pytest.mark.parametrize(
+    "out_properties", [None, [Labels(["a", "b"], torch.tensor([[1, 1]]))]]
+)
+@pytest.mark.skipif(not HAS_CUDA, reason="requires cuda")
+def test_module_map_cuda(single_block_tensor, out_properties):  # noqa F811
+    """
+    We set the correct default device for initialization and check if the module this
+    works once the default device has been changed. This catches cases where the default
+    device or a hard coded device is used for tensor created within the forward
+    function.
+    """
+    modules = []
+    for key in single_block_tensor.keys:
+        modules.append(
+            MockModule(
+                in_features=len(single_block_tensor.block(key).properties),
+                out_features=5,
+            )
+        )
+    tensor_module = ModuleMap(
+        single_block_tensor.keys, modules, out_properties=out_properties
+    )
+
+    assert tensor_module._in_keys.device.type == "cpu"
+    if out_properties is not None:
+        for label in tensor_module._out_properties:
+            assert label.device.type == "cpu"
+
+    tensor_module.to("cuda")
+
+    # at this point, the parameters should have been moved,
+    # but the input keys and output properties should still be on cpu
+    for parameter in tensor_module.parameters():
+        assert parameter.device.type == "cuda"
+
+    assert tensor_module._in_keys.device.type == "cpu"
+    if out_properties is not None:
+        for label in tensor_module._out_properties:
+            assert label.device.type == "cpu"
+
+    single_block_tensor = single_block_tensor.to(device="cuda")
+    out_tensor = tensor_module(single_block_tensor)
+    assert out_tensor.device.type == "cuda"
+
+    # the input keys and output properties should be on cuda
+    assert tensor_module._in_keys.device.type == "cuda"
+    if out_properties is not None:
+        for label in tensor_module._out_properties:
+            assert label.device.type == "cuda"
+
+
+def test_module_map_dtype(single_block_tensor):
+    modules = []
+    for key in single_block_tensor.keys:
+        modules.append(
+            MockModule(
+                in_features=len(single_block_tensor.block(key).properties),
+                out_features=5,
+            )
+        )
+
+    tensor_module = ModuleMap(single_block_tensor.keys, modules)
+    tensor_module(single_block_tensor)
+
+    tensor_module = tensor_module.to(torch.float64)
+    single_block_tensor = single_block_tensor.to(torch.float64)
+    tensor_module(single_block_tensor)
+
+
 def test_torchscript_module_map(single_block_tensor):
     modules = []
     for key in single_block_tensor.keys:
@@ -111,3 +189,49 @@ def test_torchscript_module_map(single_block_tensor):
     buffer.seek(0)
     torch.jit.load(buffer)
     buffer.close()
+
+
+@pytest.mark.parametrize(
+    "out_properties", [None, [Labels(["a", "b"], torch.tensor([[1, 1]]))]]
+)
+@pytest.mark.skipif(not HAS_CUDA, reason="requires cuda")
+def test_torchscript_module_map_cuda(out_properties, single_block_tensor):
+    modules = []
+    for key in single_block_tensor.keys:
+        modules.append(
+            MockModule(
+                in_features=len(single_block_tensor.block(key).properties),
+                out_features=5,
+            )
+        )
+    tensor_module = ModuleMap(
+        single_block_tensor.keys, modules, out_properties=out_properties
+    )
+    tensor_module = torch.jit.script(tensor_module)
+
+    assert tensor_module._in_keys.device.type == "cpu"
+    if out_properties is not None:
+        for label in tensor_module._out_properties:
+            assert label.device.type == "cpu"
+
+    tensor_module.to("cuda")
+
+    # at this point, the parameters should have been moved,
+    # but the input keys and output properties should still be on cpu
+    for parameter in tensor_module.parameters():
+        assert parameter.device.type == "cuda"
+
+    assert tensor_module._in_keys.device.type == "cpu"
+    if out_properties is not None:
+        for label in tensor_module._out_properties:
+            assert label.device.type == "cpu"
+
+    single_block_tensor = single_block_tensor.to(device="cuda")
+    out_tensor = tensor_module(single_block_tensor)
+    assert out_tensor.device.type == "cuda"
+
+    # the input keys and output properties should be on cuda
+    assert tensor_module._in_keys.device.type == "cuda"
+    if out_properties is not None:
+        for label in tensor_module._out_properties:
+            assert label.device.type == "cuda"

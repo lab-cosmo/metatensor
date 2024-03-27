@@ -256,6 +256,12 @@ class ModuleMap(ModuleList):
         :param tensor:
             input tensor map
         """
+        self._in_keys = self._in_keys.to(tensor.device)
+        if self._out_properties is not None:
+            self._out_properties = [
+                label.to(tensor.device) for label in self._out_properties
+            ]
+
         out_blocks: List[TensorBlock] = []
         for key, block in tensor.items():
             out_block = self.forward_block(key, block)
