@@ -1,0 +1,4 @@
+lstsq
+======
+
+.. autofunction:: metatensor.lstsq

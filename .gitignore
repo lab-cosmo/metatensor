@@ -1,0 +1,12 @@
+/target/
+**/*.rs.bk
+Cargo.lock
+
+/.tox/
+/build/
+/dist/
+/docs/
+/python/
+/metatensor/
+*.egg-info
+__pycache__/

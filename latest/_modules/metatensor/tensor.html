@@ -1,0 +1,1214 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="../../">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><link rel="author" title="About these documents" href="../../about.html" /><link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" />
+
+    <!-- Generated with Sphinx 7.2.6 and Furo 2024.01.29 -->
+        <title>metatensor.tensor - Metatensor</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=135e06be" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/metatensor.css?v=d517da54" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=36a5483c" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../index.html"><div class="brand">Metatensor</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
+  
+  
+  <span class="sidebar-brand-text">Metatensor</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">What is metatensor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../core/index.html">Core classes</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of Core classes</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../core/overview.html">Overview</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../core/reference/python/index.html">Python API reference</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of Python API reference</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../core/reference/python/tensor.html">TensorMap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../core/reference/python/block.html">TensorBlock</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../core/reference/python/labels.html">Labels</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../core/reference/python/io.html">Serialization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../core/reference/python/data.html">Data arrays</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../core/reference/python/misc.html">Miscellaneous</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../core/reference/cxx/index.html">C++ API reference</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of C++ API reference</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../core/reference/cxx/tensor.html">TensorMap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../core/reference/cxx/labels.html">Labels</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../core/reference/cxx/block.html">TensorBlock</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../core/reference/cxx/data.html">Data arrays</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../core/reference/cxx/misc.html">Miscellaneous</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../core/reference/c/index.html">C API reference</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of C API reference</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../core/reference/c/tensor.html">TensorMap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../core/reference/c/labels.html">Labels</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../core/reference/c/block.html">TensorBlock</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../core/reference/c/data.html">Data arrays</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../core/reference/c/misc.html">Miscellaneous</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../core/reference/rust/index.html">Rust API reference</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../examples/core/index.html">Tutorials</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle navigation of Tutorials</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/core/1-first-steps.html">First steps with metatensor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/core/2-handling-sparsity.html">Handling sparsity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/core/3-managing-gradients.html">Managing gradients</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../core/CHANGELOG.html">Changelog</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../operations/index.html">Operations</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle navigation of Operations</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../operations/reference/index.html">API reference</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle navigation of API reference</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../operations/reference/creation/index.html">Creation operations</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle navigation of Creation operations</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../operations/reference/creation/empty_like.html">empty_like()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../operations/reference/creation/ones_like.html">ones_like()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../operations/reference/creation/zeros_like.html">zeros_like()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../operations/reference/creation/random_like.html">random_like()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../operations/reference/creation/block_from_array.html">block_from_array()</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../operations/reference/linear_algebra/index.html">Linear algebra</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle navigation of Linear algebra</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../operations/reference/linear_algebra/dot.html">dot()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../operations/reference/linear_algebra/lstsq.html">lstsq()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../operations/reference/linear_algebra/solve.html">solve()</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../operations/reference/logic/index.html">Logic function</a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle navigation of Logic function</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../operations/reference/logic/allclose.html">allclose()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../operations/reference/logic/equal.html">equal()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../operations/reference/logic/equal_metadata.html">equal_metadata()</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../operations/reference/manipulation/index.html">Manipulation operations</a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><div class="visually-hidden">Toggle navigation of Manipulation operations</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../operations/reference/manipulation/detach.html">detach()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../operations/reference/manipulation/drop-blocks.html">drop_blocks()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../operations/reference/manipulation/join.html">join()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../operations/reference/manipulation/manipulate-dimension.html">manipulate dimension</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../operations/reference/manipulation/one-hot.html">one_hot()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../operations/reference/manipulation/remove-gradients.html">remove_gradients()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../operations/reference/manipulation/requires-grad.html">requires_grad()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../operations/reference/manipulation/samples-reduction.html">samples reduction</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../operations/reference/manipulation/slice.html">slice()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../operations/reference/manipulation/split.html">split()</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../operations/reference/math/index.html">Mathematical functions</a><input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><div class="visually-hidden">Toggle navigation of Mathematical functions</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../operations/reference/math/abs.html">abs()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../operations/reference/math/add.html">add()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../operations/reference/math/divide.html">divide()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../operations/reference/math/multiply.html">multiply()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../operations/reference/math/pow.html">pow()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../operations/reference/math/subtract.html">subtract()</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../operations/reference/set/index.html">Set operations</a><input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><div class="visually-hidden">Toggle navigation of Set operations</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../operations/reference/set/unique_metadata.html">unique_metadata()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../operations/reference/set/sort.html">sort()</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../operations/reference/checks.html">Checks</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../operations/CHANGELOG.html">Changelog</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../torch/index.html">TorchScript interface</a><input class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" role="switch" type="checkbox"/><label for="toctree-checkbox-14"><div class="visually-hidden">Toggle navigation of TorchScript interface</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../torch/reference/index.html">API reference</a><input class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><div class="visually-hidden">Toggle navigation of API reference</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../torch/reference/tensor.html">TensorMap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../torch/reference/block.html">TensorBlock</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../torch/reference/labels.html">Labels</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../torch/reference/serialization.html">Serialization</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../torch/reference/cxx/index.html">TorchScript C++ API reference</a><input class="toctree-checkbox" id="toctree-checkbox-16" name="toctree-checkbox-16" role="switch" type="checkbox"/><label for="toctree-checkbox-16"><div class="visually-hidden">Toggle navigation of TorchScript C++ API reference</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../torch/reference/cxx/tensor.html">TensorMap</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../torch/reference/cxx/block.html">TensorBlock</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../torch/reference/cxx/labels.html">Labels</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../torch/reference/cxx/miscellaneous.html">Miscellaneous</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../torch/CHANGELOG.html">Changelog</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../learn/index.html">Learning utilities</a><input class="toctree-checkbox" id="toctree-checkbox-17" name="toctree-checkbox-17" role="switch" type="checkbox"/><label for="toctree-checkbox-17"><div class="visually-hidden">Toggle navigation of Learning utilities</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../learn/reference/index.html">API reference</a><input class="toctree-checkbox" id="toctree-checkbox-18" name="toctree-checkbox-18" role="switch" type="checkbox"/><label for="toctree-checkbox-18"><div class="visually-hidden">Toggle navigation of API reference</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../learn/reference/data/index.html">Data utilites</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../learn/reference/nn/index.html">Neural Network</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../examples/learn/index.html">Tutorials</a><input class="toctree-checkbox" id="toctree-checkbox-19" name="toctree-checkbox-19" role="switch" type="checkbox"/><label for="toctree-checkbox-19"><div class="visually-hidden">Toggle navigation of Tutorials</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/learn/1-dataset-dataloader.html">Datasets and data loaders</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/learn/2-indexed-dataset.html">Using IndexedDataset</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../learn/CHANGELOG.html">Changelog</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../atomistic/index.html">Atomistic applications</a><input class="toctree-checkbox" id="toctree-checkbox-20" name="toctree-checkbox-20" role="switch" type="checkbox"/><label for="toctree-checkbox-20"><div class="visually-hidden">Toggle navigation of Atomistic applications</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../atomistic/overview.html">Overview</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../atomistic/reference/index.html">API reference</a><input class="toctree-checkbox" id="toctree-checkbox-21" name="toctree-checkbox-21" role="switch" type="checkbox"/><label for="toctree-checkbox-21"><div class="visually-hidden">Toggle navigation of API reference</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../atomistic/reference/systems.html">Systems</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../atomistic/reference/models/index.html">Models</a><input class="toctree-checkbox" id="toctree-checkbox-22" name="toctree-checkbox-22" role="switch" type="checkbox"/><label for="toctree-checkbox-22"><div class="visually-hidden">Toggle navigation of Models</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../atomistic/reference/models/export.html">Exporting models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../atomistic/reference/models/metadata.html">Information about models</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../atomistic/reference/ase.html">Atomic Simulation Environment (ASE) integration</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../atomistic/reference/cxx/index.html">C++ API reference</a><input class="toctree-checkbox" id="toctree-checkbox-23" name="toctree-checkbox-23" role="switch" type="checkbox"/><label for="toctree-checkbox-23"><div class="visually-hidden">Toggle navigation of C++ API reference</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../atomistic/reference/cxx/systems.html">Systems</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../atomistic/reference/cxx/models.html">Models</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../atomistic/outputs.html">Standard model outputs</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../examples/atomistic/index.html">Tutorials</a><input class="toctree-checkbox" id="toctree-checkbox-24" name="toctree-checkbox-24" role="switch" type="checkbox"/><label for="toctree-checkbox-24"><div class="visually-hidden">Toggle navigation of Tutorials</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/atomistic/1-export-atomistic-model.html">Exporting a model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/atomistic/2-running-ase-md.html">Running Molecular Dynamics with ASE</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../devdoc/index.html">Developer documentation</a><input class="toctree-checkbox" id="toctree-checkbox-25" name="toctree-checkbox-25" role="switch" type="checkbox"/><label for="toctree-checkbox-25"><div class="visually-hidden">Toggle navigation of Developer documentation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../devdoc/get-started.html">Getting started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../devdoc/architecture.html">Code organization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../devdoc/versions.html">Version number management</a></li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <h1>Source code for metatensor.tensor</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">copy</span>
+<span class="kn">import</span> <span class="nn">ctypes</span>
+<span class="kn">import</span> <span class="nn">pathlib</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">from</span> <span class="nn">pickle</span> <span class="kn">import</span> <span class="n">PickleBuffer</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">BinaryIO</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">data</span>
+<span class="kn">from</span> <span class="nn">._c_api</span> <span class="kn">import</span> <span class="n">c_uintptr_t</span><span class="p">,</span> <span class="n">mts_block_t</span><span class="p">,</span> <span class="n">mts_labels_t</span>
+<span class="kn">from</span> <span class="nn">._c_lib</span> <span class="kn">import</span> <span class="n">_get_library</span>
+<span class="kn">from</span> <span class="nn">.block</span> <span class="kn">import</span> <span class="n">TensorBlock</span>
+<span class="kn">from</span> <span class="nn">.data</span> <span class="kn">import</span> <span class="n">Device</span><span class="p">,</span> <span class="n">DeviceWarning</span><span class="p">,</span> <span class="n">DType</span>
+<span class="kn">from</span> <span class="nn">.labels</span> <span class="kn">import</span> <span class="n">Labels</span><span class="p">,</span> <span class="n">LabelsEntry</span>
+<span class="kn">from</span> <span class="nn">.status</span> <span class="kn">import</span> <span class="n">_check_pointer</span>
+<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">_to_arguments_parse</span>
+
+
+<div class="viewcode-block" id="TensorMap">
+<a class="viewcode-back" href="../../core/reference/python/tensor.html#metatensor.TensorMap">[docs]</a>
+<span class="k">class</span> <span class="nc">TensorMap</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A TensorMap is the main user-facing class of this library, and can store any kind of</span>
+<span class="sd">    data used in atomistic machine learning similar to a Python :py:class:`dict`.</span>
+
+<span class="sd">    A tensor map contains a list of :py:class:`TensorBlock`, each one associated with a</span>
+<span class="sd">    key. Blocks can either be accessed one by one with the :py:func:`TensorMap.block`</span>
+<span class="sd">    function, or by iterating over the tensor map itself:</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">        for block in tensor:</span>
+<span class="sd">            ...</span>
+
+<span class="sd">    The corresponding keys can be included in the loop by using the ``items()`` method</span>
+<span class="sd">    of a :py:func:`TensorMap`:</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">        for key, block in tensor.items():</span>
+<span class="sd">            ...</span>
+
+<span class="sd">    A tensor map provides functions to move some of these keys to the samples or</span>
+<span class="sd">    properties labels of the blocks, moving from a sparse representation of the data to</span>
+<span class="sd">    a dense one.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">keys</span><span class="p">:</span> <span class="n">Labels</span><span class="p">,</span> <span class="n">blocks</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">TensorBlock</span><span class="p">]):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param keys: keys associated with each block</span>
+<span class="sd">        :param blocks: set of blocks containing the actual data</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">keys</span><span class="p">,</span> <span class="n">Labels</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;`keys` must be metatensor Labels, not </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">keys</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="n">blocks</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">blocks</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">block</span> <span class="ow">in</span> <span class="n">blocks</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">block</span><span class="p">,</span> <span class="n">TensorBlock</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                    <span class="s2">&quot;`blocks` elements must be metatensor TensorBlock, &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;not </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">block</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_lib</span> <span class="o">=</span> <span class="n">_get_library</span><span class="p">()</span>
+
+        <span class="n">blocks_array_t</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">mts_block_t</span><span class="p">)</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">blocks</span><span class="p">)</span>
+        <span class="n">blocks_array</span> <span class="o">=</span> <span class="n">blocks_array_t</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">block</span><span class="o">.</span><span class="n">_ptr</span> <span class="k">for</span> <span class="n">block</span> <span class="ow">in</span> <span class="n">blocks</span><span class="p">])</span>
+
+        <span class="k">for</span> <span class="n">block</span> <span class="ow">in</span> <span class="n">blocks</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">block</span><span class="o">.</span><span class="n">_parent</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;can not use blocks from another TensorMap in a new one, &quot;</span>
+                    <span class="s2">&quot;use TensorBlock.copy() to make a copy of each block first&quot;</span>
+                <span class="p">)</span>
+
+            <span class="n">block_origin</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">data_origin</span><span class="p">(</span><span class="n">block</span><span class="o">.</span><span class="n">_raw_values</span><span class="p">)</span>
+            <span class="n">first_block_origin</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">data_origin</span><span class="p">(</span><span class="n">blocks</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">_raw_values</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">block_origin</span> <span class="o">!=</span> <span class="n">first_block_origin</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;all blocks in a TensorMap must have the same origin, &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;got &#39;</span><span class="si">{</span><span class="n">data</span><span class="o">.</span><span class="n">data_origin_name</span><span class="p">(</span><span class="n">first_block_origin</span><span class="p">)</span><span class="si">}</span><span class="s2">&#39; &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;and &#39;</span><span class="si">{</span><span class="n">data</span><span class="o">.</span><span class="n">data_origin_name</span><span class="p">(</span><span class="n">block_origin</span><span class="p">)</span><span class="si">}</span><span class="s2">&#39;&quot;</span>
+                <span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">block</span><span class="o">.</span><span class="n">device</span> <span class="o">!=</span> <span class="n">blocks</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">device</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;all blocks in a TensorMap must have the same device, &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;got &#39;</span><span class="si">{</span><span class="n">blocks</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">device</span><span class="si">}</span><span class="s2">&#39; and &#39;</span><span class="si">{</span><span class="n">block</span><span class="o">.</span><span class="n">device</span><span class="si">}</span><span class="s2">&#39;&quot;</span>
+                <span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">block</span><span class="o">.</span><span class="n">dtype</span> <span class="o">!=</span> <span class="n">blocks</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;all blocks in a TensorMap must have the same dtype, &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;got </span><span class="si">{</span><span class="n">blocks</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="si">}</span><span class="s2"> and </span><span class="si">{</span><span class="n">block</span><span class="o">.</span><span class="n">dtype</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">blocks</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">data</span><span class="o">.</span><span class="n">array_device_is_cpu</span><span class="p">(</span><span class="n">blocks</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">):</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="s2">&quot;Blocks values and keys for this TensorMap are on different devices: &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;keys are always on CPU, and blocks values are on device &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="n">blocks</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">device</span><span class="si">}</span><span class="s2">&#39;. If you are using PyTorch and need the labels &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;to also be on </span><span class="si">{</span><span class="n">blocks</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">device</span><span class="si">}</span><span class="s2">, you should use &quot;</span>
+                <span class="s2">&quot;`metatensor.torch.TensorMap`.&quot;</span><span class="p">,</span>
+                <span class="n">category</span><span class="o">=</span><span class="n">DeviceWarning</span><span class="p">,</span>
+                <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+            <span class="p">)</span>
+
+        <span class="c1"># all blocks are moved into the tensor map, assign NULL to `block._ptr` to</span>
+        <span class="c1"># prevent accessing invalid data from Python and double free</span>
+        <span class="k">for</span> <span class="n">block</span> <span class="ow">in</span> <span class="n">blocks</span><span class="p">:</span>
+            <span class="n">block</span><span class="o">.</span><span class="n">_move_ptr</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ptr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lib</span><span class="o">.</span><span class="n">mts_tensormap</span><span class="p">(</span>
+            <span class="n">keys</span><span class="o">.</span><span class="n">_as_mts_labels_t</span><span class="p">(),</span> <span class="n">blocks_array</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">blocks</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">_check_pointer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ptr</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">block</span> <span class="ow">in</span> <span class="n">blocks</span><span class="p">:</span>
+            <span class="n">block</span><span class="o">.</span><span class="n">_is_inside_map</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_from_ptr</span><span class="p">(</span><span class="n">ptr</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a tensor map from a pointer owning its data&quot;&quot;&quot;</span>
+        <span class="n">_check_pointer</span><span class="p">(</span><span class="n">ptr</span><span class="p">)</span>
+        <span class="n">obj</span> <span class="o">=</span> <span class="n">TensorMap</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="n">TensorMap</span><span class="p">)</span>
+        <span class="n">obj</span><span class="o">.</span><span class="n">_lib</span> <span class="o">=</span> <span class="n">_get_library</span><span class="p">()</span>
+        <span class="n">obj</span><span class="o">.</span><span class="n">_ptr</span> <span class="o">=</span> <span class="n">ptr</span>
+        <span class="n">obj</span><span class="o">.</span><span class="n">_blocks</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">return</span> <span class="n">obj</span>
+
+    <span class="k">def</span> <span class="fm">__del__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_lib&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lib</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_ptr&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_lib</span><span class="o">.</span><span class="n">mts_tensormap_free</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ptr</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__copy__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;shallow copies of TensorMap are not possible, use a deepcopy instead&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__deepcopy__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_memodict</span><span class="p">):</span>
+        <span class="n">new_ptr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lib</span><span class="o">.</span><span class="n">mts_tensormap_copy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ptr</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">TensorMap</span><span class="o">.</span><span class="n">_from_ptr</span><span class="p">(</span><span class="n">new_ptr</span><span class="p">)</span>
+
+<div class="viewcode-block" id="TensorMap.copy">
+<a class="viewcode-back" href="../../core/reference/python/tensor.html#metatensor.TensorMap.copy">[docs]</a>
+    <span class="k">def</span> <span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;TensorMap&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get a deep copy of this TensorMap, including all the data and metadata</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selection</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TensorBlock</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;This is equivalent to self.block(selection)&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">block</span><span class="p">(</span><span class="n">selection</span><span class="p">)</span>
+
+    <span class="c1"># ===== Serialization support ===== #</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_from_pickle</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">buffer</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">bytes</span><span class="p">,</span> <span class="nb">bytearray</span><span class="p">]):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Passed to pickler to reconstruct TensorMap from bytes object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">.io</span> <span class="kn">import</span> <span class="n">create_numpy_array</span><span class="p">,</span> <span class="n">load_buffer_custom_array</span>
+
+        <span class="c1"># TODO: make it so when saving data in torch tensors, we load back data in torch</span>
+        <span class="c1"># tensors.</span>
+        <span class="k">return</span> <span class="n">load_buffer_custom_array</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="n">create_numpy_array</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__reduce_ex__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">protocol</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Used by the Pickler to dump TensorMap object to bytes object. When protocol &gt;= 5</span>
+<span class="sd">        it supports PickleBuffer which reduces number of copies needed</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">.io</span> <span class="kn">import</span> <span class="n">_save_tensormap_buffer_raw</span>
+
+        <span class="n">buffer</span> <span class="o">=</span> <span class="n">_save_tensormap_buffer_raw</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">protocol</span> <span class="o">&gt;=</span> <span class="mi">5</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_from_pickle</span><span class="p">,</span> <span class="p">(</span><span class="n">PickleBuffer</span><span class="p">(</span><span class="n">buffer</span><span class="p">),)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_from_pickle</span><span class="p">,</span> <span class="p">(</span><span class="n">buffer</span><span class="o">.</span><span class="n">raw</span><span class="p">,)</span>
+
+<div class="viewcode-block" id="TensorMap.load">
+<a class="viewcode-back" href="../../core/reference/python/tensor.html#metatensor.TensorMap.load">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="n">file</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">,</span> <span class="n">BinaryIO</span><span class="p">],</span> <span class="n">use_numpy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;TensorMap&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Load a serialized :py:class:`TensorMap` from a file or a buffer, calling</span>
+<span class="sd">        :py:func:`metatensor.load`.</span>
+
+<span class="sd">        :param file: file path or file object to load from</span>
+<span class="sd">        :param use_numpy: should we use the numpy loader or metatensor&#39;s. See</span>
+<span class="sd">            :py:func:`metatensor.load` for more information.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">.io</span> <span class="kn">import</span> <span class="n">load</span>
+
+        <span class="k">return</span> <span class="n">load</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="n">file</span><span class="p">,</span> <span class="n">use_numpy</span><span class="o">=</span><span class="n">use_numpy</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TensorMap.load_buffer">
+<a class="viewcode-back" href="../../core/reference/python/tensor.html#metatensor.TensorMap.load_buffer">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">load_buffer</span><span class="p">(</span>
+        <span class="n">buffer</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">bytes</span><span class="p">,</span> <span class="nb">bytearray</span><span class="p">,</span> <span class="nb">memoryview</span><span class="p">],</span>
+        <span class="n">use_numpy</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Labels&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Load a serialized :py:class:`TensorMap` from a buffer, calling</span>
+<span class="sd">        :py:func:`metatensor.io.load_buffer`.</span>
+
+<span class="sd">        :param buffer: in-memory buffer containing the data</span>
+<span class="sd">        :param use_numpy: should we use the numpy loader or metatensor&#39;s. See</span>
+<span class="sd">            :py:func:`metatensor.load` for more information.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">.io</span> <span class="kn">import</span> <span class="n">load_buffer</span>
+
+        <span class="k">return</span> <span class="n">load_buffer</span><span class="p">(</span><span class="n">buffer</span><span class="o">=</span><span class="n">buffer</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TensorMap.save">
+<a class="viewcode-back" href="../../core/reference/python/tensor.html#metatensor.TensorMap.save">[docs]</a>
+    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">,</span> <span class="n">BinaryIO</span><span class="p">],</span> <span class="n">use_numpy</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Save this :py:class:`TensorMap` to a file or a buffer, calling</span>
+<span class="sd">        :py:func:`metatensor.save`.</span>
+
+<span class="sd">        :param file: file path or file object to save to</span>
+<span class="sd">        :param use_numpy: should we use the numpy serializer or metatensor&#39;s. See</span>
+<span class="sd">            :py:func:`metatensor.save` for more information.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">.io</span> <span class="kn">import</span> <span class="n">save</span>
+
+        <span class="k">return</span> <span class="n">save</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="n">file</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">use_numpy</span><span class="o">=</span><span class="n">use_numpy</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TensorMap.save_buffer">
+<a class="viewcode-back" href="../../core/reference/python/tensor.html#metatensor.TensorMap.save_buffer">[docs]</a>
+    <span class="k">def</span> <span class="nf">save_buffer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">use_numpy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">memoryview</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Save this :py:class:`TensorMap` to an in-memory buffer, calling</span>
+<span class="sd">        :py:func:`metatensor.io.save_buffer`.</span>
+
+<span class="sd">        :param use_numpy: should we use numpy serialization or metatensor&#39;s. See</span>
+<span class="sd">            :py:func:`metatensor.save` for more information.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">.io</span> <span class="kn">import</span> <span class="n">save_buffer</span>
+
+        <span class="k">return</span> <span class="n">save_buffer</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">use_numpy</span><span class="o">=</span><span class="n">use_numpy</span><span class="p">)</span></div>
+
+
+    <span class="c1"># ===== Math functions, implemented using metatensor-operations ===== #</span>
+
+    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="kn">from</span> <span class="nn">metatensor.operations</span> <span class="kn">import</span> <span class="n">equal</span>
+
+        <span class="k">return</span> <span class="n">equal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__ne__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="kn">from</span> <span class="nn">metatensor.operations</span> <span class="kn">import</span> <span class="n">equal</span>
+
+        <span class="k">return</span> <span class="ow">not</span> <span class="n">equal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="kn">from</span> <span class="nn">metatensor.operations</span> <span class="kn">import</span> <span class="n">add</span>
+
+        <span class="k">return</span> <span class="n">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__sub__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="kn">from</span> <span class="nn">metatensor.operations</span> <span class="kn">import</span> <span class="n">subtract</span>
+
+        <span class="k">return</span> <span class="n">subtract</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__mul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="kn">from</span> <span class="nn">metatensor.operations</span> <span class="kn">import</span> <span class="n">multiply</span>
+
+        <span class="k">return</span> <span class="n">multiply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__matmul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="kn">from</span> <span class="nn">metatensor.operations</span> <span class="kn">import</span> <span class="n">dot</span>
+
+        <span class="k">return</span> <span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__truediv__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="kn">from</span> <span class="nn">metatensor.operations</span> <span class="kn">import</span> <span class="n">divide</span>
+
+        <span class="k">return</span> <span class="n">divide</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__pow__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="kn">from</span> <span class="nn">metatensor.operations</span> <span class="kn">import</span> <span class="nb">pow</span>
+
+        <span class="k">return</span> <span class="nb">pow</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__neg__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="kn">from</span> <span class="nn">metatensor.operations</span> <span class="kn">import</span> <span class="n">multiply</span>
+
+        <span class="k">return</span> <span class="n">multiply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__pos__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="c1"># ===== Data manipulation ===== #</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">keys</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Labels</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The set of keys labeling the blocks in this tensor map.&quot;&quot;&quot;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">mts_labels_t</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_lib</span><span class="o">.</span><span class="n">mts_tensormap_keys</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ptr</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Labels</span><span class="o">.</span><span class="n">_from_mts_labels_t</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+
+<div class="viewcode-block" id="TensorMap.block_by_id">
+<a class="viewcode-back" href="../../core/reference/python/tensor.html#metatensor.TensorMap.block_by_id">[docs]</a>
+    <span class="k">def</span> <span class="nf">block_by_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TensorBlock</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the block at ``index`` in this :py:class:`TensorMap`.</span>
+
+<span class="sd">        :param index: index of the block to retrieve</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">index</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="c1"># we need to raise IndexError to make sure TensorMap supports iterations</span>
+            <span class="c1"># over blocks with `for block in tensor:` which calls `__getitem__` with</span>
+            <span class="c1"># integers from 0 to whenever IndexError is raised.</span>
+            <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;block index out of bounds: we have </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="si">}</span><span class="s2"> blocks but the &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;index is </span><span class="si">{</span><span class="n">index</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+
+        <span class="n">block</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">mts_block_t</span><span class="p">)()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_lib</span><span class="o">.</span><span class="n">mts_tensormap_block_by_id</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ptr</span><span class="p">,</span> <span class="n">block</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">TensorBlock</span><span class="o">.</span><span class="n">_from_ptr</span><span class="p">(</span><span class="n">block</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TensorMap.blocks_by_id">
+<a class="viewcode-back" href="../../core/reference/python/tensor.html#metatensor.TensorMap.blocks_by_id">[docs]</a>
+    <span class="k">def</span> <span class="nf">blocks_by_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indices</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">TensorBlock</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the blocks with the given ``indices`` in this :py:class:`TensorMap`.</span>
+
+<span class="sd">        :param indices: indices of the block to retrieve</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">block_by_id</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="TensorMap.blocks_matching">
+<a class="viewcode-back" href="../../core/reference/python/tensor.html#metatensor.TensorMap.blocks_matching">[docs]</a>
+    <span class="k">def</span> <span class="nf">blocks_matching</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selection</span><span class="p">:</span> <span class="n">Labels</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get a (possibly empty) list of block indexes matching the ``selection``.</span>
+
+<span class="sd">        This function finds all keys in this :py:class:`TensorMap` with the same values</span>
+<span class="sd">        as ``selection`` for the dimensions/names contained in the ``selection``; and</span>
+<span class="sd">        return the corresponding indexes.</span>
+
+<span class="sd">        The ``selection`` should contain a single entry.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">block_indexes</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">ARRAY</span><span class="p">(</span><span class="n">c_uintptr_t</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">))()</span>
+        <span class="n">count</span> <span class="o">=</span> <span class="n">c_uintptr_t</span><span class="p">(</span><span class="n">block_indexes</span><span class="o">.</span><span class="n">_length_</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_lib</span><span class="o">.</span><span class="n">mts_tensormap_blocks_matching</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_ptr</span><span class="p">,</span>
+            <span class="n">block_indexes</span><span class="p">,</span>
+            <span class="n">count</span><span class="p">,</span>
+            <span class="n">selection</span><span class="o">.</span><span class="n">_as_mts_labels_t</span><span class="p">(),</span>
+        <span class="p">)</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">count</span><span class="o">.</span><span class="n">value</span><span class="p">):</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">block_indexes</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+
+        <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="TensorMap.block">
+<a class="viewcode-back" href="../../core/reference/python/tensor.html#metatensor.TensorMap.block">[docs]</a>
+    <span class="k">def</span> <span class="nf">block</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">selection</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="n">Labels</span><span class="p">,</span> <span class="n">LabelsEntry</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TensorBlock</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the single block in this :py:class:`TensorMap` matching the ``selection``.</span>
+
+<span class="sd">        When ``selection`` is an ``int``, this is equivalent to</span>
+<span class="sd">        :py:func:`TensorMap.block_by_id`.</span>
+
+<span class="sd">        When ``selection`` is an :py:class:`Labels`, it should only contain a single</span>
+<span class="sd">        entry, which will be used for the selection.</span>
+
+<span class="sd">        When ``selection`` is a ``Dict[str, int]``, it is converted into a single single</span>
+<span class="sd">        :py:class:`LabelsEntry` (the dict keys becoming the names and the dict values</span>
+<span class="sd">        being joined together to form the :py:class:`LabelsEntry` values), which is then</span>
+<span class="sd">        used for the selection.</span>
+
+<span class="sd">        When ``selection`` is a :py:class:`LabelsEntry`, this function finds the key in</span>
+<span class="sd">        this :py:class:`TensorMap` with the same values as ``selection`` for the</span>
+<span class="sd">        dimensions/names contained in the ``selection``; and return the corresponding</span>
+<span class="sd">        indexes.</span>
+
+<span class="sd">        If ``selection`` is :py:obj:`None`, the selection can be passed as keyword</span>
+<span class="sd">        arguments, which will be converted to a ``Dict[str, int]``.</span>
+
+<span class="sd">        :param selection: description of the block to extract</span>
+
+<span class="sd">        &gt;&gt;&gt; from metatensor import TensorMap, TensorBlock, Labels</span>
+<span class="sd">        &gt;&gt;&gt; keys = Labels([&quot;key_1&quot;, &quot;key_2&quot;], np.array([[0, 0], [6, 8]]))</span>
+<span class="sd">        &gt;&gt;&gt; block_1 = TensorBlock(</span>
+<span class="sd">        ...     values=np.full((3, 5), 1.0),</span>
+<span class="sd">        ...     samples=Labels.range(&quot;sample&quot;, 3),</span>
+<span class="sd">        ...     components=[],</span>
+<span class="sd">        ...     properties=Labels.range(&quot;property&quot;, 5),</span>
+<span class="sd">        ... )</span>
+<span class="sd">        &gt;&gt;&gt; block_2 = TensorBlock(</span>
+<span class="sd">        ...     values=np.full((5, 3), 2.0),</span>
+<span class="sd">        ...     samples=Labels.range(&quot;sample&quot;, 5),</span>
+<span class="sd">        ...     components=[],</span>
+<span class="sd">        ...     properties=Labels.range(&quot;property&quot;, 3),</span>
+<span class="sd">        ... )</span>
+<span class="sd">        &gt;&gt;&gt; tensor = TensorMap(keys, [block_1, block_2])</span>
+<span class="sd">        &gt;&gt;&gt; # numeric index selection, this gives a block by its position</span>
+<span class="sd">        &gt;&gt;&gt; block = tensor.block(0)</span>
+<span class="sd">        &gt;&gt;&gt; block</span>
+<span class="sd">        TensorBlock</span>
+<span class="sd">            samples (3): [&#39;sample&#39;]</span>
+<span class="sd">            components (): []</span>
+<span class="sd">            properties (5): [&#39;property&#39;]</span>
+<span class="sd">            gradients: None</span>
+<span class="sd">        &gt;&gt;&gt; # This is the first block</span>
+<span class="sd">        &gt;&gt;&gt; block.values.mean()</span>
+<span class="sd">        1.0</span>
+<span class="sd">        &gt;&gt;&gt; # use a single key entry (i.e. LabelsEntry) for the selection</span>
+<span class="sd">        &gt;&gt;&gt; tensor.block(tensor.keys[0]).values.mean()</span>
+<span class="sd">        1.0</span>
+<span class="sd">        &gt;&gt;&gt; # Labels with a single entry selection</span>
+<span class="sd">        &gt;&gt;&gt; labels = Labels(names=[&quot;key_1&quot;, &quot;key_2&quot;], values=np.array([[6, 8]]))</span>
+<span class="sd">        &gt;&gt;&gt; tensor.block(labels).values.mean()</span>
+<span class="sd">        2.0</span>
+<span class="sd">        &gt;&gt;&gt; # keyword arguments selection</span>
+<span class="sd">        &gt;&gt;&gt; tensor.block(key_1=0, key_2=0).values.mean()</span>
+<span class="sd">        1.0</span>
+<span class="sd">        &gt;&gt;&gt; # dictionary selection</span>
+<span class="sd">        &gt;&gt;&gt; tensor.block({&quot;key_1&quot;: 6, &quot;key_2&quot;: 8}).values.mean()</span>
+<span class="sd">        2.0</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">selection</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">block</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">selection</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">block_by_id</span><span class="p">(</span><span class="n">selection</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">selection</span> <span class="o">=</span> <span class="n">_normalize_selection</span><span class="p">(</span><span class="n">selection</span><span class="p">)</span>
+
+        <span class="n">matching</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">blocks_matching</span><span class="p">(</span><span class="n">selection</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">matching</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;there are no blocks in this TensorMap&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;couldn&#39;t find any block matching </span><span class="si">{</span><span class="n">selection</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">print</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">matching</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;more than one block matched </span><span class="si">{</span><span class="n">selection</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">print</span><span class="p">()</span><span class="si">}</span><span class="s2">, &quot;</span>
+                <span class="s2">&quot;use `TensorMap.blocks` to get all of them&quot;</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">block_by_id</span><span class="p">(</span><span class="n">matching</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="TensorMap.blocks">
+<a class="viewcode-back" href="../../core/reference/python/tensor.html#metatensor.TensorMap.blocks">[docs]</a>
+    <span class="k">def</span> <span class="nf">blocks</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">selection</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span>
+            <span class="kc">None</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="nb">int</span><span class="p">,</span> <span class="n">Labels</span><span class="p">,</span> <span class="n">LabelsEntry</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span>
+        <span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">TensorBlock</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the blocks in this :py:class:`TensorMap` matching the ``selection``.</span>
+
+<span class="sd">        When ``selection`` is ``None`` (the default), all blocks are returned.</span>
+
+<span class="sd">        When ``selection`` is an ``int``, this is equivalent to</span>
+<span class="sd">        :py:func:`TensorMap.block_by_id`; and for a ``List[int]`` this is equivalent to</span>
+<span class="sd">        :py:func:`TensorMap.blocks_by_id`.</span>
+
+<span class="sd">        When ``selection`` is an :py:class:`Labels`, it should only contain a single</span>
+<span class="sd">        entry, which will be used for the selection.</span>
+
+<span class="sd">        When ``selection`` is a ``Dict[str, int]``, it is converted into a single single</span>
+<span class="sd">        :py:class:`LabelsEntry` (the dict keys becoming the names and the dict values</span>
+<span class="sd">        being joined together to form the :py:class:`LabelsEntry` values), which is then</span>
+<span class="sd">        used for the selection.</span>
+
+<span class="sd">        When ``selection`` is a :py:class:`LabelsEntry`, this function finds all keys in</span>
+<span class="sd">        this :py:class:`TensorMap` with the same values as ``selection`` for the</span>
+<span class="sd">        dimensions/names contained in the ``selection``; and return the corresponding</span>
+<span class="sd">        blocks.</span>
+
+<span class="sd">        If ``selection`` is :py:obj:`None`, the selection can be passed as keyword</span>
+<span class="sd">        arguments, which will be converted to a ``Dict[str, int]``.</span>
+
+<span class="sd">        :param selection: description of the blocks to extract</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">selection</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">blocks</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">selection</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">block_by_id</span><span class="p">(</span><span class="n">selection</span><span class="p">)]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">selection</span> <span class="o">=</span> <span class="n">_normalize_selection</span><span class="p">(</span><span class="n">selection</span><span class="p">)</span>
+
+        <span class="n">matching</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">blocks_matching</span><span class="p">(</span><span class="n">selection</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># return an empty list here instead of the top of this function to make sure</span>
+            <span class="c1"># the selection was validated</span>
+            <span class="k">return</span> <span class="p">[]</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">matching</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Couldn&#39;t find any block matching &#39;</span><span class="si">{</span><span class="n">selection</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">print</span><span class="p">()</span><span class="si">}</span><span class="s2">&#39;&quot;</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">blocks_by_id</span><span class="p">(</span><span class="n">matching</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TensorMap.items">
+<a class="viewcode-back" href="../../core/reference/python/tensor.html#metatensor.TensorMap.items">[docs]</a>
+    <span class="k">def</span> <span class="nf">items</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;get an iterator over (key, block) pairs in this :py:class:`TensorMap`&quot;&quot;&quot;</span>
+        <span class="n">keys</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">keys</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">key</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">keys</span><span class="p">):</span>
+            <span class="k">yield</span> <span class="n">key</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">block_by_id</span><span class="p">(</span><span class="n">i</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TensorMap.keys_to_samples">
+<a class="viewcode-back" href="../../core/reference/python/tensor.html#metatensor.TensorMap.keys_to_samples">[docs]</a>
+    <span class="k">def</span> <span class="nf">keys_to_samples</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">keys_to_move</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">sort_samples</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;TensorMap&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Merge blocks along the samples axis, adding ``keys_to_move`` to the end of the</span>
+<span class="sd">        samples labels dimensions.</span>
+
+<span class="sd">        This function will remove ``keys_to_move`` from the keys, and find all blocks</span>
+<span class="sd">        with the same remaining keys values. It will then merge these blocks along the</span>
+<span class="sd">        samples direction (i.e. do a *vertical* concatenation), adding ``keys_to_move``</span>
+<span class="sd">        to the end of the samples labels dimensions. The values taken by</span>
+<span class="sd">        ``keys_to_move`` in the new samples labels will be the values of these</span>
+<span class="sd">        dimensions in the merged blocks&#39; keys.</span>
+
+<span class="sd">        If ``keys_to_move`` is a set of :py:class:`Labels`, it must be empty</span>
+<span class="sd">        (``keys_to_move.values.shape[0] == 0``), and only the :py:class:`Labels.names`</span>
+<span class="sd">        will be used.</span>
+
+<span class="sd">        The order of the samples is controlled by ``sort_samples``. If ``sort_samples``</span>
+<span class="sd">        is true, samples are re-ordered to keep them lexicographically sorted. Otherwise</span>
+<span class="sd">        they are kept in the order in which they appear in the blocks.</span>
+
+<span class="sd">        This function is only implemented when the blocks to merge have the same</span>
+<span class="sd">        properties values.</span>
+
+<span class="sd">        :param keys_to_move: description of the keys to move</span>
+<span class="sd">        :param sort_samples: whether to sort the merged samples or keep them in the</span>
+<span class="sd">            order in which they appear in the original blocks</span>
+<span class="sd">        :return: a new :py:class:`TensorMap` with merged blocks</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">keys_to_move</span> <span class="o">=</span> <span class="n">_normalize_keys_to_move</span><span class="p">(</span><span class="n">keys_to_move</span><span class="p">)</span>
+
+        <span class="n">ptr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lib</span><span class="o">.</span><span class="n">mts_tensormap_keys_to_samples</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_ptr</span><span class="p">,</span> <span class="n">keys_to_move</span><span class="o">.</span><span class="n">_as_mts_labels_t</span><span class="p">(),</span> <span class="n">sort_samples</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">TensorMap</span><span class="o">.</span><span class="n">_from_ptr</span><span class="p">(</span><span class="n">ptr</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TensorMap.components_to_properties">
+<a class="viewcode-back" href="../../core/reference/python/tensor.html#metatensor.TensorMap.components_to_properties">[docs]</a>
+    <span class="k">def</span> <span class="nf">components_to_properties</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">dimensions</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;TensorMap&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Move the given ``dimensions`` from the component labels to the property labels</span>
+<span class="sd">        for each block.</span>
+
+<span class="sd">        :param dimensions: name of the component dimensions to move to the properties</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">c_dimensions</span> <span class="o">=</span> <span class="n">_list_or_str_to_array_c_char</span><span class="p">(</span><span class="n">dimensions</span><span class="p">)</span>
+
+        <span class="n">ptr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lib</span><span class="o">.</span><span class="n">mts_tensormap_components_to_properties</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_ptr</span><span class="p">,</span> <span class="n">c_dimensions</span><span class="p">,</span> <span class="n">c_dimensions</span><span class="o">.</span><span class="n">_length_</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">TensorMap</span><span class="o">.</span><span class="n">_from_ptr</span><span class="p">(</span><span class="n">ptr</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TensorMap.keys_to_properties">
+<a class="viewcode-back" href="../../core/reference/python/tensor.html#metatensor.TensorMap.keys_to_properties">[docs]</a>
+    <span class="k">def</span> <span class="nf">keys_to_properties</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">keys_to_move</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">Labels</span><span class="p">],</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">sort_samples</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;TensorMap&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Merge blocks along the properties direction, adding ``keys_to_move`` at the</span>
+<span class="sd">        beginning of the properties labels dimensions.</span>
+
+<span class="sd">        This function will remove ``keys_to_move`` from the keys, and find all blocks</span>
+<span class="sd">        with the same remaining keys values. Then it will merge these blocks along the</span>
+<span class="sd">        properties direction (i.e. do a *horizontal* concatenation).</span>
+
+<span class="sd">        If ``keys_to_move`` is given as strings, then the new property labels will</span>
+<span class="sd">        **only** contain entries from the existing blocks. For example, merging a block</span>
+<span class="sd">        with key ``a=0`` and properties ``p=1, 2`` with a block with key ``a=2`` and</span>
+<span class="sd">        properties ``p=1, 3`` will produce a block with properties ``a, p = (0, 1), (0,</span>
+<span class="sd">        2), (2, 1), (2, 3)``.</span>
+
+<span class="sd">        If ``keys_to_move`` is a set of :py:class:`Labels` and it is empty</span>
+<span class="sd">        (``len(keys_to_move) == 0``), the :py:class:`Labels.names` will be used as if</span>
+<span class="sd">        they where passed directly.</span>
+
+<span class="sd">        Finally, if ``keys_to_move`` is a non empty set of :py:class:`Labels`, the new</span>
+<span class="sd">        properties labels will contains **all** of the entries of ``keys_to_move``</span>
+<span class="sd">        (regardless of the values taken by ``keys_to_move.names`` in the merged blocks&#39;</span>
+<span class="sd">        keys) followed by the existing properties labels. For example, using ``a=2, 3``</span>
+<span class="sd">        in ``keys_to_move``, blocks with properties ``p=1, 2`` will result in ``a, p =</span>
+<span class="sd">        (2, 1), (2, 2), (3, 1), (3, 2)``. If there is no values (no block/missing</span>
+<span class="sd">        sample) for a given property in the merged block, then the value will be set to</span>
+<span class="sd">        zero.</span>
+
+<span class="sd">        When using a non empty :py:class:`Labels` for ``keys_to_move``, the properties</span>
+<span class="sd">        labels of all the merged blocks must take the same values.</span>
+
+<span class="sd">        The order of the samples in the merged blocks is controlled by ``sort_samples``.</span>
+<span class="sd">        If ``sort_samples`` is :py:obj:`True`, samples are re-ordered to keep them</span>
+<span class="sd">        lexicographically sorted. Otherwise they are kept in the order in which they</span>
+<span class="sd">        appear in the blocks.</span>
+
+<span class="sd">        :param keys_to_move: description of the keys to move</span>
+<span class="sd">        :param sort_samples: whether to sort the merged samples or keep them in the</span>
+<span class="sd">            order in which they appear in the original blocks</span>
+<span class="sd">        :return: a new :py:class:`TensorMap` with merged blocks</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">keys_to_move</span> <span class="o">=</span> <span class="n">_normalize_keys_to_move</span><span class="p">(</span><span class="n">keys_to_move</span><span class="p">)</span>
+        <span class="n">ptr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lib</span><span class="o">.</span><span class="n">mts_tensormap_keys_to_properties</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_ptr</span><span class="p">,</span> <span class="n">keys_to_move</span><span class="o">.</span><span class="n">_as_mts_labels_t</span><span class="p">(),</span> <span class="n">sort_samples</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">TensorMap</span><span class="o">.</span><span class="n">_from_ptr</span><span class="p">(</span><span class="n">ptr</span><span class="p">)</span></div>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">sample_names</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        names of the samples dimensions for all blocks in this :py:class:`TensorMap`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[]</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">block</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">samples</span><span class="o">.</span><span class="n">names</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">component_names</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        names of the components dimensions for all blocks in this :py:class:`TensorMap`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[]</span>
+
+        <span class="k">return</span> <span class="p">[</span><span class="n">c</span><span class="o">.</span><span class="n">names</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">block</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">components</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">property_names</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        names of the properties dimensions for all blocks in this :py:class:`TensorMap`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[]</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">block</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">names</span>
+
+<div class="viewcode-block" id="TensorMap.print">
+<a class="viewcode-back" href="../../core/reference/python/tensor.html#metatensor.TensorMap.print">[docs]</a>
+    <span class="k">def</span> <span class="nf">print</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_keys</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Print this :py:class:`TensorMap` to a string, including at most ``max_keys`` in</span>
+<span class="sd">        the output.</span>
+
+<span class="sd">        :param max_keys: how many keys to include in the output. Use ``-1`` to include</span>
+<span class="sd">            all keys.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;TensorMap with </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="si">}</span><span class="s2"> blocks</span><span class="se">\n</span><span class="s2">keys:&quot;</span>
+        <span class="n">result</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="n">max_entries</span><span class="o">=</span><span class="n">max_keys</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span></div>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">device</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Device</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;get the device of all the arrays stored inside this :py:class:`TensorMap`&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;cpu&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">block_by_id</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">device</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">dtype</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DType</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;get the dtype of all the arrays stored inside this :py:class:`TensorMap`&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">block_by_id</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">dtype</span>
+
+<div class="viewcode-block" id="TensorMap.to">
+<a class="viewcode-back" href="../../core/reference/python/tensor.html#metatensor.TensorMap.to">[docs]</a>
+    <span class="k">def</span> <span class="nf">to</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;TensorMap&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Move the keys and all the blocks in this :py:class:`TensorMap` to the given</span>
+<span class="sd">        ``dtype``, ``device`` and ``arrays`` backend.</span>
+
+<span class="sd">        The arguments to this function can be given as positional or keyword arguments.</span>
+
+<span class="sd">        :param dtype: new dtype to use for all arrays. The dtype stays the same if this</span>
+<span class="sd">            is set to ``None``.</span>
+<span class="sd">        :param device: new device to use for all arrays. The device stays the same if</span>
+<span class="sd">            this is set to ``None``.</span>
+<span class="sd">        :param arrays: new backend to use for the arrays. This can be either</span>
+<span class="sd">            ``&quot;numpy&quot;``, ``&quot;torch&quot;`` or ``None`` (keeps the existing backend); and must</span>
+<span class="sd">            be given as a keyword argument (``arrays=&quot;numpy&quot;``).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">arrays</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;arrays&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">dtype</span><span class="p">,</span> <span class="n">device</span> <span class="o">=</span> <span class="n">_to_arguments_parse</span><span class="p">(</span><span class="s2">&quot;`TensorMap.to`&quot;</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="n">blocks</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">with</span> <span class="n">warnings</span><span class="o">.</span><span class="n">catch_warnings</span><span class="p">():</span>
+            <span class="c1"># do not warn on device mismatch between values/labels here,</span>
+            <span class="c1"># there will be a warning when constructing the TensorMap</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="n">DeviceWarning</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">block</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">blocks</span><span class="p">():</span>
+                <span class="n">blocks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">block</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">,</span> <span class="n">arrays</span><span class="o">=</span><span class="n">arrays</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">TensorMap</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">,</span> <span class="n">blocks</span><span class="p">)</span></div>
+</div>
+
+
+
+<span class="k">def</span> <span class="nf">_normalize_keys_to_move</span><span class="p">(</span><span class="n">keys_to_move</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">Labels</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Labels</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">keys_to_move</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">keys_to_move</span> <span class="o">=</span> <span class="p">(</span><span class="n">keys_to_move</span><span class="p">,)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">keys_to_move</span><span class="p">,</span> <span class="n">Labels</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">keys_to_move</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
+
+        <span class="n">keys_to_move</span> <span class="o">=</span> <span class="n">Labels</span><span class="p">(</span>
+            <span class="n">names</span><span class="o">=</span><span class="n">keys_to_move</span><span class="p">,</span>
+            <span class="n">values</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">keys_to_move</span><span class="p">))),</span>
+        <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">keys_to_move</span>
+
+
+<span class="k">def</span> <span class="nf">_list_or_str_to_array_c_char</span><span class="p">(</span><span class="n">strings</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]]):</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">strings</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">strings</span> <span class="o">=</span> <span class="p">[</span><span class="n">strings</span><span class="p">]</span>
+
+    <span class="n">c_strings</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">ARRAY</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_char_p</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">strings</span><span class="p">))()</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">strings</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
+        <span class="n">c_strings</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;utf8&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">c_strings</span>
+
+
+<span class="k">def</span> <span class="nf">_can_cast_to_numpy_int</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">can_cast</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">,</span> <span class="n">casting</span><span class="o">=</span><span class="s2">&quot;same_kind&quot;</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_normalize_selection</span><span class="p">(</span>
+    <span class="n">selection</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Labels</span><span class="p">,</span> <span class="n">LabelsEntry</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Labels</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">selection</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">selection</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+                <span class="c1"># all good</span>
+                <span class="k">pass</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">_can_cast_to_numpy_int</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;expected integer values in selection, got </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">=</span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2"> of &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">selection</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Labels</span><span class="p">([],</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Labels</span><span class="p">(</span>
+                <span class="nb">list</span><span class="p">(</span><span class="n">selection</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">selection</span><span class="o">.</span><span class="n">values</span><span class="p">()]],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span>
+            <span class="p">)</span>
+
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">selection</span><span class="p">,</span> <span class="n">Labels</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">selection</span>
+
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">selection</span><span class="p">,</span> <span class="n">LabelsEntry</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Labels</span><span class="p">(</span><span class="n">selection</span><span class="o">.</span><span class="n">names</span><span class="p">,</span> <span class="n">selection</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;invalid type for block selection: </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">selection</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2024, Guillaume Fraux, Davide Tisi, Philip Loche, Joseph W. Abbott, Jigyasa Nigam, Chiheb Ben Mahmoud
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer no-toc">
+      
+      
+      
+    </aside>
+  </div>
+</div><script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/scripts/furo.js?v=32e29ea5"></script>
+    <script src="../../_static/toggleprompt.js?v=5801b3bb"></script>
+    <script src="../../_static/design-tabs.js?v=36754332"></script>
+    <script src="../../_static/js/custom.js?v=4b1677b9"></script>
+    </body>
+</html>

@@ -1,0 +1,896 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="../../../">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="author" title="About these documents" href="../../../about.html" /><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="TensorBlock" href="block.html" /><link rel="prev" title="Python API reference" href="index.html" />
+
+    <!-- Generated with Sphinx 7.2.6 and Furo 2024.01.29 -->
+        <title>TensorMap - Metatensor</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=135e06be" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/metatensor.css?v=d517da54" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?v=36a5483c" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../../index.html"><div class="brand">Metatensor</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
+  
+  
+  <span class="sidebar-brand-text">Metatensor</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../about.html">What is metatensor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="../../index.html">Core classes</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of Core classes</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../overview.html">Overview</a></li>
+<li class="toctree-l2 current has-children"><a class="reference internal" href="index.html">Python API reference</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of Python API reference</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l3 current current-page"><a class="current reference internal" href="#">TensorMap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="block.html">TensorBlock</a></li>
+<li class="toctree-l3"><a class="reference internal" href="labels.html">Labels</a></li>
+<li class="toctree-l3"><a class="reference internal" href="io.html">Serialization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html">Data arrays</a></li>
+<li class="toctree-l3"><a class="reference internal" href="misc.html">Miscellaneous</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../cxx/index.html">C++ API reference</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of C++ API reference</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../cxx/tensor.html">TensorMap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../cxx/labels.html">Labels</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../cxx/block.html">TensorBlock</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../cxx/data.html">Data arrays</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../cxx/misc.html">Miscellaneous</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../c/index.html">C API reference</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of C API reference</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../c/tensor.html">TensorMap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../c/labels.html">Labels</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../c/block.html">TensorBlock</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../c/data.html">Data arrays</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../c/misc.html">Miscellaneous</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../rust/index.html">Rust API reference</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../examples/core/index.html">Tutorials</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle navigation of Tutorials</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../examples/core/1-first-steps.html">First steps with metatensor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../examples/core/2-handling-sparsity.html">Handling sparsity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../examples/core/3-managing-gradients.html">Managing gradients</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../CHANGELOG.html">Changelog</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../operations/index.html">Operations</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle navigation of Operations</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../operations/reference/index.html">API reference</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle navigation of API reference</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../operations/reference/creation/index.html">Creation operations</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle navigation of Creation operations</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../operations/reference/creation/empty_like.html">empty_like()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../operations/reference/creation/ones_like.html">ones_like()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../operations/reference/creation/zeros_like.html">zeros_like()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../operations/reference/creation/random_like.html">random_like()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../operations/reference/creation/block_from_array.html">block_from_array()</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../operations/reference/linear_algebra/index.html">Linear algebra</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle navigation of Linear algebra</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../operations/reference/linear_algebra/dot.html">dot()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../operations/reference/linear_algebra/lstsq.html">lstsq()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../operations/reference/linear_algebra/solve.html">solve()</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../operations/reference/logic/index.html">Logic function</a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle navigation of Logic function</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../operations/reference/logic/allclose.html">allclose()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../operations/reference/logic/equal.html">equal()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../operations/reference/logic/equal_metadata.html">equal_metadata()</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../operations/reference/manipulation/index.html">Manipulation operations</a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><div class="visually-hidden">Toggle navigation of Manipulation operations</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../operations/reference/manipulation/detach.html">detach()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../operations/reference/manipulation/drop-blocks.html">drop_blocks()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../operations/reference/manipulation/join.html">join()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../operations/reference/manipulation/manipulate-dimension.html">manipulate dimension</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../operations/reference/manipulation/one-hot.html">one_hot()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../operations/reference/manipulation/remove-gradients.html">remove_gradients()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../operations/reference/manipulation/requires-grad.html">requires_grad()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../operations/reference/manipulation/samples-reduction.html">samples reduction</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../operations/reference/manipulation/slice.html">slice()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../operations/reference/manipulation/split.html">split()</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../operations/reference/math/index.html">Mathematical functions</a><input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><div class="visually-hidden">Toggle navigation of Mathematical functions</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../operations/reference/math/abs.html">abs()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../operations/reference/math/add.html">add()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../operations/reference/math/divide.html">divide()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../operations/reference/math/multiply.html">multiply()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../operations/reference/math/pow.html">pow()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../operations/reference/math/subtract.html">subtract()</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../operations/reference/set/index.html">Set operations</a><input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><div class="visually-hidden">Toggle navigation of Set operations</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../operations/reference/set/unique_metadata.html">unique_metadata()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../operations/reference/set/sort.html">sort()</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../operations/reference/checks.html">Checks</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../operations/CHANGELOG.html">Changelog</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../torch/index.html">TorchScript interface</a><input class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" role="switch" type="checkbox"/><label for="toctree-checkbox-14"><div class="visually-hidden">Toggle navigation of TorchScript interface</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../torch/reference/index.html">API reference</a><input class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><div class="visually-hidden">Toggle navigation of API reference</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../torch/reference/tensor.html">TensorMap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../torch/reference/block.html">TensorBlock</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../torch/reference/labels.html">Labels</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../torch/reference/serialization.html">Serialization</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../torch/reference/cxx/index.html">TorchScript C++ API reference</a><input class="toctree-checkbox" id="toctree-checkbox-16" name="toctree-checkbox-16" role="switch" type="checkbox"/><label for="toctree-checkbox-16"><div class="visually-hidden">Toggle navigation of TorchScript C++ API reference</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../torch/reference/cxx/tensor.html">TensorMap</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../torch/reference/cxx/block.html">TensorBlock</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../torch/reference/cxx/labels.html">Labels</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../torch/reference/cxx/miscellaneous.html">Miscellaneous</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../torch/CHANGELOG.html">Changelog</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../learn/index.html">Learning utilities</a><input class="toctree-checkbox" id="toctree-checkbox-17" name="toctree-checkbox-17" role="switch" type="checkbox"/><label for="toctree-checkbox-17"><div class="visually-hidden">Toggle navigation of Learning utilities</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../learn/reference/index.html">API reference</a><input class="toctree-checkbox" id="toctree-checkbox-18" name="toctree-checkbox-18" role="switch" type="checkbox"/><label for="toctree-checkbox-18"><div class="visually-hidden">Toggle navigation of API reference</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../learn/reference/data/index.html">Data utilites</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../learn/reference/nn/index.html">Neural Network</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../examples/learn/index.html">Tutorials</a><input class="toctree-checkbox" id="toctree-checkbox-19" name="toctree-checkbox-19" role="switch" type="checkbox"/><label for="toctree-checkbox-19"><div class="visually-hidden">Toggle navigation of Tutorials</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../examples/learn/1-dataset-dataloader.html">Datasets and data loaders</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../examples/learn/2-indexed-dataset.html">Using IndexedDataset</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../learn/CHANGELOG.html">Changelog</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../atomistic/index.html">Atomistic applications</a><input class="toctree-checkbox" id="toctree-checkbox-20" name="toctree-checkbox-20" role="switch" type="checkbox"/><label for="toctree-checkbox-20"><div class="visually-hidden">Toggle navigation of Atomistic applications</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../atomistic/overview.html">Overview</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../atomistic/reference/index.html">API reference</a><input class="toctree-checkbox" id="toctree-checkbox-21" name="toctree-checkbox-21" role="switch" type="checkbox"/><label for="toctree-checkbox-21"><div class="visually-hidden">Toggle navigation of API reference</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../atomistic/reference/systems.html">Systems</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../atomistic/reference/models/index.html">Models</a><input class="toctree-checkbox" id="toctree-checkbox-22" name="toctree-checkbox-22" role="switch" type="checkbox"/><label for="toctree-checkbox-22"><div class="visually-hidden">Toggle navigation of Models</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../atomistic/reference/models/export.html">Exporting models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../atomistic/reference/models/metadata.html">Information about models</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../atomistic/reference/ase.html">Atomic Simulation Environment (ASE) integration</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../atomistic/reference/cxx/index.html">C++ API reference</a><input class="toctree-checkbox" id="toctree-checkbox-23" name="toctree-checkbox-23" role="switch" type="checkbox"/><label for="toctree-checkbox-23"><div class="visually-hidden">Toggle navigation of C++ API reference</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../atomistic/reference/cxx/systems.html">Systems</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../atomistic/reference/cxx/models.html">Models</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../atomistic/outputs.html">Standard model outputs</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../examples/atomistic/index.html">Tutorials</a><input class="toctree-checkbox" id="toctree-checkbox-24" name="toctree-checkbox-24" role="switch" type="checkbox"/><label for="toctree-checkbox-24"><div class="visually-hidden">Toggle navigation of Tutorials</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../examples/atomistic/1-export-atomistic-model.html">Exporting a model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../examples/atomistic/2-running-ase-md.html">Running Molecular Dynamics with ASE</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../devdoc/index.html">Developer documentation</a><input class="toctree-checkbox" id="toctree-checkbox-25" name="toctree-checkbox-25" role="switch" type="checkbox"/><label for="toctree-checkbox-25"><div class="visually-hidden">Toggle navigation of Developer documentation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../devdoc/get-started.html">Getting started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../devdoc/architecture.html">Code organization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../devdoc/versions.html">Version number management</a></li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <section id="tensormap">
+<h1>TensorMap<a class="headerlink" href="#tensormap" title="Link to this heading">#</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="metatensor.TensorMap">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">metatensor.</span></span><span class="sig-name descname"><span class="pre">TensorMap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">keys</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="labels.html#metatensor.Labels" title="metatensor.labels.Labels"><span class="pre">Labels</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">blocks</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.12)"><span class="pre">Sequence</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="block.html#metatensor.TensorBlock" title="metatensor.block.TensorBlock"><span class="pre">TensorBlock</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/metatensor/tensor.html#TensorMap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metatensor.TensorMap" title="Link to this definition">#</a></dt>
+<dd><p>A TensorMap is the main user-facing class of this library, and can store any kind of
+data used in atomistic machine learning similar to a Python <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>.</p>
+<p>A tensor map contains a list of <a class="reference internal" href="block.html#metatensor.TensorBlock" title="metatensor.TensorBlock"><code class="xref py py-class docutils literal notranslate"><span class="pre">TensorBlock</span></code></a>, each one associated with a
+key. Blocks can either be accessed one by one with the <a class="reference internal" href="#metatensor.TensorMap.block" title="metatensor.TensorMap.block"><code class="xref py py-func docutils literal notranslate"><span class="pre">TensorMap.block()</span></code></a>
+function, or by iterating over the tensor map itself:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">block</span> <span class="ow">in</span> <span class="n">tensor</span><span class="p">:</span>
+    <span class="o">...</span>
+</pre></div>
+</div>
+<p>The corresponding keys can be included in the loop by using the <code class="docutils literal notranslate"><span class="pre">items()</span></code> method
+of a <a class="reference internal" href="#metatensor.TensorMap" title="metatensor.TensorMap"><code class="xref py py-func docutils literal notranslate"><span class="pre">TensorMap()</span></code></a>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">block</span> <span class="ow">in</span> <span class="n">tensor</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="o">...</span>
+</pre></div>
+</div>
+<p>A tensor map provides functions to move some of these keys to the samples or
+properties labels of the blocks, moving from a sparse representation of the data to
+a dense one.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>keys</strong> (<a class="reference internal" href="labels.html#metatensor.Labels" title="metatensor.labels.Labels"><em>Labels</em></a>) – keys associated with each block</p></li>
+<li><p><strong>blocks</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.12)"><em>Sequence</em></a><em>[</em><a class="reference internal" href="block.html#metatensor.TensorBlock" title="metatensor.block.TensorBlock"><em>TensorBlock</em></a><em>]</em>) – set of blocks containing the actual data</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="metatensor.TensorMap.copy">
+<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#metatensor.TensorMap" title="metatensor.tensor.TensorMap"><span class="pre">TensorMap</span></a></span></span><a class="reference internal" href="../../../_modules/metatensor/tensor.html#TensorMap.copy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metatensor.TensorMap.copy" title="Link to this definition">#</a></dt>
+<dd><p>Get a deep copy of this TensorMap, including all the data and metadata</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#metatensor.TensorMap" title="metatensor.tensor.TensorMap"><em>TensorMap</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metatensor.TensorMap.load">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.12)"><span class="pre">Path</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.BinaryIO" title="(in Python v3.12)"><span class="pre">BinaryIO</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_numpy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#metatensor.TensorMap" title="metatensor.tensor.TensorMap"><span class="pre">TensorMap</span></a></span></span><a class="reference internal" href="../../../_modules/metatensor/tensor.html#TensorMap.load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metatensor.TensorMap.load" title="Link to this definition">#</a></dt>
+<dd><p>Load a serialized <a class="reference internal" href="#metatensor.TensorMap" title="metatensor.TensorMap"><code class="xref py py-class docutils literal notranslate"><span class="pre">TensorMap</span></code></a> from a file or a buffer, calling
+<a class="reference internal" href="io.html#metatensor.load" title="metatensor.load"><code class="xref py py-func docutils literal notranslate"><span class="pre">metatensor.load()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em> | </em><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.12)"><em>Path</em></a><em> | </em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.BinaryIO" title="(in Python v3.12)"><em>BinaryIO</em></a>) – file path or file object to load from</p></li>
+<li><p><strong>use_numpy</strong> – should we use the numpy loader or metatensor’s. See
+<a class="reference internal" href="io.html#metatensor.load" title="metatensor.load"><code class="xref py py-func docutils literal notranslate"><span class="pre">metatensor.load()</span></code></a> for more information.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#metatensor.TensorMap" title="metatensor.tensor.TensorMap"><em>TensorMap</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metatensor.TensorMap.load_buffer">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load_buffer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">buffer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bytes" title="(in Python v3.12)"><span class="pre">bytes</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bytearray" title="(in Python v3.12)"><span class="pre">bytearray</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#memoryview" title="(in Python v3.12)"><span class="pre">memoryview</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_numpy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="labels.html#metatensor.Labels" title="metatensor.labels.Labels"><span class="pre">Labels</span></a></span></span><a class="reference internal" href="../../../_modules/metatensor/tensor.html#TensorMap.load_buffer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metatensor.TensorMap.load_buffer" title="Link to this definition">#</a></dt>
+<dd><p>Load a serialized <a class="reference internal" href="#metatensor.TensorMap" title="metatensor.TensorMap"><code class="xref py py-class docutils literal notranslate"><span class="pre">TensorMap</span></code></a> from a buffer, calling
+<a class="reference internal" href="io.html#metatensor.io.load_buffer" title="metatensor.io.load_buffer"><code class="xref py py-func docutils literal notranslate"><span class="pre">metatensor.io.load_buffer()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>buffer</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bytes" title="(in Python v3.12)"><em>bytes</em></a><em> | </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bytearray" title="(in Python v3.12)"><em>bytearray</em></a><em> | </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#memoryview" title="(in Python v3.12)"><em>memoryview</em></a>) – in-memory buffer containing the data</p></li>
+<li><p><strong>use_numpy</strong> – should we use the numpy loader or metatensor’s. See
+<a class="reference internal" href="io.html#metatensor.load" title="metatensor.load"><code class="xref py py-func docutils literal notranslate"><span class="pre">metatensor.load()</span></code></a> for more information.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="labels.html#metatensor.Labels" title="metatensor.labels.Labels"><em>Labels</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metatensor.TensorMap.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.12)"><span class="pre">Path</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.BinaryIO" title="(in Python v3.12)"><span class="pre">BinaryIO</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_numpy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/metatensor/tensor.html#TensorMap.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metatensor.TensorMap.save" title="Link to this definition">#</a></dt>
+<dd><p>Save this <a class="reference internal" href="#metatensor.TensorMap" title="metatensor.TensorMap"><code class="xref py py-class docutils literal notranslate"><span class="pre">TensorMap</span></code></a> to a file or a buffer, calling
+<a class="reference internal" href="io.html#metatensor.save" title="metatensor.save"><code class="xref py py-func docutils literal notranslate"><span class="pre">metatensor.save()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em> | </em><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.12)"><em>Path</em></a><em> | </em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.BinaryIO" title="(in Python v3.12)"><em>BinaryIO</em></a>) – file path or file object to save to</p></li>
+<li><p><strong>use_numpy</strong> – should we use the numpy serializer or metatensor’s. See
+<a class="reference internal" href="io.html#metatensor.save" title="metatensor.save"><code class="xref py py-func docutils literal notranslate"><span class="pre">metatensor.save()</span></code></a> for more information.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metatensor.TensorMap.save_buffer">
+<span class="sig-name descname"><span class="pre">save_buffer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">use_numpy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#memoryview" title="(in Python v3.12)"><span class="pre">memoryview</span></a></span></span><a class="reference internal" href="../../../_modules/metatensor/tensor.html#TensorMap.save_buffer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metatensor.TensorMap.save_buffer" title="Link to this definition">#</a></dt>
+<dd><p>Save this <a class="reference internal" href="#metatensor.TensorMap" title="metatensor.TensorMap"><code class="xref py py-class docutils literal notranslate"><span class="pre">TensorMap</span></code></a> to an in-memory buffer, calling
+<a class="reference internal" href="io.html#metatensor.io.save_buffer" title="metatensor.io.save_buffer"><code class="xref py py-func docutils literal notranslate"><span class="pre">metatensor.io.save_buffer()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>use_numpy</strong> – should we use numpy serialization or metatensor’s. See
+<a class="reference internal" href="io.html#metatensor.save" title="metatensor.save"><code class="xref py py-func docutils literal notranslate"><span class="pre">metatensor.save()</span></code></a> for more information.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#memoryview" title="(in Python v3.12)"><em>memoryview</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="metatensor.TensorMap.keys">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">keys</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="labels.html#metatensor.Labels" title="metatensor.labels.Labels"><span class="pre">Labels</span></a></em><a class="headerlink" href="#metatensor.TensorMap.keys" title="Link to this definition">#</a></dt>
+<dd><p>The set of keys labeling the blocks in this tensor map.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metatensor.TensorMap.block_by_id">
+<span class="sig-name descname"><span class="pre">block_by_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="block.html#metatensor.TensorBlock" title="metatensor.block.TensorBlock"><span class="pre">TensorBlock</span></a></span></span><a class="reference internal" href="../../../_modules/metatensor/tensor.html#TensorMap.block_by_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metatensor.TensorMap.block_by_id" title="Link to this definition">#</a></dt>
+<dd><p>Get the block at <code class="docutils literal notranslate"><span class="pre">index</span></code> in this <a class="reference internal" href="#metatensor.TensorMap" title="metatensor.TensorMap"><code class="xref py py-class docutils literal notranslate"><span class="pre">TensorMap</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – index of the block to retrieve</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="block.html#metatensor.TensorBlock" title="metatensor.block.TensorBlock"><em>TensorBlock</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metatensor.TensorMap.blocks_by_id">
+<span class="sig-name descname"><span class="pre">blocks_by_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">indices</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.12)"><span class="pre">Sequence</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="block.html#metatensor.TensorBlock" title="metatensor.block.TensorBlock"><span class="pre">TensorBlock</span></a></span></span><a class="reference internal" href="../../../_modules/metatensor/tensor.html#TensorMap.blocks_by_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metatensor.TensorMap.blocks_by_id" title="Link to this definition">#</a></dt>
+<dd><p>Get the blocks with the given <code class="docutils literal notranslate"><span class="pre">indices</span></code> in this <a class="reference internal" href="#metatensor.TensorMap" title="metatensor.TensorMap"><code class="xref py py-class docutils literal notranslate"><span class="pre">TensorMap</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>indices</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.12)"><em>Sequence</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>]</em>) – indices of the block to retrieve</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="block.html#metatensor.TensorBlock" title="metatensor.block.TensorBlock"><em>TensorBlock</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metatensor.TensorMap.blocks_matching">
+<span class="sig-name descname"><span class="pre">blocks_matching</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">selection</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="labels.html#metatensor.Labels" title="metatensor.labels.Labels"><span class="pre">Labels</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.12)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/metatensor/tensor.html#TensorMap.blocks_matching"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metatensor.TensorMap.blocks_matching" title="Link to this definition">#</a></dt>
+<dd><p>Get a (possibly empty) list of block indexes matching the <code class="docutils literal notranslate"><span class="pre">selection</span></code>.</p>
+<p>This function finds all keys in this <a class="reference internal" href="#metatensor.TensorMap" title="metatensor.TensorMap"><code class="xref py py-class docutils literal notranslate"><span class="pre">TensorMap</span></code></a> with the same values
+as <code class="docutils literal notranslate"><span class="pre">selection</span></code> for the dimensions/names contained in the <code class="docutils literal notranslate"><span class="pre">selection</span></code>; and
+return the corresponding indexes.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">selection</span></code> should contain a single entry.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>selection</strong> (<a class="reference internal" href="labels.html#metatensor.Labels" title="metatensor.labels.Labels"><em>Labels</em></a>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.12)"><em>List</em></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metatensor.TensorMap.block">
+<span class="sig-name descname"><span class="pre">block</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">selection</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="labels.html#metatensor.Labels" title="metatensor.labels.Labels"><span class="pre">Labels</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="labels.html#metatensor.labels.LabelsEntry" title="metatensor.labels.LabelsEntry"><span class="pre">LabelsEntry</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.12)"><span class="pre">Dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="block.html#metatensor.TensorBlock" title="metatensor.block.TensorBlock"><span class="pre">TensorBlock</span></a></span></span><a class="reference internal" href="../../../_modules/metatensor/tensor.html#TensorMap.block"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metatensor.TensorMap.block" title="Link to this definition">#</a></dt>
+<dd><p>Get the single block in this <a class="reference internal" href="#metatensor.TensorMap" title="metatensor.TensorMap"><code class="xref py py-class docutils literal notranslate"><span class="pre">TensorMap</span></code></a> matching the <code class="docutils literal notranslate"><span class="pre">selection</span></code>.</p>
+<p>When <code class="docutils literal notranslate"><span class="pre">selection</span></code> is an <code class="docutils literal notranslate"><span class="pre">int</span></code>, this is equivalent to
+<a class="reference internal" href="#metatensor.TensorMap.block_by_id" title="metatensor.TensorMap.block_by_id"><code class="xref py py-func docutils literal notranslate"><span class="pre">TensorMap.block_by_id()</span></code></a>.</p>
+<p>When <code class="docutils literal notranslate"><span class="pre">selection</span></code> is an <a class="reference internal" href="labels.html#metatensor.Labels" title="metatensor.Labels"><code class="xref py py-class docutils literal notranslate"><span class="pre">Labels</span></code></a>, it should only contain a single
+entry, which will be used for the selection.</p>
+<p>When <code class="docutils literal notranslate"><span class="pre">selection</span></code> is a <code class="docutils literal notranslate"><span class="pre">Dict[str,</span> <span class="pre">int]</span></code>, it is converted into a single single
+<code class="xref py py-class docutils literal notranslate"><span class="pre">LabelsEntry</span></code> (the dict keys becoming the names and the dict values
+being joined together to form the <code class="xref py py-class docutils literal notranslate"><span class="pre">LabelsEntry</span></code> values), which is then
+used for the selection.</p>
+<p>When <code class="docutils literal notranslate"><span class="pre">selection</span></code> is a <code class="xref py py-class docutils literal notranslate"><span class="pre">LabelsEntry</span></code>, this function finds the key in
+this <a class="reference internal" href="#metatensor.TensorMap" title="metatensor.TensorMap"><code class="xref py py-class docutils literal notranslate"><span class="pre">TensorMap</span></code></a> with the same values as <code class="docutils literal notranslate"><span class="pre">selection</span></code> for the
+dimensions/names contained in the <code class="docutils literal notranslate"><span class="pre">selection</span></code>; and return the corresponding
+indexes.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">selection</span></code> is <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>, the selection can be passed as keyword
+arguments, which will be converted to a <code class="docutils literal notranslate"><span class="pre">Dict[str,</span> <span class="pre">int]</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>selection</strong> (<em>None</em><em> | </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em> | </em><a class="reference internal" href="labels.html#metatensor.Labels" title="metatensor.labels.Labels"><em>Labels</em></a><em> | </em><a class="reference internal" href="labels.html#metatensor.labels.LabelsEntry" title="metatensor.labels.LabelsEntry"><em>LabelsEntry</em></a><em> | </em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.12)"><em>Dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>]</em>) – description of the block to extract</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="block.html#metatensor.TensorBlock" title="metatensor.block.TensorBlock"><em>TensorBlock</em></a></p>
+</dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">metatensor</span> <span class="kn">import</span> <span class="n">TensorMap</span><span class="p">,</span> <span class="n">TensorBlock</span><span class="p">,</span> <span class="n">Labels</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">keys</span> <span class="o">=</span> <span class="n">Labels</span><span class="p">([</span><span class="s2">&quot;key_1&quot;</span><span class="p">,</span> <span class="s2">&quot;key_2&quot;</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">6</span><span class="p">,</span> <span class="mi">8</span><span class="p">]]))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">block_1</span> <span class="o">=</span> <span class="n">TensorBlock</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">values</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="mf">1.0</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="n">samples</span><span class="o">=</span><span class="n">Labels</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="s2">&quot;sample&quot;</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="n">components</span><span class="o">=</span><span class="p">[],</span>
+<span class="gp">... </span>    <span class="n">properties</span><span class="o">=</span><span class="n">Labels</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="s2">&quot;property&quot;</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">block_2</span> <span class="o">=</span> <span class="n">TensorBlock</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">values</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="mf">2.0</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="n">samples</span><span class="o">=</span><span class="n">Labels</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="s2">&quot;sample&quot;</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="n">components</span><span class="o">=</span><span class="p">[],</span>
+<span class="gp">... </span>    <span class="n">properties</span><span class="o">=</span><span class="n">Labels</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="s2">&quot;property&quot;</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tensor</span> <span class="o">=</span> <span class="n">TensorMap</span><span class="p">(</span><span class="n">keys</span><span class="p">,</span> <span class="p">[</span><span class="n">block_1</span><span class="p">,</span> <span class="n">block_2</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># numeric index selection, this gives a block by its position</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">block</span> <span class="o">=</span> <span class="n">tensor</span><span class="o">.</span><span class="n">block</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">block</span>
+<span class="go">TensorBlock</span>
+<span class="go">    samples (3): [&#39;sample&#39;]</span>
+<span class="go">    components (): []</span>
+<span class="go">    properties (5): [&#39;property&#39;]</span>
+<span class="go">    gradients: None</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># This is the first block</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">block</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="go">1.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># use a single key entry (i.e. LabelsEntry) for the selection</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tensor</span><span class="o">.</span><span class="n">block</span><span class="p">(</span><span class="n">tensor</span><span class="o">.</span><span class="n">keys</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="go">1.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Labels with a single entry selection</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">labels</span> <span class="o">=</span> <span class="n">Labels</span><span class="p">(</span><span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;key_1&quot;</span><span class="p">,</span> <span class="s2">&quot;key_2&quot;</span><span class="p">],</span> <span class="n">values</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">6</span><span class="p">,</span> <span class="mi">8</span><span class="p">]]))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tensor</span><span class="o">.</span><span class="n">block</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="go">2.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># keyword arguments selection</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tensor</span><span class="o">.</span><span class="n">block</span><span class="p">(</span><span class="n">key_1</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">key_2</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="go">1.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># dictionary selection</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tensor</span><span class="o">.</span><span class="n">block</span><span class="p">({</span><span class="s2">&quot;key_1&quot;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span> <span class="s2">&quot;key_2&quot;</span><span class="p">:</span> <span class="mi">8</span><span class="p">})</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="go">2.0</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metatensor.TensorMap.blocks">
+<span class="sig-name descname"><span class="pre">blocks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">selection</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.12)"><span class="pre">Sequence</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="labels.html#metatensor.Labels" title="metatensor.labels.Labels"><span class="pre">Labels</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="labels.html#metatensor.labels.LabelsEntry" title="metatensor.labels.LabelsEntry"><span class="pre">LabelsEntry</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.12)"><span class="pre">Dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.12)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="block.html#metatensor.TensorBlock" title="metatensor.block.TensorBlock"><span class="pre">TensorBlock</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/metatensor/tensor.html#TensorMap.blocks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metatensor.TensorMap.blocks" title="Link to this definition">#</a></dt>
+<dd><p>Get the blocks in this <a class="reference internal" href="#metatensor.TensorMap" title="metatensor.TensorMap"><code class="xref py py-class docutils literal notranslate"><span class="pre">TensorMap</span></code></a> matching the <code class="docutils literal notranslate"><span class="pre">selection</span></code>.</p>
+<p>When <code class="docutils literal notranslate"><span class="pre">selection</span></code> is <code class="docutils literal notranslate"><span class="pre">None</span></code> (the default), all blocks are returned.</p>
+<p>When <code class="docutils literal notranslate"><span class="pre">selection</span></code> is an <code class="docutils literal notranslate"><span class="pre">int</span></code>, this is equivalent to
+<a class="reference internal" href="#metatensor.TensorMap.block_by_id" title="metatensor.TensorMap.block_by_id"><code class="xref py py-func docutils literal notranslate"><span class="pre">TensorMap.block_by_id()</span></code></a>; and for a <code class="docutils literal notranslate"><span class="pre">List[int]</span></code> this is equivalent to
+<a class="reference internal" href="#metatensor.TensorMap.blocks_by_id" title="metatensor.TensorMap.blocks_by_id"><code class="xref py py-func docutils literal notranslate"><span class="pre">TensorMap.blocks_by_id()</span></code></a>.</p>
+<p>When <code class="docutils literal notranslate"><span class="pre">selection</span></code> is an <a class="reference internal" href="labels.html#metatensor.Labels" title="metatensor.Labels"><code class="xref py py-class docutils literal notranslate"><span class="pre">Labels</span></code></a>, it should only contain a single
+entry, which will be used for the selection.</p>
+<p>When <code class="docutils literal notranslate"><span class="pre">selection</span></code> is a <code class="docutils literal notranslate"><span class="pre">Dict[str,</span> <span class="pre">int]</span></code>, it is converted into a single single
+<code class="xref py py-class docutils literal notranslate"><span class="pre">LabelsEntry</span></code> (the dict keys becoming the names and the dict values
+being joined together to form the <code class="xref py py-class docutils literal notranslate"><span class="pre">LabelsEntry</span></code> values), which is then
+used for the selection.</p>
+<p>When <code class="docutils literal notranslate"><span class="pre">selection</span></code> is a <code class="xref py py-class docutils literal notranslate"><span class="pre">LabelsEntry</span></code>, this function finds all keys in
+this <a class="reference internal" href="#metatensor.TensorMap" title="metatensor.TensorMap"><code class="xref py py-class docutils literal notranslate"><span class="pre">TensorMap</span></code></a> with the same values as <code class="docutils literal notranslate"><span class="pre">selection</span></code> for the
+dimensions/names contained in the <code class="docutils literal notranslate"><span class="pre">selection</span></code>; and return the corresponding
+blocks.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">selection</span></code> is <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>, the selection can be passed as keyword
+arguments, which will be converted to a <code class="docutils literal notranslate"><span class="pre">Dict[str,</span> <span class="pre">int]</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>selection</strong> (<em>None</em><em> | </em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.12)"><em>Sequence</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>] </em><em>| </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em> | </em><a class="reference internal" href="labels.html#metatensor.Labels" title="metatensor.labels.Labels"><em>Labels</em></a><em> | </em><a class="reference internal" href="labels.html#metatensor.labels.LabelsEntry" title="metatensor.labels.LabelsEntry"><em>LabelsEntry</em></a><em> | </em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.12)"><em>Dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>]</em>) – description of the blocks to extract</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.12)"><em>List</em></a>[<a class="reference internal" href="block.html#metatensor.TensorBlock" title="metatensor.block.TensorBlock"><em>TensorBlock</em></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metatensor.TensorMap.items">
+<span class="sig-name descname"><span class="pre">items</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/metatensor/tensor.html#TensorMap.items"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metatensor.TensorMap.items" title="Link to this definition">#</a></dt>
+<dd><p>get an iterator over (key, block) pairs in this <a class="reference internal" href="#metatensor.TensorMap" title="metatensor.TensorMap"><code class="xref py py-class docutils literal notranslate"><span class="pre">TensorMap</span></code></a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metatensor.TensorMap.keys_to_samples">
+<span class="sig-name descname"><span class="pre">keys_to_samples</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">keys_to_move</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.12)"><span class="pre">Sequence</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort_samples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#metatensor.TensorMap" title="metatensor.tensor.TensorMap"><span class="pre">TensorMap</span></a></span></span><a class="reference internal" href="../../../_modules/metatensor/tensor.html#TensorMap.keys_to_samples"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metatensor.TensorMap.keys_to_samples" title="Link to this definition">#</a></dt>
+<dd><p>Merge blocks along the samples axis, adding <code class="docutils literal notranslate"><span class="pre">keys_to_move</span></code> to the end of the
+samples labels dimensions.</p>
+<p>This function will remove <code class="docutils literal notranslate"><span class="pre">keys_to_move</span></code> from the keys, and find all blocks
+with the same remaining keys values. It will then merge these blocks along the
+samples direction (i.e. do a <em>vertical</em> concatenation), adding <code class="docutils literal notranslate"><span class="pre">keys_to_move</span></code>
+to the end of the samples labels dimensions. The values taken by
+<code class="docutils literal notranslate"><span class="pre">keys_to_move</span></code> in the new samples labels will be the values of these
+dimensions in the merged blocks’ keys.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">keys_to_move</span></code> is a set of <a class="reference internal" href="labels.html#metatensor.Labels" title="metatensor.Labels"><code class="xref py py-class docutils literal notranslate"><span class="pre">Labels</span></code></a>, it must be empty
+(<code class="docutils literal notranslate"><span class="pre">keys_to_move.values.shape[0]</span> <span class="pre">==</span> <span class="pre">0</span></code>), and only the <a class="reference internal" href="labels.html#metatensor.Labels.names" title="metatensor.Labels.names"><code class="xref py py-class docutils literal notranslate"><span class="pre">Labels.names</span></code></a>
+will be used.</p>
+<p>The order of the samples is controlled by <code class="docutils literal notranslate"><span class="pre">sort_samples</span></code>. If <code class="docutils literal notranslate"><span class="pre">sort_samples</span></code>
+is true, samples are re-ordered to keep them lexicographically sorted. Otherwise
+they are kept in the order in which they appear in the blocks.</p>
+<p>This function is only implemented when the blocks to merge have the same
+properties values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>keys_to_move</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em> | </em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.12)"><em>Sequence</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>]</em>) – description of the keys to move</p></li>
+<li><p><strong>sort_samples</strong> – whether to sort the merged samples or keep them in the
+order in which they appear in the original blocks</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>a new <a class="reference internal" href="#metatensor.TensorMap" title="metatensor.TensorMap"><code class="xref py py-class docutils literal notranslate"><span class="pre">TensorMap</span></code></a> with merged blocks</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#metatensor.TensorMap" title="metatensor.tensor.TensorMap"><em>TensorMap</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metatensor.TensorMap.components_to_properties">
+<span class="sig-name descname"><span class="pre">components_to_properties</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dimensions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.12)"><span class="pre">Sequence</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#metatensor.TensorMap" title="metatensor.tensor.TensorMap"><span class="pre">TensorMap</span></a></span></span><a class="reference internal" href="../../../_modules/metatensor/tensor.html#TensorMap.components_to_properties"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metatensor.TensorMap.components_to_properties" title="Link to this definition">#</a></dt>
+<dd><p>Move the given <code class="docutils literal notranslate"><span class="pre">dimensions</span></code> from the component labels to the property labels
+for each block.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>dimensions</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em> | </em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.12)"><em>Sequence</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>]</em>) – name of the component dimensions to move to the properties</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#metatensor.TensorMap" title="metatensor.tensor.TensorMap"><em>TensorMap</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metatensor.TensorMap.keys_to_properties">
+<span class="sig-name descname"><span class="pre">keys_to_properties</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">keys_to_move</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.12)"><span class="pre">Sequence</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="labels.html#metatensor.Labels" title="metatensor.labels.Labels"><span class="pre">Labels</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort_samples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#metatensor.TensorMap" title="metatensor.tensor.TensorMap"><span class="pre">TensorMap</span></a></span></span><a class="reference internal" href="../../../_modules/metatensor/tensor.html#TensorMap.keys_to_properties"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metatensor.TensorMap.keys_to_properties" title="Link to this definition">#</a></dt>
+<dd><p>Merge blocks along the properties direction, adding <code class="docutils literal notranslate"><span class="pre">keys_to_move</span></code> at the
+beginning of the properties labels dimensions.</p>
+<p>This function will remove <code class="docutils literal notranslate"><span class="pre">keys_to_move</span></code> from the keys, and find all blocks
+with the same remaining keys values. Then it will merge these blocks along the
+properties direction (i.e. do a <em>horizontal</em> concatenation).</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">keys_to_move</span></code> is given as strings, then the new property labels will
+<strong>only</strong> contain entries from the existing blocks. For example, merging a block
+with key <code class="docutils literal notranslate"><span class="pre">a=0</span></code> and properties <code class="docutils literal notranslate"><span class="pre">p=1,</span> <span class="pre">2</span></code> with a block with key <code class="docutils literal notranslate"><span class="pre">a=2</span></code> and
+properties <code class="docutils literal notranslate"><span class="pre">p=1,</span> <span class="pre">3</span></code> will produce a block with properties <code class="docutils literal notranslate"><span class="pre">a,</span> <span class="pre">p</span> <span class="pre">=</span> <span class="pre">(0,</span> <span class="pre">1),</span> <span class="pre">(0,</span>
+<span class="pre">2),</span> <span class="pre">(2,</span> <span class="pre">1),</span> <span class="pre">(2,</span> <span class="pre">3)</span></code>.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">keys_to_move</span></code> is a set of <a class="reference internal" href="labels.html#metatensor.Labels" title="metatensor.Labels"><code class="xref py py-class docutils literal notranslate"><span class="pre">Labels</span></code></a> and it is empty
+(<code class="docutils literal notranslate"><span class="pre">len(keys_to_move)</span> <span class="pre">==</span> <span class="pre">0</span></code>), the <a class="reference internal" href="labels.html#metatensor.Labels.names" title="metatensor.Labels.names"><code class="xref py py-class docutils literal notranslate"><span class="pre">Labels.names</span></code></a> will be used as if
+they where passed directly.</p>
+<p>Finally, if <code class="docutils literal notranslate"><span class="pre">keys_to_move</span></code> is a non empty set of <a class="reference internal" href="labels.html#metatensor.Labels" title="metatensor.Labels"><code class="xref py py-class docutils literal notranslate"><span class="pre">Labels</span></code></a>, the new
+properties labels will contains <strong>all</strong> of the entries of <code class="docutils literal notranslate"><span class="pre">keys_to_move</span></code>
+(regardless of the values taken by <code class="docutils literal notranslate"><span class="pre">keys_to_move.names</span></code> in the merged blocks’
+keys) followed by the existing properties labels. For example, using <code class="docutils literal notranslate"><span class="pre">a=2,</span> <span class="pre">3</span></code>
+in <code class="docutils literal notranslate"><span class="pre">keys_to_move</span></code>, blocks with properties <code class="docutils literal notranslate"><span class="pre">p=1,</span> <span class="pre">2</span></code> will result in <code class="docutils literal notranslate"><span class="pre">a,</span> <span class="pre">p</span> <span class="pre">=</span>
+<span class="pre">(2,</span> <span class="pre">1),</span> <span class="pre">(2,</span> <span class="pre">2),</span> <span class="pre">(3,</span> <span class="pre">1),</span> <span class="pre">(3,</span> <span class="pre">2)</span></code>. If there is no values (no block/missing
+sample) for a given property in the merged block, then the value will be set to
+zero.</p>
+<p>When using a non empty <a class="reference internal" href="labels.html#metatensor.Labels" title="metatensor.Labels"><code class="xref py py-class docutils literal notranslate"><span class="pre">Labels</span></code></a> for <code class="docutils literal notranslate"><span class="pre">keys_to_move</span></code>, the properties
+labels of all the merged blocks must take the same values.</p>
+<p>The order of the samples in the merged blocks is controlled by <code class="docutils literal notranslate"><span class="pre">sort_samples</span></code>.
+If <code class="docutils literal notranslate"><span class="pre">sort_samples</span></code> is <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code></a>, samples are re-ordered to keep them
+lexicographically sorted. Otherwise they are kept in the order in which they
+appear in the blocks.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>keys_to_move</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em> | </em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.12)"><em>Sequence</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>] </em><em>| </em><a class="reference internal" href="labels.html#metatensor.Labels" title="metatensor.labels.Labels"><em>Labels</em></a>) – description of the keys to move</p></li>
+<li><p><strong>sort_samples</strong> – whether to sort the merged samples or keep them in the
+order in which they appear in the original blocks</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>a new <a class="reference internal" href="#metatensor.TensorMap" title="metatensor.TensorMap"><code class="xref py py-class docutils literal notranslate"><span class="pre">TensorMap</span></code></a> with merged blocks</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#metatensor.TensorMap" title="metatensor.tensor.TensorMap"><em>TensorMap</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="metatensor.TensorMap.sample_names">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sample_names</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.12)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#metatensor.TensorMap.sample_names" title="Link to this definition">#</a></dt>
+<dd><p>names of the samples dimensions for all blocks in this <a class="reference internal" href="#metatensor.TensorMap" title="metatensor.TensorMap"><code class="xref py py-class docutils literal notranslate"><span class="pre">TensorMap</span></code></a></p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="metatensor.TensorMap.component_names">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">component_names</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.12)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#metatensor.TensorMap.component_names" title="Link to this definition">#</a></dt>
+<dd><p>names of the components dimensions for all blocks in this <a class="reference internal" href="#metatensor.TensorMap" title="metatensor.TensorMap"><code class="xref py py-class docutils literal notranslate"><span class="pre">TensorMap</span></code></a></p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="metatensor.TensorMap.property_names">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">property_names</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.12)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#metatensor.TensorMap.property_names" title="Link to this definition">#</a></dt>
+<dd><p>names of the properties dimensions for all blocks in this <a class="reference internal" href="#metatensor.TensorMap" title="metatensor.TensorMap"><code class="xref py py-class docutils literal notranslate"><span class="pre">TensorMap</span></code></a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metatensor.TensorMap.print">
+<span class="sig-name descname"><span class="pre">print</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">max_keys</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span></span><a class="reference internal" href="../../../_modules/metatensor/tensor.html#TensorMap.print"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metatensor.TensorMap.print" title="Link to this definition">#</a></dt>
+<dd><p>Print this <a class="reference internal" href="#metatensor.TensorMap" title="metatensor.TensorMap"><code class="xref py py-class docutils literal notranslate"><span class="pre">TensorMap</span></code></a> to a string, including at most <code class="docutils literal notranslate"><span class="pre">max_keys</span></code> in
+the output.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>max_keys</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – how many keys to include in the output. Use <code class="docutils literal notranslate"><span class="pre">-1</span></code> to include
+all keys.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="metatensor.TensorMap.device">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">device</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://pytorch.org/docs/stable/tensor_attributes.html#torch.device" title="(in PyTorch v2.2)"><span class="pre">device</span></a></em><a class="headerlink" href="#metatensor.TensorMap.device" title="Link to this definition">#</a></dt>
+<dd><p>get the device of all the arrays stored inside this <a class="reference internal" href="#metatensor.TensorMap" title="metatensor.TensorMap"><code class="xref py py-class docutils literal notranslate"><span class="pre">TensorMap</span></code></a></p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="metatensor.TensorMap.dtype">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dtype</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.dtype.html#numpy.dtype" title="(in NumPy v1.26)"><span class="pre">dtype</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://pytorch.org/docs/stable/tensor_attributes.html#torch.dtype" title="(in PyTorch v2.2)"><span class="pre">dtype</span></a></em><a class="headerlink" href="#metatensor.TensorMap.dtype" title="Link to this definition">#</a></dt>
+<dd><p>get the dtype of all the arrays stored inside this <a class="reference internal" href="#metatensor.TensorMap" title="metatensor.TensorMap"><code class="xref py py-class docutils literal notranslate"><span class="pre">TensorMap</span></code></a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metatensor.TensorMap.to">
+<span class="sig-name descname"><span class="pre">to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#metatensor.TensorMap" title="metatensor.tensor.TensorMap"><span class="pre">TensorMap</span></a></span></span><a class="reference internal" href="../../../_modules/metatensor/tensor.html#TensorMap.to"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metatensor.TensorMap.to" title="Link to this definition">#</a></dt>
+<dd><p>Move the keys and all the blocks in this <a class="reference internal" href="#metatensor.TensorMap" title="metatensor.TensorMap"><code class="xref py py-class docutils literal notranslate"><span class="pre">TensorMap</span></code></a> to the given
+<code class="docutils literal notranslate"><span class="pre">dtype</span></code>, <code class="docutils literal notranslate"><span class="pre">device</span></code> and <code class="docutils literal notranslate"><span class="pre">arrays</span></code> backend.</p>
+<p>The arguments to this function can be given as positional or keyword arguments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dtype</strong> – new dtype to use for all arrays. The dtype stays the same if this
+is set to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+<li><p><strong>device</strong> – new device to use for all arrays. The device stays the same if
+this is set to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+<li><p><strong>arrays</strong> – new backend to use for the arrays. This can be either
+<code class="docutils literal notranslate"><span class="pre">&quot;numpy&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;torch&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">None</span></code> (keeps the existing backend); and must
+be given as a keyword argument (<code class="docutils literal notranslate"><span class="pre">arrays=&quot;numpy&quot;</span></code>).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#metatensor.TensorMap" title="metatensor.tensor.TensorMap"><em>TensorMap</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="block.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">TensorBlock</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="index.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Python API reference</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2024, Guillaume Fraux, Davide Tisi, Philip Loche, Joseph W. Abbott, Jigyasa Nigam, Chiheb Ben Mahmoud
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">TensorMap</a><ul>
+<li><a class="reference internal" href="#metatensor.TensorMap"><code class="docutils literal notranslate"><span class="pre">TensorMap</span></code></a><ul>
+<li><a class="reference internal" href="#metatensor.TensorMap.copy"><code class="docutils literal notranslate"><span class="pre">TensorMap.copy()</span></code></a></li>
+<li><a class="reference internal" href="#metatensor.TensorMap.load"><code class="docutils literal notranslate"><span class="pre">TensorMap.load()</span></code></a></li>
+<li><a class="reference internal" href="#metatensor.TensorMap.load_buffer"><code class="docutils literal notranslate"><span class="pre">TensorMap.load_buffer()</span></code></a></li>
+<li><a class="reference internal" href="#metatensor.TensorMap.save"><code class="docutils literal notranslate"><span class="pre">TensorMap.save()</span></code></a></li>
+<li><a class="reference internal" href="#metatensor.TensorMap.save_buffer"><code class="docutils literal notranslate"><span class="pre">TensorMap.save_buffer()</span></code></a></li>
+<li><a class="reference internal" href="#metatensor.TensorMap.keys"><code class="docutils literal notranslate"><span class="pre">TensorMap.keys</span></code></a></li>
+<li><a class="reference internal" href="#metatensor.TensorMap.block_by_id"><code class="docutils literal notranslate"><span class="pre">TensorMap.block_by_id()</span></code></a></li>
+<li><a class="reference internal" href="#metatensor.TensorMap.blocks_by_id"><code class="docutils literal notranslate"><span class="pre">TensorMap.blocks_by_id()</span></code></a></li>
+<li><a class="reference internal" href="#metatensor.TensorMap.blocks_matching"><code class="docutils literal notranslate"><span class="pre">TensorMap.blocks_matching()</span></code></a></li>
+<li><a class="reference internal" href="#metatensor.TensorMap.block"><code class="docutils literal notranslate"><span class="pre">TensorMap.block()</span></code></a></li>
+<li><a class="reference internal" href="#metatensor.TensorMap.blocks"><code class="docutils literal notranslate"><span class="pre">TensorMap.blocks()</span></code></a></li>
+<li><a class="reference internal" href="#metatensor.TensorMap.items"><code class="docutils literal notranslate"><span class="pre">TensorMap.items()</span></code></a></li>
+<li><a class="reference internal" href="#metatensor.TensorMap.keys_to_samples"><code class="docutils literal notranslate"><span class="pre">TensorMap.keys_to_samples()</span></code></a></li>
+<li><a class="reference internal" href="#metatensor.TensorMap.components_to_properties"><code class="docutils literal notranslate"><span class="pre">TensorMap.components_to_properties()</span></code></a></li>
+<li><a class="reference internal" href="#metatensor.TensorMap.keys_to_properties"><code class="docutils literal notranslate"><span class="pre">TensorMap.keys_to_properties()</span></code></a></li>
+<li><a class="reference internal" href="#metatensor.TensorMap.sample_names"><code class="docutils literal notranslate"><span class="pre">TensorMap.sample_names</span></code></a></li>
+<li><a class="reference internal" href="#metatensor.TensorMap.component_names"><code class="docutils literal notranslate"><span class="pre">TensorMap.component_names</span></code></a></li>
+<li><a class="reference internal" href="#metatensor.TensorMap.property_names"><code class="docutils literal notranslate"><span class="pre">TensorMap.property_names</span></code></a></li>
+<li><a class="reference internal" href="#metatensor.TensorMap.print"><code class="docutils literal notranslate"><span class="pre">TensorMap.print()</span></code></a></li>
+<li><a class="reference internal" href="#metatensor.TensorMap.device"><code class="docutils literal notranslate"><span class="pre">TensorMap.device</span></code></a></li>
+<li><a class="reference internal" href="#metatensor.TensorMap.dtype"><code class="docutils literal notranslate"><span class="pre">TensorMap.dtype</span></code></a></li>
+<li><a class="reference internal" href="#metatensor.TensorMap.to"><code class="docutils literal notranslate"><span class="pre">TensorMap.to()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/scripts/furo.js?v=32e29ea5"></script>
+    <script src="../../../_static/toggleprompt.js?v=5801b3bb"></script>
+    <script src="../../../_static/design-tabs.js?v=36754332"></script>
+    <script src="../../../_static/js/custom.js?v=4b1677b9"></script>
+    </body>
+</html>

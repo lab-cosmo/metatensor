@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 1241 1418" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.5;">
+    <g>
+        <g>
+            <rect x="372.126" y="313.065" width="826.772" height="1062.99" style="fill:rgb(153,204,255);stroke:black;stroke-width:4.17px;"/>
+            <text x="605.095px" y="902.561px" style="font-family:'Avenir-Medium', 'Avenir';font-weight:500;font-size:166.667px;stroke:black;stroke-width:4.17px;stroke-linecap:butt;stroke-miterlimit:2;">Data</text>
+        </g>
+        <g>
+            <rect x="372.126" y="41.265" width="826.772" height="212.598" style="fill:rgb(255,102,102);"/>
+            <text x="507.644px" y="172.531px" style="font-family:'Avenir-Medium', 'Avenir';font-weight:500;font-size:116.667px;">Pr<tspan x="617.894px 687.194px " y="172.531px 172.531px ">op</tspan>erties</text>
+        </g>
+        <g>
+            <rect x="41.26" y="313.065" width="259.843" height="1062.99" style="fill:rgb(121,210,121);"/>
+            <g transform="matrix(6.12323e-17,-1,1,6.12323e-17,-3422.43,2294.33)">
+                <text x="1229.86px" y="3621.27px" style="font-family:'Avenir-Medium', 'Avenir';font-weight:500;font-size:116.667px;">Samples</text>
+            </g>
+        </g>
+    </g>
+</svg>

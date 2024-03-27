@@ -1,0 +1,4 @@
+pow
+===
+
+.. autofunction:: metatensor.pow

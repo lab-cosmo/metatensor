@@ -1,0 +1,4 @@
+join
+====
+
+.. autofunction:: metatensor.join

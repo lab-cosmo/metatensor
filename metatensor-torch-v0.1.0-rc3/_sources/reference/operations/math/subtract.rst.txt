@@ -1,0 +1,4 @@
+subtract
+========
+
+.. autofunction:: metatensor.subtract

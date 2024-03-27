@@ -1,0 +1,1355 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="../../">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="author" title="About these documents" href="../../about.html" /><link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Serialization" href="serialization.html" /><link rel="prev" title="TensorBlock" href="block.html" />
+
+    <!-- Generated with Sphinx 7.2.6 and Furo 2024.01.29 -->
+        <title>Labels - Metatensor</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=135e06be" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/metatensor.css?v=d517da54" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=36a5483c" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../index.html"><div class="brand">Metatensor</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
+  
+  
+  <span class="sidebar-brand-text">Metatensor</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">What is metatensor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../core/index.html">Core classes</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of Core classes</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../core/overview.html">Overview</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../core/reference/python/index.html">Python API reference</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of Python API reference</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../core/reference/python/tensor.html">TensorMap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../core/reference/python/block.html">TensorBlock</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../core/reference/python/labels.html">Labels</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../core/reference/python/io.html">Serialization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../core/reference/python/data.html">Data arrays</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../core/reference/python/misc.html">Miscellaneous</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../core/reference/cxx/index.html">C++ API reference</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of C++ API reference</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../core/reference/cxx/tensor.html">TensorMap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../core/reference/cxx/labels.html">Labels</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../core/reference/cxx/block.html">TensorBlock</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../core/reference/cxx/data.html">Data arrays</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../core/reference/cxx/misc.html">Miscellaneous</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../core/reference/c/index.html">C API reference</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of C API reference</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../core/reference/c/tensor.html">TensorMap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../core/reference/c/labels.html">Labels</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../core/reference/c/block.html">TensorBlock</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../core/reference/c/data.html">Data arrays</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../core/reference/c/misc.html">Miscellaneous</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../core/reference/rust/index.html">Rust API reference</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../examples/core/index.html">Tutorials</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle navigation of Tutorials</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/core/1-first-steps.html">First steps with metatensor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/core/2-handling-sparsity.html">Handling sparsity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/core/3-managing-gradients.html">Managing gradients</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../core/CHANGELOG.html">Changelog</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../operations/index.html">Operations</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle navigation of Operations</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../operations/reference/index.html">API reference</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle navigation of API reference</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../operations/reference/creation/index.html">Creation operations</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle navigation of Creation operations</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../operations/reference/creation/empty_like.html">empty_like()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../operations/reference/creation/ones_like.html">ones_like()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../operations/reference/creation/zeros_like.html">zeros_like()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../operations/reference/creation/random_like.html">random_like()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../operations/reference/creation/block_from_array.html">block_from_array()</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../operations/reference/linear_algebra/index.html">Linear algebra</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle navigation of Linear algebra</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../operations/reference/linear_algebra/dot.html">dot()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../operations/reference/linear_algebra/lstsq.html">lstsq()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../operations/reference/linear_algebra/solve.html">solve()</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../operations/reference/logic/index.html">Logic function</a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle navigation of Logic function</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../operations/reference/logic/allclose.html">allclose()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../operations/reference/logic/equal.html">equal()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../operations/reference/logic/equal_metadata.html">equal_metadata()</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../operations/reference/manipulation/index.html">Manipulation operations</a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><div class="visually-hidden">Toggle navigation of Manipulation operations</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../operations/reference/manipulation/detach.html">detach()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../operations/reference/manipulation/drop-blocks.html">drop_blocks()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../operations/reference/manipulation/join.html">join()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../operations/reference/manipulation/manipulate-dimension.html">manipulate dimension</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../operations/reference/manipulation/one-hot.html">one_hot()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../operations/reference/manipulation/remove-gradients.html">remove_gradients()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../operations/reference/manipulation/requires-grad.html">requires_grad()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../operations/reference/manipulation/samples-reduction.html">samples reduction</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../operations/reference/manipulation/slice.html">slice()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../operations/reference/manipulation/split.html">split()</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../operations/reference/math/index.html">Mathematical functions</a><input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><div class="visually-hidden">Toggle navigation of Mathematical functions</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../operations/reference/math/abs.html">abs()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../operations/reference/math/add.html">add()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../operations/reference/math/divide.html">divide()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../operations/reference/math/multiply.html">multiply()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../operations/reference/math/pow.html">pow()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../operations/reference/math/subtract.html">subtract()</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../operations/reference/set/index.html">Set operations</a><input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><div class="visually-hidden">Toggle navigation of Set operations</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../operations/reference/set/unique_metadata.html">unique_metadata()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../operations/reference/set/sort.html">sort()</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../operations/reference/checks.html">Checks</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../operations/CHANGELOG.html">Changelog</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="../index.html">TorchScript interface</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" role="switch" type="checkbox"/><label for="toctree-checkbox-14"><div class="visually-hidden">Toggle navigation of TorchScript interface</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2 current has-children"><a class="reference internal" href="index.html">API reference</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><div class="visually-hidden">Toggle navigation of API reference</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="tensor.html">TensorMap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="block.html">TensorBlock</a></li>
+<li class="toctree-l3 current current-page"><a class="current reference internal" href="#">Labels</a></li>
+<li class="toctree-l3"><a class="reference internal" href="serialization.html">Serialization</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="cxx/index.html">TorchScript C++ API reference</a><input class="toctree-checkbox" id="toctree-checkbox-16" name="toctree-checkbox-16" role="switch" type="checkbox"/><label for="toctree-checkbox-16"><div class="visually-hidden">Toggle navigation of TorchScript C++ API reference</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="cxx/tensor.html">TensorMap</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cxx/block.html">TensorBlock</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cxx/labels.html">Labels</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cxx/miscellaneous.html">Miscellaneous</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../CHANGELOG.html">Changelog</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../learn/index.html">Learning utilities</a><input class="toctree-checkbox" id="toctree-checkbox-17" name="toctree-checkbox-17" role="switch" type="checkbox"/><label for="toctree-checkbox-17"><div class="visually-hidden">Toggle navigation of Learning utilities</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../learn/reference/index.html">API reference</a><input class="toctree-checkbox" id="toctree-checkbox-18" name="toctree-checkbox-18" role="switch" type="checkbox"/><label for="toctree-checkbox-18"><div class="visually-hidden">Toggle navigation of API reference</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../learn/reference/data/index.html">Data utilites</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../learn/reference/nn/index.html">Neural Network</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../examples/learn/index.html">Tutorials</a><input class="toctree-checkbox" id="toctree-checkbox-19" name="toctree-checkbox-19" role="switch" type="checkbox"/><label for="toctree-checkbox-19"><div class="visually-hidden">Toggle navigation of Tutorials</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/learn/1-dataset-dataloader.html">Datasets and data loaders</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/learn/2-indexed-dataset.html">Using IndexedDataset</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../learn/CHANGELOG.html">Changelog</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../atomistic/index.html">Atomistic applications</a><input class="toctree-checkbox" id="toctree-checkbox-20" name="toctree-checkbox-20" role="switch" type="checkbox"/><label for="toctree-checkbox-20"><div class="visually-hidden">Toggle navigation of Atomistic applications</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../atomistic/overview.html">Overview</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../atomistic/reference/index.html">API reference</a><input class="toctree-checkbox" id="toctree-checkbox-21" name="toctree-checkbox-21" role="switch" type="checkbox"/><label for="toctree-checkbox-21"><div class="visually-hidden">Toggle navigation of API reference</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../atomistic/reference/systems.html">Systems</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../atomistic/reference/models/index.html">Models</a><input class="toctree-checkbox" id="toctree-checkbox-22" name="toctree-checkbox-22" role="switch" type="checkbox"/><label for="toctree-checkbox-22"><div class="visually-hidden">Toggle navigation of Models</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../atomistic/reference/models/export.html">Exporting models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../atomistic/reference/models/metadata.html">Information about models</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../atomistic/reference/ase.html">Atomic Simulation Environment (ASE) integration</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../atomistic/reference/cxx/index.html">C++ API reference</a><input class="toctree-checkbox" id="toctree-checkbox-23" name="toctree-checkbox-23" role="switch" type="checkbox"/><label for="toctree-checkbox-23"><div class="visually-hidden">Toggle navigation of C++ API reference</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../atomistic/reference/cxx/systems.html">Systems</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../atomistic/reference/cxx/models.html">Models</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../atomistic/outputs.html">Standard model outputs</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../examples/atomistic/index.html">Tutorials</a><input class="toctree-checkbox" id="toctree-checkbox-24" name="toctree-checkbox-24" role="switch" type="checkbox"/><label for="toctree-checkbox-24"><div class="visually-hidden">Toggle navigation of Tutorials</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/atomistic/1-export-atomistic-model.html">Exporting a model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/atomistic/2-running-ase-md.html">Running Molecular Dynamics with ASE</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../devdoc/index.html">Developer documentation</a><input class="toctree-checkbox" id="toctree-checkbox-25" name="toctree-checkbox-25" role="switch" type="checkbox"/><label for="toctree-checkbox-25"><div class="visually-hidden">Toggle navigation of Developer documentation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../devdoc/get-started.html">Getting started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../devdoc/architecture.html">Code organization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../devdoc/versions.html">Version number management</a></li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <section id="labels">
+<h1>Labels<a class="headerlink" href="#labels" title="Link to this heading">#</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="metatensor.torch.Labels">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">metatensor.torch.</span></span><span class="sig-name descname"><span class="pre">Labels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.12)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.12)"><span class="pre">Tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">values</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.2)"><span class="pre">Tensor</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/metatensor/torch/documentation.html#Labels"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metatensor.torch.Labels" title="Link to this definition">#</a></dt>
+<dd><p>A set of labels carrying metadata associated with a <a class="reference internal" href="tensor.html#metatensor.torch.TensorMap" title="metatensor.torch.TensorMap"><code class="xref py py-class docutils literal notranslate"><span class="pre">TensorMap</span></code></a>.</p>
+<p>The metadata can be though as a list of tuples, where each value in the
+tuple also has an associated dimension name. In practice, the dimensions
+<code class="docutils literal notranslate"><span class="pre">names</span></code> are stored separately from the <code class="docutils literal notranslate"><span class="pre">values</span></code>, and the values are in a
+2-dimensional array integers with the shape <code class="docutils literal notranslate"><span class="pre">(n_entries,</span> <span class="pre">n_dimensions)</span></code>.
+Each row/entry in this array is unique, and they are often (but not always)
+sorted in lexicographic order.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>The pure Python version of this class <a class="reference internal" href="../../core/reference/python/labels.html#metatensor.Labels" title="metatensor.Labels"><code class="xref py py-class docutils literal notranslate"><span class="pre">metatensor.Labels</span></code></a>,
+and the <a class="reference internal" href="../index.html#python-vs-torch"><span class="std std-ref">differences between TorchScript and Python API for
+metatensor</span></a>.</p>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">metatensor.torch</span> <span class="kn">import</span> <span class="n">Labels</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">labels</span> <span class="o">=</span> <span class="n">Labels</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;system&quot;</span><span class="p">,</span> <span class="s2">&quot;atom&quot;</span><span class="p">,</span> <span class="s2">&quot;type&quot;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">values</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">)]),</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span>
+<span class="go">Labels(</span>
+<span class="go">    system  atom  type</span>
+<span class="go">      0      1     8</span>
+<span class="go">      0      2     1</span>
+<span class="go">      0      5     1</span>
+<span class="go">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">labels</span><span class="o">.</span><span class="n">names</span>
+<span class="go">[&#39;system&#39;, &#39;atom&#39;, &#39;type&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">labels</span><span class="o">.</span><span class="n">values</span>
+<span class="go">tensor([[0, 1, 8],</span>
+<span class="go">        [0, 2, 1],</span>
+<span class="go">        [0, 5, 1]], dtype=torch.int32)</span>
+</pre></div>
+</div>
+<p>It is possible to create a view inside a <a class="reference internal" href="#metatensor.torch.Labels" title="metatensor.torch.Labels"><code class="xref py py-class docutils literal notranslate"><span class="pre">Labels</span></code></a>, selecting only
+a subset of columns/dimensions:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># single dimension</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">view</span> <span class="o">=</span> <span class="n">labels</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="s2">&quot;atom&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">view</span><span class="o">.</span><span class="n">names</span>
+<span class="go">[&#39;atom&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">view</span><span class="o">.</span><span class="n">values</span>
+<span class="go">tensor([[1],</span>
+<span class="go">        [2],</span>
+<span class="go">        [5]], dtype=torch.int32)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># multiple dimensions</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">view</span> <span class="o">=</span> <span class="n">labels</span><span class="o">.</span><span class="n">view</span><span class="p">([</span><span class="s2">&quot;atom&quot;</span><span class="p">,</span> <span class="s2">&quot;system&quot;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">view</span><span class="o">.</span><span class="n">names</span>
+<span class="go">[&#39;atom&#39;, &#39;system&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">view</span><span class="o">.</span><span class="n">values</span>
+<span class="go">tensor([[1, 0],</span>
+<span class="go">        [2, 0],</span>
+<span class="go">        [5, 0]], dtype=torch.int32)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">view</span><span class="o">.</span><span class="n">is_view</span><span class="p">()</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># we can convert a view back to a full, owned Labels</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">owned_labels</span> <span class="o">=</span> <span class="n">view</span><span class="o">.</span><span class="n">to_owned</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">owned_labels</span><span class="o">.</span><span class="n">is_view</span><span class="p">()</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+<p>One can also iterate over labels entries, or directly index the <a class="reference internal" href="#metatensor.torch.Labels" title="metatensor.torch.Labels"><code class="xref py py-class docutils literal notranslate"><span class="pre">Labels</span></code></a>
+to get a specific entry</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">entry</span> <span class="o">=</span> <span class="n">labels</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># or labels.entry(0)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">entry</span><span class="o">.</span><span class="n">names</span>
+<span class="go">[&#39;system&#39;, &#39;atom&#39;, &#39;type&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">entry</span><span class="o">.</span><span class="n">values</span>
+<span class="go">tensor([0, 1, 8], dtype=torch.int32)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">labels</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="go">LabelsEntry(system=0, atom=1, type=8)</span>
+<span class="go">LabelsEntry(system=0, atom=2, type=1)</span>
+<span class="go">LabelsEntry(system=0, atom=5, type=1)</span>
+</pre></div>
+</div>
+<p>Or get all the values associated with a given dimension/column name</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">labels</span><span class="o">.</span><span class="n">column</span><span class="p">(</span><span class="s2">&quot;atom&quot;</span><span class="p">)</span>
+<span class="go">tensor([1, 2, 5], dtype=torch.int32)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">labels</span><span class="p">[</span><span class="s2">&quot;atom&quot;</span><span class="p">]</span>  <span class="c1"># alternative syntax for the above</span>
+<span class="go">tensor([1, 2, 5], dtype=torch.int32)</span>
+</pre></div>
+</div>
+<p>Labels can be checked for equality:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">owned_labels</span> <span class="o">==</span> <span class="n">labels</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">labels</span> <span class="o">==</span> <span class="n">labels</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<p>Finally, it is possible to check if a value is inside (non-view) labels, and
+get the corresponding position:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">labels</span><span class="o">.</span><span class="n">position</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+<span class="go">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">labels</span><span class="o">.</span><span class="n">position</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">]))</span>
+<span class="go">None</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span> <span class="ow">in</span> <span class="n">labels</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">labels</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="ow">in</span> <span class="n">labels</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>names</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em> | </em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.12)"><em>List</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>] </em><em>| </em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.12)"><em>Tuple</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>...</em><em>]</em>) – names of the dimensions in the new labels. A single string
+is transformed into a list with one element, i.e.
+<code class="docutils literal notranslate"><span class="pre">names=&quot;a&quot;</span></code> is the same as <code class="docutils literal notranslate"><span class="pre">names=[&quot;a&quot;]</span></code>.</p></li>
+<li><p><strong>values</strong> (<a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.2)"><em>Tensor</em></a>) – values of the labels, this needs to be a 2-dimensional
+array of integers.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py property">
+<dt class="sig sig-object py" id="metatensor.torch.Labels.names">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">names</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.12)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#metatensor.torch.Labels.names" title="Link to this definition">#</a></dt>
+<dd><p>names of the dimensions for these <a class="reference internal" href="#metatensor.torch.Labels" title="metatensor.torch.Labels"><code class="xref py py-class docutils literal notranslate"><span class="pre">Labels</span></code></a></p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="metatensor.torch.Labels.values">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">values</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.2)"><span class="pre">Tensor</span></a></em><a class="headerlink" href="#metatensor.torch.Labels.values" title="Link to this definition">#</a></dt>
+<dd><p>Values associated with each dimensions of the <a class="reference internal" href="#metatensor.torch.Labels" title="metatensor.torch.Labels"><code class="xref py py-class docutils literal notranslate"><span class="pre">Labels</span></code></a>, stored
+as 2-dimensional tensor of 32-bit integers.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">values</span></code> should be treated as immutable/read-only (we would like to
+enforce this automatically, but PyTorch can not mark a
+<a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch.Tensor</span></code></a> as immutable)</p>
+<p>Any modification to this tensor can break the underlying data structure, or
+make it out of sync with the <code class="docutils literal notranslate"><span class="pre">values</span></code>.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metatensor.torch.Labels.single">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">single</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#metatensor.torch.Labels" title="metatensor.torch.documentation.Labels"><span class="pre">Labels</span></a></span></span><a class="reference internal" href="../../_modules/metatensor/torch/documentation.html#Labels.single"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metatensor.torch.Labels.single" title="Link to this definition">#</a></dt>
+<dd><p>Create <a class="reference internal" href="#metatensor.torch.Labels" title="metatensor.torch.Labels"><code class="xref py py-class docutils literal notranslate"><span class="pre">Labels</span></code></a> to use when there is no relevant metadata and
+only one entry in the corresponding dimension (e.g. keys when a tensor
+map contains a single block).</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>PyTorch can execute <code class="docutils literal notranslate"><span class="pre">static</span></code> functions (like this one) coming from a
+TorchScript extension, but fails when trying to save code calling this
+function with <a class="reference external" href="https://pytorch.org/docs/stable/generated/torch.jit.save.html#torch.jit.save" title="(in PyTorch v2.2)"><code class="xref py py-func docutils literal notranslate"><span class="pre">torch.jit.save()</span></code></a>, giving the following error:</p>
+<blockquote>
+<div><p>Failed to downcast a Function to a GraphFunction</p>
+</div></blockquote>
+<p>This issue is reported as <a class="reference external" href="pytorch-115639">PyTorch#115639</a>. In the
+meantime, if you need to <a class="reference external" href="https://pytorch.org/docs/stable/generated/torch.jit.save.html#torch.jit.save" title="(in PyTorch v2.2)"><code class="xref py py-func docutils literal notranslate"><span class="pre">torch.jit.save()</span></code></a> code containing
+this function, you can implement it manually in a few lines.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#metatensor.torch.Labels" title="metatensor.torch.documentation.Labels"><em>Labels</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metatensor.torch.Labels.empty">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">empty</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.12)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.12)"><span class="pre">Tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#metatensor.torch.Labels" title="metatensor.torch.documentation.Labels"><span class="pre">Labels</span></a></span></span><a class="reference internal" href="../../_modules/metatensor/torch/documentation.html#Labels.empty"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metatensor.torch.Labels.empty" title="Link to this definition">#</a></dt>
+<dd><p>Create <a class="reference internal" href="#metatensor.torch.Labels" title="metatensor.torch.Labels"><code class="xref py py-class docutils literal notranslate"><span class="pre">Labels</span></code></a> with given <code class="docutils literal notranslate"><span class="pre">names</span></code> but no values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>names</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em> | </em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.12)"><em>List</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>] </em><em>| </em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.12)"><em>Tuple</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>...</em><em>]</em>) – names of the dimensions in the new labels. A single string
+is transformed into a list with one element, i.e.
+<code class="docutils literal notranslate"><span class="pre">names=&quot;a&quot;</span></code> is the same as <code class="docutils literal notranslate"><span class="pre">names=[&quot;a&quot;]</span></code>.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#metatensor.torch.Labels" title="metatensor.torch.documentation.Labels"><em>Labels</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metatensor.torch.Labels.range">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">range</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#metatensor.torch.Labels" title="metatensor.torch.documentation.Labels"><span class="pre">Labels</span></a></span></span><a class="reference internal" href="../../_modules/metatensor/torch/documentation.html#Labels.range"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metatensor.torch.Labels.range" title="Link to this definition">#</a></dt>
+<dd><p>Create <a class="reference internal" href="#metatensor.torch.Labels" title="metatensor.torch.Labels"><code class="xref py py-class docutils literal notranslate"><span class="pre">Labels</span></code></a> with a single dimension using the given
+<code class="docutils literal notranslate"><span class="pre">name</span></code> and values in the <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">end)</span></code> range.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – name of the single dimension in the new labels.</p></li>
+<li><p><strong>end</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – end of the range for labels</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#metatensor.torch.Labels" title="metatensor.torch.documentation.Labels"><em>Labels</em></a></p>
+</dd>
+</dl>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>PyTorch can execute <code class="docutils literal notranslate"><span class="pre">static</span></code> functions (like this one) coming from a
+TorchScript extension, but fails when trying to save code calling this
+function with <a class="reference external" href="https://pytorch.org/docs/stable/generated/torch.jit.save.html#torch.jit.save" title="(in PyTorch v2.2)"><code class="xref py py-func docutils literal notranslate"><span class="pre">torch.jit.save()</span></code></a>, giving the following error:</p>
+<blockquote>
+<div><p>Failed to downcast a Function to a GraphFunction</p>
+</div></blockquote>
+<p>This issue is reported as <a class="reference external" href="pytorch-115639">PyTorch#115639</a>. In the
+meantime, if you need to <a class="reference external" href="https://pytorch.org/docs/stable/generated/torch.jit.save.html#torch.jit.save" title="(in PyTorch v2.2)"><code class="xref py py-func docutils literal notranslate"><span class="pre">torch.jit.save()</span></code></a> code containing
+this function, you can implement it manually in a few lines.</p>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">metatensor.torch</span> <span class="kn">import</span> <span class="n">Labels</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">labels</span> <span class="o">=</span> <span class="n">Labels</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="s2">&quot;dummy&quot;</span><span class="p">,</span> <span class="mi">7</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">labels</span><span class="o">.</span><span class="n">names</span>
+<span class="go">[&#39;dummy&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">labels</span><span class="o">.</span><span class="n">values</span>
+<span class="go">tensor([[0],</span>
+<span class="go">        [1],</span>
+<span class="go">        [2],</span>
+<span class="go">        [3],</span>
+<span class="go">        [4],</span>
+<span class="go">        [5],</span>
+<span class="go">        [6]], dtype=torch.int32)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metatensor.torch.Labels.__len__">
+<span class="sig-name descname"><span class="pre">__len__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a></span></span><a class="reference internal" href="../../_modules/metatensor/torch/documentation.html#Labels.__len__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metatensor.torch.Labels.__len__" title="Link to this definition">#</a></dt>
+<dd><p>number of entries in these labels</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metatensor.torch.Labels.__getitem__">
+<span class="sig-name descname"><span class="pre">__getitem__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dimension</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.2)"><span class="pre">Tensor</span></a></span></span><a class="reference internal" href="../../_modules/metatensor/torch/documentation.html#Labels.__getitem__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metatensor.torch.Labels.__getitem__" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">__getitem__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#metatensor.torch.LabelsEntry" title="metatensor.torch.documentation.LabelsEntry"><span class="pre">LabelsEntry</span></a></span></span></dt>
+<dd><p>When indexing with a string, get the values for the corresponding dimension as a
+1-dimensional array (i.e. <a class="reference internal" href="#metatensor.torch.Labels.column" title="metatensor.torch.Labels.column"><code class="xref py py-func docutils literal notranslate"><span class="pre">Labels.column()</span></code></a>).</p>
+<p>When indexing with an integer, get the corresponding row/labels entry (i.e.
+<a class="reference internal" href="#metatensor.torch.Labels.entry" title="metatensor.torch.Labels.entry"><code class="xref py py-func docutils literal notranslate"><span class="pre">Labels.entry()</span></code></a>).</p>
+<p>See also <a class="reference internal" href="#metatensor.torch.Labels.view" title="metatensor.torch.Labels.view"><code class="xref py py-func docutils literal notranslate"><span class="pre">Labels.view()</span></code></a> to extract the values associated with multiple
+columns/dimensions.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metatensor.torch.Labels.__contains__">
+<span class="sig-name descname"><span class="pre">__contains__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">entry</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#metatensor.torch.LabelsEntry" title="metatensor.torch.documentation.LabelsEntry"><span class="pre">LabelsEntry</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.2)"><span class="pre">Tensor</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.12)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.12)"><span class="pre">Tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><span class="pre">bool</span></a></span></span><a class="reference internal" href="../../_modules/metatensor/torch/documentation.html#Labels.__contains__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metatensor.torch.Labels.__contains__" title="Link to this definition">#</a></dt>
+<dd><p>check if these <a class="reference internal" href="#metatensor.torch.Labels" title="metatensor.torch.Labels"><code class="xref py py-class docutils literal notranslate"><span class="pre">Labels</span></code></a> contain the given <code class="docutils literal notranslate"><span class="pre">entry</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>entry</strong> (<a class="reference internal" href="#metatensor.torch.LabelsEntry" title="metatensor.torch.documentation.LabelsEntry"><em>LabelsEntry</em></a><em> | </em><a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.2)"><em>Tensor</em></a><em> | </em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.12)"><em>List</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>] </em><em>| </em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.12)"><em>Tuple</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>, </em><em>...</em><em>]</em>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metatensor.torch.Labels.__eq__">
+<span class="sig-name descname"><span class="pre">__eq__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#metatensor.torch.Labels" title="metatensor.torch.documentation.Labels"><span class="pre">Labels</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><span class="pre">bool</span></a></span></span><a class="reference internal" href="../../_modules/metatensor/torch/documentation.html#Labels.__eq__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metatensor.torch.Labels.__eq__" title="Link to this definition">#</a></dt>
+<dd><p>check if two set of labels are equal (same dimension names and same
+values)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>other</strong> (<a class="reference internal" href="#metatensor.torch.Labels" title="metatensor.torch.documentation.Labels"><em>Labels</em></a>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metatensor.torch.Labels.__ne__">
+<span class="sig-name descname"><span class="pre">__ne__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#metatensor.torch.Labels" title="metatensor.torch.documentation.Labels"><span class="pre">Labels</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><span class="pre">bool</span></a></span></span><a class="reference internal" href="../../_modules/metatensor/torch/documentation.html#Labels.__ne__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metatensor.torch.Labels.__ne__" title="Link to this definition">#</a></dt>
+<dd><p>check if two set of labels are not equal (different dimension names or
+different values)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>other</strong> (<a class="reference internal" href="#metatensor.torch.Labels" title="metatensor.torch.documentation.Labels"><em>Labels</em></a>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metatensor.torch.Labels.load">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#metatensor.torch.Labels" title="metatensor.torch.documentation.Labels"><span class="pre">Labels</span></a></span></span><a class="reference internal" href="../../_modules/metatensor/torch/documentation.html#Labels.load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metatensor.torch.Labels.load" title="Link to this definition">#</a></dt>
+<dd><p>Load a serialized <a class="reference internal" href="#metatensor.torch.Labels" title="metatensor.torch.Labels"><code class="xref py py-class docutils literal notranslate"><span class="pre">Labels</span></code></a> from the file at <code class="docutils literal notranslate"><span class="pre">path</span></code>, this is
+equivalent to <a class="reference internal" href="serialization.html#metatensor.torch.load_labels" title="metatensor.torch.load_labels"><code class="xref py py-func docutils literal notranslate"><span class="pre">metatensor.torch.load_labels()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – Path of the file containing a saved <a class="reference internal" href="tensor.html#metatensor.torch.TensorMap" title="metatensor.torch.TensorMap"><code class="xref py py-class docutils literal notranslate"><span class="pre">TensorMap</span></code></a></p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#metatensor.torch.Labels" title="metatensor.torch.documentation.Labels"><em>Labels</em></a></p>
+</dd>
+</dl>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>PyTorch can execute <code class="docutils literal notranslate"><span class="pre">static</span></code> functions (like this one) coming from a
+TorchScript extension, but fails when trying to save code calling this
+function with <a class="reference external" href="https://pytorch.org/docs/stable/generated/torch.jit.save.html#torch.jit.save" title="(in PyTorch v2.2)"><code class="xref py py-func docutils literal notranslate"><span class="pre">torch.jit.save()</span></code></a>, giving the following error:</p>
+<blockquote>
+<div><p>Failed to downcast a Function to a GraphFunction</p>
+</div></blockquote>
+<p>This issue is reported as <a class="reference external" href="pytorch-115639">PyTorch#115639</a>. In the mean
+time, you should use <a class="reference internal" href="serialization.html#metatensor.torch.load_labels" title="metatensor.torch.load_labels"><code class="xref py py-func docutils literal notranslate"><span class="pre">metatensor.torch.load_labels()</span></code></a> instead of this
+function to save your code to TorchScript.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metatensor.torch.Labels.load_buffer">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load_buffer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">buffer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.2)"><span class="pre">Tensor</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#metatensor.torch.Labels" title="metatensor.torch.documentation.Labels"><span class="pre">Labels</span></a></span></span><a class="reference internal" href="../../_modules/metatensor/torch/documentation.html#Labels.load_buffer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metatensor.torch.Labels.load_buffer" title="Link to this definition">#</a></dt>
+<dd><p>Load a serialized <a class="reference internal" href="#metatensor.torch.Labels" title="metatensor.torch.Labels"><code class="xref py py-class docutils literal notranslate"><span class="pre">Labels</span></code></a> from an in-memory <code class="docutils literal notranslate"><span class="pre">buffer</span></code>, this is
+equivalent to <a class="reference internal" href="serialization.html#metatensor.torch.load_labels_buffer" title="metatensor.torch.load_labels_buffer"><code class="xref py py-func docutils literal notranslate"><span class="pre">metatensor.torch.load_labels_buffer()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>buffer</strong> (<a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.2)"><em>Tensor</em></a>) – torch Tensor representing an in-memory buffer</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#metatensor.torch.Labels" title="metatensor.torch.documentation.Labels"><em>Labels</em></a></p>
+</dd>
+</dl>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>PyTorch can execute <code class="docutils literal notranslate"><span class="pre">static</span></code> functions (like this one) coming from a
+TorchScript extension, but fails when trying to save code calling this
+function with <a class="reference external" href="https://pytorch.org/docs/stable/generated/torch.jit.save.html#torch.jit.save" title="(in PyTorch v2.2)"><code class="xref py py-func docutils literal notranslate"><span class="pre">torch.jit.save()</span></code></a>, giving the following error:</p>
+<blockquote>
+<div><p>Failed to downcast a Function to a GraphFunction</p>
+</div></blockquote>
+<p>This issue is reported as <a class="reference external" href="pytorch-115639">PyTorch#115639</a>. In the mean
+time, you should use <a class="reference internal" href="serialization.html#metatensor.torch.load_labels_buffer" title="metatensor.torch.load_labels_buffer"><code class="xref py py-func docutils literal notranslate"><span class="pre">metatensor.torch.load_labels_buffer()</span></code></a> instead
+of this function to save your code to TorchScript.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metatensor.torch.Labels.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/metatensor/torch/documentation.html#Labels.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metatensor.torch.Labels.save" title="Link to this definition">#</a></dt>
+<dd><p>Save these <a class="reference internal" href="#metatensor.torch.Labels" title="metatensor.torch.Labels"><code class="xref py py-class docutils literal notranslate"><span class="pre">Labels</span></code></a> to a file, this is equivalent to
+<a class="reference internal" href="serialization.html#metatensor.torch.save" title="metatensor.torch.save"><code class="xref py py-func docutils literal notranslate"><span class="pre">metatensor.torch.save()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – Path of the file. If the file already exists, it will be
+overwritten</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metatensor.torch.Labels.save_buffer">
+<span class="sig-name descname"><span class="pre">save_buffer</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.2)"><span class="pre">Tensor</span></a></span></span><a class="reference internal" href="../../_modules/metatensor/torch/documentation.html#Labels.save_buffer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metatensor.torch.Labels.save_buffer" title="Link to this definition">#</a></dt>
+<dd><p>Save these <a class="reference internal" href="#metatensor.torch.Labels" title="metatensor.torch.Labels"><code class="xref py py-class docutils literal notranslate"><span class="pre">Labels</span></code></a> to an in-memory buffer, this is equivalent to
+<a class="reference internal" href="serialization.html#metatensor.torch.save_buffer" title="metatensor.torch.save_buffer"><code class="xref py py-func docutils literal notranslate"><span class="pre">metatensor.torch.save_buffer()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.2)"><em>Tensor</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metatensor.torch.Labels.append">
+<span class="sig-name descname"><span class="pre">append</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">values</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.2)"><span class="pre">Tensor</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#metatensor.torch.Labels" title="metatensor.torch.documentation.Labels"><span class="pre">Labels</span></a></span></span><a class="reference internal" href="../../_modules/metatensor/torch/documentation.html#Labels.append"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metatensor.torch.Labels.append" title="Link to this definition">#</a></dt>
+<dd><p>Append a new dimension to the end of the <a class="reference internal" href="#metatensor.torch.Labels" title="metatensor.torch.Labels"><code class="xref py py-class docutils literal notranslate"><span class="pre">Labels</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – name of the new dimension</p></li>
+<li><p><strong>values</strong> (<a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.2)"><em>Tensor</em></a>) – 1D array of values for the new dimension</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#metatensor.torch.Labels" title="metatensor.torch.documentation.Labels"><em>Labels</em></a></p>
+</dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">torch</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">metatensor.torch</span> <span class="kn">import</span> <span class="n">Labels</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">label</span> <span class="o">=</span> <span class="n">Labels</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([[</span><span class="mi">42</span><span class="p">]]))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
+<span class="go">Labels(</span>
+<span class="go">    foo</span>
+<span class="go">    42</span>
+<span class="go">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">label</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;bar&quot;</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mi">10</span><span class="p">])))</span>
+<span class="go">Labels(</span>
+<span class="go">    foo  bar</span>
+<span class="go">    42   10</span>
+<span class="go">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metatensor.torch.Labels.insert">
+<span class="sig-name descname"><span class="pre">insert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">values</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.2)"><span class="pre">Tensor</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#metatensor.torch.Labels" title="metatensor.torch.documentation.Labels"><span class="pre">Labels</span></a></span></span><a class="reference internal" href="../../_modules/metatensor/torch/documentation.html#Labels.insert"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metatensor.torch.Labels.insert" title="Link to this definition">#</a></dt>
+<dd><p>Insert a new dimension before <code class="docutils literal notranslate"><span class="pre">index</span></code> in the <a class="reference internal" href="#metatensor.torch.Labels" title="metatensor.torch.Labels"><code class="xref py py-class docutils literal notranslate"><span class="pre">Labels</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – index before the new dimension is inserted</p></li>
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – name of the new dimension</p></li>
+<li><p><strong>values</strong> (<a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.2)"><em>Tensor</em></a>) – 1D array of values for the new dimension</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#metatensor.torch.Labels" title="metatensor.torch.documentation.Labels"><em>Labels</em></a></p>
+</dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">torch</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">metatensor.torch</span> <span class="kn">import</span> <span class="n">Labels</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">label</span> <span class="o">=</span> <span class="n">Labels</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([[</span><span class="mi">42</span><span class="p">]]))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
+<span class="go">Labels(</span>
+<span class="go">    foo</span>
+<span class="go">    42</span>
+<span class="go">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">label</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;bar&quot;</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mi">10</span><span class="p">])))</span>
+<span class="go">Labels(</span>
+<span class="go">    bar  foo</span>
+<span class="go">    10   42</span>
+<span class="go">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metatensor.torch.Labels.permute">
+<span class="sig-name descname"><span class="pre">permute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dimensions_indexes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.12)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#metatensor.torch.Labels" title="metatensor.torch.documentation.Labels"><span class="pre">Labels</span></a></span></span><a class="reference internal" href="../../_modules/metatensor/torch/documentation.html#Labels.permute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metatensor.torch.Labels.permute" title="Link to this definition">#</a></dt>
+<dd><p>Permute dimensions according to <code class="docutils literal notranslate"><span class="pre">dimensions_indexes</span></code> in the
+<a class="reference internal" href="#metatensor.torch.Labels" title="metatensor.torch.Labels"><code class="xref py py-class docutils literal notranslate"><span class="pre">Labels</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>dimensions_indexes</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.12)"><em>List</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>]</em>) – desired ordering of the dimensions</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.12)"><strong>ValueError</strong></a> – if length of <code class="docutils literal notranslate"><span class="pre">dimensions_indexes</span></code> does not match the
+Labels length</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.12)"><strong>ValueError</strong></a> – if duplicate values are present in <code class="docutils literal notranslate"><span class="pre">dimensions_indexes</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#metatensor.torch.Labels" title="metatensor.torch.documentation.Labels"><em>Labels</em></a></p>
+</dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">torch</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">metatensor.torch</span> <span class="kn">import</span> <span class="n">Labels</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">label</span> <span class="o">=</span> <span class="n">Labels</span><span class="p">([</span><span class="s2">&quot;foo&quot;</span><span class="p">,</span> <span class="s2">&quot;bar&quot;</span><span class="p">,</span> <span class="s2">&quot;baz&quot;</span><span class="p">],</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([[</span><span class="mi">42</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">3</span><span class="p">]]))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
+<span class="go">Labels(</span>
+<span class="go">    foo  bar  baz</span>
+<span class="go">    42   10    3</span>
+<span class="go">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">label</span><span class="o">.</span><span class="n">permute</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+<span class="go">Labels(</span>
+<span class="go">    baz  foo  bar</span>
+<span class="go">     3   42   10</span>
+<span class="go">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metatensor.torch.Labels.remove">
+<span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#metatensor.torch.Labels" title="metatensor.torch.documentation.Labels"><span class="pre">Labels</span></a></span></span><a class="reference internal" href="../../_modules/metatensor/torch/documentation.html#Labels.remove"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metatensor.torch.Labels.remove" title="Link to this definition">#</a></dt>
+<dd><p>Remove <code class="docutils literal notranslate"><span class="pre">name</span></code> from the dimensions of the <a class="reference internal" href="#metatensor.torch.Labels" title="metatensor.torch.Labels"><code class="xref py py-class docutils literal notranslate"><span class="pre">Labels</span></code></a>.</p>
+<p>Removal can only be performed if the resulting <a class="reference internal" href="#metatensor.torch.Labels" title="metatensor.torch.Labels"><code class="xref py py-class docutils literal notranslate"><span class="pre">Labels</span></code></a> instance will
+be unique.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – name to be removed</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.12)"><strong>ValueError</strong></a> – if the name is not present.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#metatensor.torch.Labels" title="metatensor.torch.documentation.Labels"><em>Labels</em></a></p>
+</dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">torch</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">metatensor.torch</span> <span class="kn">import</span> <span class="n">Labels</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">label</span> <span class="o">=</span> <span class="n">Labels</span><span class="p">([</span><span class="s2">&quot;foo&quot;</span><span class="p">,</span> <span class="s2">&quot;bar&quot;</span><span class="p">],</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([[</span><span class="mi">42</span><span class="p">,</span> <span class="mi">10</span><span class="p">]]))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
+<span class="go">Labels(</span>
+<span class="go">    foo  bar</span>
+<span class="go">    42   10</span>
+<span class="go">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">label</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;bar&quot;</span><span class="p">))</span>
+<span class="go">Labels(</span>
+<span class="go">    foo</span>
+<span class="go">    42</span>
+<span class="go">)</span>
+</pre></div>
+</div>
+<p>If the new <a class="reference internal" href="#metatensor.torch.Labels" title="metatensor.torch.Labels"><code class="xref py py-class docutils literal notranslate"><span class="pre">Labels</span></code></a> is not unique an error is raised.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">label</span> <span class="o">=</span> <span class="n">Labels</span><span class="p">([</span><span class="s2">&quot;foo&quot;</span><span class="p">,</span> <span class="s2">&quot;bar&quot;</span><span class="p">],</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([[</span><span class="mi">42</span><span class="p">,</span> <span class="mi">10</span><span class="p">],</span> <span class="p">[</span><span class="mi">42</span><span class="p">,</span> <span class="mi">11</span><span class="p">]]))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
+<span class="go">Labels(</span>
+<span class="go">    foo  bar</span>
+<span class="go">    42   10</span>
+<span class="go">    42   11</span>
+<span class="go">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">try</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">label</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;bar&quot;</span><span class="p">)</span>
+<span class="gp">... </span><span class="k">except</span> <span class="ne">RuntimeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="go">invalid parameter: can not have the same label value multiple time: [42] is already present at position 0</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metatensor.torch.Labels.rename">
+<span class="sig-name descname"><span class="pre">rename</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">old</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">new</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#metatensor.torch.Labels" title="metatensor.torch.documentation.Labels"><span class="pre">Labels</span></a></span></span><a class="reference internal" href="../../_modules/metatensor/torch/documentation.html#Labels.rename"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metatensor.torch.Labels.rename" title="Link to this definition">#</a></dt>
+<dd><p>Rename the <code class="docutils literal notranslate"><span class="pre">old</span></code> dimension to <code class="docutils literal notranslate"><span class="pre">new</span></code> in the <a class="reference internal" href="#metatensor.torch.Labels" title="metatensor.torch.Labels"><code class="xref py py-class docutils literal notranslate"><span class="pre">Labels</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>old</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – name to be replaced</p></li>
+<li><p><strong>new</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – name after the replacement</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.12)"><strong>ValueError</strong></a> – if old is not present.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#metatensor.torch.Labels" title="metatensor.torch.documentation.Labels"><em>Labels</em></a></p>
+</dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">torch</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">metatensor.torch</span> <span class="kn">import</span> <span class="n">Labels</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">label</span> <span class="o">=</span> <span class="n">Labels</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([[</span><span class="mi">42</span><span class="p">]]))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
+<span class="go">Labels(</span>
+<span class="go">    foo</span>
+<span class="go">    42</span>
+<span class="go">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">label</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">,</span> <span class="s2">&quot;bar&quot;</span><span class="p">))</span>
+<span class="go">Labels(</span>
+<span class="go">    bar</span>
+<span class="go">    42</span>
+<span class="go">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metatensor.torch.Labels.to">
+<span class="sig-name descname"><span class="pre">to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://pytorch.org/docs/stable/tensor_attributes.html#torch.device" title="(in PyTorch v2.2)"><span class="pre">device</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#metatensor.torch.Labels" title="metatensor.torch.documentation.Labels"><span class="pre">Labels</span></a></span></span><a class="reference internal" href="../../_modules/metatensor/torch/documentation.html#Labels.to"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metatensor.torch.Labels.to" title="Link to this definition">#</a></dt>
+<dd><p>move the values for these Labels to the given <code class="docutils literal notranslate"><span class="pre">device</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>device</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em> | </em><a class="reference external" href="https://pytorch.org/docs/stable/tensor_attributes.html#torch.device" title="(in PyTorch v2.2)"><em>device</em></a>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#metatensor.torch.Labels" title="metatensor.torch.documentation.Labels"><em>Labels</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="metatensor.torch.Labels.device">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">device</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://pytorch.org/docs/stable/tensor_attributes.html#torch.device" title="(in PyTorch v2.2)"><span class="pre">device</span></a></em><a class="headerlink" href="#metatensor.torch.Labels.device" title="Link to this definition">#</a></dt>
+<dd><p>get the current device used for the values of these Labels</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metatensor.torch.Labels.position">
+<span class="sig-name descname"><span class="pre">position</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">entry</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#metatensor.torch.LabelsEntry" title="metatensor.torch.documentation.LabelsEntry"><span class="pre">LabelsEntry</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.2)"><span class="pre">Tensor</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.12)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.12)"><span class="pre">Tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../../_modules/metatensor/torch/documentation.html#Labels.position"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metatensor.torch.Labels.position" title="Link to this definition">#</a></dt>
+<dd><p>Get the position of the given <code class="docutils literal notranslate"><span class="pre">entry</span></code> in this set of
+<a class="reference internal" href="#metatensor.torch.Labels" title="metatensor.torch.Labels"><code class="xref py py-class docutils literal notranslate"><span class="pre">Labels</span></code></a>, or <code class="docutils literal notranslate"><span class="pre">None</span></code> if the entry is not present in the
+labels.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>entry</strong> (<a class="reference internal" href="#metatensor.torch.LabelsEntry" title="metatensor.torch.documentation.LabelsEntry"><em>LabelsEntry</em></a><em> | </em><a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.2)"><em>Tensor</em></a><em> | </em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.12)"><em>List</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>] </em><em>| </em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.12)"><em>Tuple</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>, </em><em>...</em><em>]</em>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a> | <em>None</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metatensor.torch.Labels.union">
+<span class="sig-name descname"><span class="pre">union</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#metatensor.torch.Labels" title="metatensor.torch.documentation.Labels"><span class="pre">Labels</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#metatensor.torch.Labels" title="metatensor.torch.documentation.Labels"><span class="pre">Labels</span></a></span></span><a class="reference internal" href="../../_modules/metatensor/torch/documentation.html#Labels.union"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metatensor.torch.Labels.union" title="Link to this definition">#</a></dt>
+<dd><p>Take the union of these <a class="reference internal" href="#metatensor.torch.Labels" title="metatensor.torch.Labels"><code class="xref py py-class docutils literal notranslate"><span class="pre">Labels</span></code></a> with <code class="docutils literal notranslate"><span class="pre">other</span></code>.</p>
+<p>If you want to know where entries in <code class="docutils literal notranslate"><span class="pre">self</span></code> and <code class="docutils literal notranslate"><span class="pre">other</span></code> ends up in the
+union, you can use <a class="reference internal" href="#metatensor.torch.Labels.union_and_mapping" title="metatensor.torch.Labels.union_and_mapping"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Labels.union_and_mapping()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>other</strong> (<a class="reference internal" href="#metatensor.torch.Labels" title="metatensor.torch.documentation.Labels"><em>Labels</em></a>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#metatensor.torch.Labels" title="metatensor.torch.documentation.Labels"><em>Labels</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metatensor.torch.Labels.union_and_mapping">
+<span class="sig-name descname"><span class="pre">union_and_mapping</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#metatensor.torch.Labels" title="metatensor.torch.documentation.Labels"><span class="pre">Labels</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.12)"><span class="pre">Tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#metatensor.torch.Labels" title="metatensor.torch.documentation.Labels"><span class="pre">Labels</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.2)"><span class="pre">Tensor</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.2)"><span class="pre">Tensor</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/metatensor/torch/documentation.html#Labels.union_and_mapping"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metatensor.torch.Labels.union_and_mapping" title="Link to this definition">#</a></dt>
+<dd><p>Take the union of these <a class="reference internal" href="#metatensor.torch.Labels" title="metatensor.torch.Labels"><code class="xref py py-class docutils literal notranslate"><span class="pre">Labels</span></code></a> with <code class="docutils literal notranslate"><span class="pre">other</span></code>.</p>
+<p>This function also returns the position in the union where each entry of the
+input :py:class::<cite>Labels</cite> ended up.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Tuple containing the union, a <a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch.Tensor</span></code></a> containing the
+position in the union of the entries from <code class="docutils literal notranslate"><span class="pre">self</span></code>, and a
+<a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch.Tensor</span></code></a> containing the position in the union of the
+entries from <code class="docutils literal notranslate"><span class="pre">other</span></code>.</p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>other</strong> (<a class="reference internal" href="#metatensor.torch.Labels" title="metatensor.torch.documentation.Labels"><em>Labels</em></a>) – </p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.12)"><em>Tuple</em></a>[<a class="reference internal" href="#metatensor.torch.Labels" title="metatensor.torch.documentation.Labels"><em>Labels</em></a>, <a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.2)"><em>Tensor</em></a>, <a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.2)"><em>Tensor</em></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metatensor.torch.Labels.intersection">
+<span class="sig-name descname"><span class="pre">intersection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#metatensor.torch.Labels" title="metatensor.torch.documentation.Labels"><span class="pre">Labels</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#metatensor.torch.Labels" title="metatensor.torch.documentation.Labels"><span class="pre">Labels</span></a></span></span><a class="reference internal" href="../../_modules/metatensor/torch/documentation.html#Labels.intersection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metatensor.torch.Labels.intersection" title="Link to this definition">#</a></dt>
+<dd><p>Take the intersection of these <a class="reference internal" href="#metatensor.torch.Labels" title="metatensor.torch.Labels"><code class="xref py py-class docutils literal notranslate"><span class="pre">Labels</span></code></a> with <code class="docutils literal notranslate"><span class="pre">other</span></code>.</p>
+<p>If you want to know where entries in <code class="docutils literal notranslate"><span class="pre">self</span></code> and <code class="docutils literal notranslate"><span class="pre">other</span></code> ends up in the
+intersection, you can use <a class="reference internal" href="#metatensor.torch.Labels.intersection_and_mapping" title="metatensor.torch.Labels.intersection_and_mapping"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Labels.intersection_and_mapping()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>other</strong> (<a class="reference internal" href="#metatensor.torch.Labels" title="metatensor.torch.documentation.Labels"><em>Labels</em></a>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#metatensor.torch.Labels" title="metatensor.torch.documentation.Labels"><em>Labels</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metatensor.torch.Labels.intersection_and_mapping">
+<span class="sig-name descname"><span class="pre">intersection_and_mapping</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#metatensor.torch.Labels" title="metatensor.torch.documentation.Labels"><span class="pre">Labels</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.12)"><span class="pre">Tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#metatensor.torch.Labels" title="metatensor.torch.documentation.Labels"><span class="pre">Labels</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.2)"><span class="pre">Tensor</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.2)"><span class="pre">Tensor</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/metatensor/torch/documentation.html#Labels.intersection_and_mapping"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metatensor.torch.Labels.intersection_and_mapping" title="Link to this definition">#</a></dt>
+<dd><p>Take the intersection of these <a class="reference internal" href="#metatensor.torch.Labels" title="metatensor.torch.Labels"><code class="xref py py-class docutils literal notranslate"><span class="pre">Labels</span></code></a> with <code class="docutils literal notranslate"><span class="pre">other</span></code>.</p>
+<p>This function also returns the position in the intersection where each entry of
+the input :py:class::<cite>Labels</cite> ended up.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Tuple containing the intersection, a <a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch.Tensor</span></code></a>
+containing the position in the intersection of the entries from <code class="docutils literal notranslate"><span class="pre">self</span></code>,
+and a <a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch.Tensor</span></code></a> containing the position in the intersection
+of the entries from <code class="docutils literal notranslate"><span class="pre">other</span></code>. If entries in <code class="docutils literal notranslate"><span class="pre">self</span></code> or <code class="docutils literal notranslate"><span class="pre">other</span></code> are not
+used in the output, the mapping for them is set to <code class="docutils literal notranslate"><span class="pre">-1</span></code>.</p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>other</strong> (<a class="reference internal" href="#metatensor.torch.Labels" title="metatensor.torch.documentation.Labels"><em>Labels</em></a>) – </p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.12)"><em>Tuple</em></a>[<a class="reference internal" href="#metatensor.torch.Labels" title="metatensor.torch.documentation.Labels"><em>Labels</em></a>, <a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.2)"><em>Tensor</em></a>, <a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.2)"><em>Tensor</em></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metatensor.torch.Labels.print">
+<span class="sig-name descname"><span class="pre">print</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">max_entries</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">indent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span></span><a class="reference internal" href="../../_modules/metatensor/torch/documentation.html#Labels.print"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metatensor.torch.Labels.print" title="Link to this definition">#</a></dt>
+<dd><p>print these <a class="reference internal" href="#metatensor.torch.Labels" title="metatensor.torch.Labels"><code class="xref py py-class docutils literal notranslate"><span class="pre">Labels</span></code></a> to a string</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>max_entries</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – how many entries to print, use <code class="docutils literal notranslate"><span class="pre">-1</span></code> to print everything</p></li>
+<li><p><strong>indent</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – indent the output by <code class="docutils literal notranslate"><span class="pre">indent</span></code> spaces</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metatensor.torch.Labels.entry">
+<span class="sig-name descname"><span class="pre">entry</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#metatensor.torch.LabelsEntry" title="metatensor.torch.documentation.LabelsEntry"><span class="pre">LabelsEntry</span></a></span></span><a class="reference internal" href="../../_modules/metatensor/torch/documentation.html#Labels.entry"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metatensor.torch.Labels.entry" title="Link to this definition">#</a></dt>
+<dd><p>get a single entry in these labels, see also <a class="reference internal" href="#metatensor.torch.Labels.__getitem__" title="metatensor.torch.Labels.__getitem__"><code class="xref py py-func docutils literal notranslate"><span class="pre">Labels.__getitem__()</span></code></a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#metatensor.torch.LabelsEntry" title="metatensor.torch.documentation.LabelsEntry"><em>LabelsEntry</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metatensor.torch.Labels.column">
+<span class="sig-name descname"><span class="pre">column</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dimension</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.2)"><span class="pre">Tensor</span></a></span></span><a class="reference internal" href="../../_modules/metatensor/torch/documentation.html#Labels.column"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metatensor.torch.Labels.column" title="Link to this definition">#</a></dt>
+<dd><p>Get the values associated with a single dimension in these labels (i.e. a single
+column of <a class="reference internal" href="#metatensor.torch.Labels.values" title="metatensor.torch.Labels.values"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Labels.values</span></code></a>) as a 1-dimensional array.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#metatensor.torch.Labels.__getitem__" title="metatensor.torch.Labels.__getitem__"><code class="xref py py-func docutils literal notranslate"><span class="pre">Labels.__getitem__()</span></code></a> as the main way to use this function</p>
+<p><a class="reference internal" href="#metatensor.torch.Labels.view" title="metatensor.torch.Labels.view"><code class="xref py py-func docutils literal notranslate"><span class="pre">Labels.view()</span></code></a> to access multiple columns simultaneously</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>dimension</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.2)"><em>Tensor</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metatensor.torch.Labels.view">
+<span class="sig-name descname"><span class="pre">view</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dimensions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.12)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.12)"><span class="pre">Tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#metatensor.torch.Labels" title="metatensor.torch.documentation.Labels"><span class="pre">Labels</span></a></span></span><a class="reference internal" href="../../_modules/metatensor/torch/documentation.html#Labels.view"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metatensor.torch.Labels.view" title="Link to this definition">#</a></dt>
+<dd><p>get a view for the specified columns in these labels, see also
+<a class="reference internal" href="#metatensor.torch.Labels.__getitem__" title="metatensor.torch.Labels.__getitem__"><code class="xref py py-func docutils literal notranslate"><span class="pre">Labels.__getitem__()</span></code></a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>dimensions</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em> | </em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.12)"><em>List</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>] </em><em>| </em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.12)"><em>Tuple</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>...</em><em>]</em>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#metatensor.torch.Labels" title="metatensor.torch.documentation.Labels"><em>Labels</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metatensor.torch.Labels.is_view">
+<span class="sig-name descname"><span class="pre">is_view</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><span class="pre">bool</span></a></span></span><a class="reference internal" href="../../_modules/metatensor/torch/documentation.html#Labels.is_view"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metatensor.torch.Labels.is_view" title="Link to this definition">#</a></dt>
+<dd><p>are these labels a view inside another set of labels?</p>
+<p>A view is created with <a class="reference internal" href="#metatensor.torch.Labels.__getitem__" title="metatensor.torch.Labels.__getitem__"><code class="xref py py-func docutils literal notranslate"><span class="pre">Labels.__getitem__()</span></code></a> or
+<a class="reference internal" href="#metatensor.torch.Labels.view" title="metatensor.torch.Labels.view"><code class="xref py py-func docutils literal notranslate"><span class="pre">Labels.view()</span></code></a>, and does not implement <a class="reference internal" href="#metatensor.torch.Labels.position" title="metatensor.torch.Labels.position"><code class="xref py py-func docutils literal notranslate"><span class="pre">Labels.position()</span></code></a>
+or <a class="reference internal" href="#metatensor.torch.Labels.__contains__" title="metatensor.torch.Labels.__contains__"><code class="xref py py-func docutils literal notranslate"><span class="pre">Labels.__contains__()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metatensor.torch.Labels.to_owned">
+<span class="sig-name descname"><span class="pre">to_owned</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#metatensor.torch.Labels" title="metatensor.torch.documentation.Labels"><span class="pre">Labels</span></a></span></span><a class="reference internal" href="../../_modules/metatensor/torch/documentation.html#Labels.to_owned"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metatensor.torch.Labels.to_owned" title="Link to this definition">#</a></dt>
+<dd><p>convert a view to owned labels, which implement the full API</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#metatensor.torch.Labels" title="metatensor.torch.documentation.Labels"><em>Labels</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="metatensor.torch.LabelsEntry">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">metatensor.torch.</span></span><span class="sig-name descname"><span class="pre">LabelsEntry</span></span><a class="reference internal" href="../../_modules/metatensor/torch/documentation.html#LabelsEntry"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metatensor.torch.LabelsEntry" title="Link to this definition">#</a></dt>
+<dd><p>A single entry (i.e. row) in a set of <a class="reference internal" href="#metatensor.torch.Labels" title="metatensor.torch.Labels"><code class="xref py py-class docutils literal notranslate"><span class="pre">Labels</span></code></a>.</p>
+<p>The main way to create a <a class="reference internal" href="#metatensor.torch.LabelsEntry" title="metatensor.torch.LabelsEntry"><code class="xref py py-class docutils literal notranslate"><span class="pre">LabelsEntry</span></code></a> is to index a
+<a class="reference internal" href="#metatensor.torch.Labels" title="metatensor.torch.Labels"><code class="xref py py-class docutils literal notranslate"><span class="pre">Labels</span></code></a> or iterate over them.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">metatensor.torch</span> <span class="kn">import</span> <span class="n">Labels</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">labels</span> <span class="o">=</span> <span class="n">Labels</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;system&quot;</span><span class="p">,</span> <span class="s2">&quot;atom&quot;</span><span class="p">,</span> <span class="s2">&quot;type&quot;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">values</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">)]),</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">entry</span> <span class="o">=</span> <span class="n">labels</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># or labels.entry(0)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">entry</span><span class="o">.</span><span class="n">names</span>
+<span class="go">[&#39;system&#39;, &#39;atom&#39;, &#39;type&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">entry</span><span class="o">.</span><span class="n">values</span>
+<span class="go">tensor([0, 1, 8], dtype=torch.int32)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Due to limitations in TorchScript, <a class="reference internal" href="#metatensor.torch.LabelsEntry" title="metatensor.torch.LabelsEntry"><code class="xref py py-class docutils literal notranslate"><span class="pre">LabelsEntry</span></code></a>
+implementation of <code class="docutils literal notranslate"><span class="pre">__hash__</span></code> will use the default Python one,
+returning the <code class="docutils literal notranslate"><span class="pre">id()</span></code> of the object. If you want to use
+<a class="reference internal" href="#metatensor.torch.LabelsEntry" title="metatensor.torch.LabelsEntry"><code class="xref py py-class docutils literal notranslate"><span class="pre">LabelsEntry</span></code></a> as keys in a dictionary, convert them to tuple
+first (<code class="docutils literal notranslate"><span class="pre">tuple(entry)</span></code>) — or to string (<code class="docutils literal notranslate"><span class="pre">str(entry)</span></code>) since
+TorchScript does not support tuple as dictionary keys anyway.</p>
+</div>
+<dl class="py property">
+<dt class="sig sig-object py" id="metatensor.torch.LabelsEntry.names">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">names</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.12)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#metatensor.torch.LabelsEntry.names" title="Link to this definition">#</a></dt>
+<dd><p>names of the dimensions for this Labels entry</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="metatensor.torch.LabelsEntry.values">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">values</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.2)"><span class="pre">Tensor</span></a></em><a class="headerlink" href="#metatensor.torch.LabelsEntry.values" title="Link to this definition">#</a></dt>
+<dd><p>Values associated with each dimensions of this <a class="reference internal" href="#metatensor.torch.LabelsEntry" title="metatensor.torch.LabelsEntry"><code class="xref py py-class docutils literal notranslate"><span class="pre">LabelsEntry</span></code></a>, stored
+as 32-bit integers.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">values</span></code> should be treated as immutable/read-only (we would like to
+enforce this automatically, but PyTorch can not mark a
+<a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch.Tensor</span></code></a> as immutable)</p>
+<p>Any modification to this tensor can break the underlying data structure, or
+make it out of sync with the <code class="docutils literal notranslate"><span class="pre">values</span></code>.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metatensor.torch.LabelsEntry.print">
+<span class="sig-name descname"><span class="pre">print</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span></span><a class="reference internal" href="../../_modules/metatensor/torch/documentation.html#LabelsEntry.print"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metatensor.torch.LabelsEntry.print" title="Link to this definition">#</a></dt>
+<dd><p>print this entry as a named tuple (i.e. <code class="docutils literal notranslate"><span class="pre">(key_1=value_1,</span> <span class="pre">key_2=value_2)</span></code>)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metatensor.torch.LabelsEntry.__len__">
+<span class="sig-name descname"><span class="pre">__len__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a></span></span><a class="reference internal" href="../../_modules/metatensor/torch/documentation.html#LabelsEntry.__len__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metatensor.torch.LabelsEntry.__len__" title="Link to this definition">#</a></dt>
+<dd><p>number of dimensions in this labels entry</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metatensor.torch.LabelsEntry.__getitem__">
+<span class="sig-name descname"><span class="pre">__getitem__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dimension</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a></span></span><a class="reference internal" href="../../_modules/metatensor/torch/documentation.html#LabelsEntry.__getitem__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metatensor.torch.LabelsEntry.__getitem__" title="Link to this definition">#</a></dt>
+<dd><p>get the value associated with the dimension in this entry</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>dimension</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em> | </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metatensor.torch.LabelsEntry.__eq__">
+<span class="sig-name descname"><span class="pre">__eq__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#metatensor.torch.LabelsEntry" title="metatensor.torch.documentation.LabelsEntry"><span class="pre">LabelsEntry</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><span class="pre">bool</span></a></span></span><a class="reference internal" href="../../_modules/metatensor/torch/documentation.html#LabelsEntry.__eq__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metatensor.torch.LabelsEntry.__eq__" title="Link to this definition">#</a></dt>
+<dd><p>check if <code class="docutils literal notranslate"><span class="pre">self</span></code> and <code class="docutils literal notranslate"><span class="pre">other</span></code> are equal (same dimensions/names and
+same values)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>other</strong> (<a class="reference internal" href="#metatensor.torch.LabelsEntry" title="metatensor.torch.documentation.LabelsEntry"><em>LabelsEntry</em></a>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metatensor.torch.LabelsEntry.__ne__">
+<span class="sig-name descname"><span class="pre">__ne__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#metatensor.torch.LabelsEntry" title="metatensor.torch.documentation.LabelsEntry"><span class="pre">LabelsEntry</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><span class="pre">bool</span></a></span></span><a class="reference internal" href="../../_modules/metatensor/torch/documentation.html#LabelsEntry.__ne__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metatensor.torch.LabelsEntry.__ne__" title="Link to this definition">#</a></dt>
+<dd><p>check if <code class="docutils literal notranslate"><span class="pre">self</span></code> and <code class="docutils literal notranslate"><span class="pre">other</span></code> are not equal (different dimensions/names or
+different values)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>other</strong> (<a class="reference internal" href="#metatensor.torch.LabelsEntry" title="metatensor.torch.documentation.LabelsEntry"><em>LabelsEntry</em></a>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="serialization.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Serialization</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="block.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">TensorBlock</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2024, Guillaume Fraux, Davide Tisi, Philip Loche, Joseph W. Abbott, Jigyasa Nigam, Chiheb Ben Mahmoud
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Labels</a><ul>
+<li><a class="reference internal" href="#metatensor.torch.Labels"><code class="docutils literal notranslate"><span class="pre">Labels</span></code></a><ul>
+<li><a class="reference internal" href="#metatensor.torch.Labels.names"><code class="docutils literal notranslate"><span class="pre">Labels.names</span></code></a></li>
+<li><a class="reference internal" href="#metatensor.torch.Labels.values"><code class="docutils literal notranslate"><span class="pre">Labels.values</span></code></a></li>
+<li><a class="reference internal" href="#metatensor.torch.Labels.single"><code class="docutils literal notranslate"><span class="pre">Labels.single()</span></code></a></li>
+<li><a class="reference internal" href="#metatensor.torch.Labels.empty"><code class="docutils literal notranslate"><span class="pre">Labels.empty()</span></code></a></li>
+<li><a class="reference internal" href="#metatensor.torch.Labels.range"><code class="docutils literal notranslate"><span class="pre">Labels.range()</span></code></a></li>
+<li><a class="reference internal" href="#metatensor.torch.Labels.__len__"><code class="docutils literal notranslate"><span class="pre">Labels.__len__()</span></code></a></li>
+<li><a class="reference internal" href="#metatensor.torch.Labels.__getitem__"><code class="docutils literal notranslate"><span class="pre">Labels.__getitem__()</span></code></a></li>
+<li><a class="reference internal" href="#metatensor.torch.Labels.__contains__"><code class="docutils literal notranslate"><span class="pre">Labels.__contains__()</span></code></a></li>
+<li><a class="reference internal" href="#metatensor.torch.Labels.__eq__"><code class="docutils literal notranslate"><span class="pre">Labels.__eq__()</span></code></a></li>
+<li><a class="reference internal" href="#metatensor.torch.Labels.__ne__"><code class="docutils literal notranslate"><span class="pre">Labels.__ne__()</span></code></a></li>
+<li><a class="reference internal" href="#metatensor.torch.Labels.load"><code class="docutils literal notranslate"><span class="pre">Labels.load()</span></code></a></li>
+<li><a class="reference internal" href="#metatensor.torch.Labels.load_buffer"><code class="docutils literal notranslate"><span class="pre">Labels.load_buffer()</span></code></a></li>
+<li><a class="reference internal" href="#metatensor.torch.Labels.save"><code class="docutils literal notranslate"><span class="pre">Labels.save()</span></code></a></li>
+<li><a class="reference internal" href="#metatensor.torch.Labels.save_buffer"><code class="docutils literal notranslate"><span class="pre">Labels.save_buffer()</span></code></a></li>
+<li><a class="reference internal" href="#metatensor.torch.Labels.append"><code class="docutils literal notranslate"><span class="pre">Labels.append()</span></code></a></li>
+<li><a class="reference internal" href="#metatensor.torch.Labels.insert"><code class="docutils literal notranslate"><span class="pre">Labels.insert()</span></code></a></li>
+<li><a class="reference internal" href="#metatensor.torch.Labels.permute"><code class="docutils literal notranslate"><span class="pre">Labels.permute()</span></code></a></li>
+<li><a class="reference internal" href="#metatensor.torch.Labels.remove"><code class="docutils literal notranslate"><span class="pre">Labels.remove()</span></code></a></li>
+<li><a class="reference internal" href="#metatensor.torch.Labels.rename"><code class="docutils literal notranslate"><span class="pre">Labels.rename()</span></code></a></li>
+<li><a class="reference internal" href="#metatensor.torch.Labels.to"><code class="docutils literal notranslate"><span class="pre">Labels.to()</span></code></a></li>
+<li><a class="reference internal" href="#metatensor.torch.Labels.device"><code class="docutils literal notranslate"><span class="pre">Labels.device</span></code></a></li>
+<li><a class="reference internal" href="#metatensor.torch.Labels.position"><code class="docutils literal notranslate"><span class="pre">Labels.position()</span></code></a></li>
+<li><a class="reference internal" href="#metatensor.torch.Labels.union"><code class="docutils literal notranslate"><span class="pre">Labels.union()</span></code></a></li>
+<li><a class="reference internal" href="#metatensor.torch.Labels.union_and_mapping"><code class="docutils literal notranslate"><span class="pre">Labels.union_and_mapping()</span></code></a></li>
+<li><a class="reference internal" href="#metatensor.torch.Labels.intersection"><code class="docutils literal notranslate"><span class="pre">Labels.intersection()</span></code></a></li>
+<li><a class="reference internal" href="#metatensor.torch.Labels.intersection_and_mapping"><code class="docutils literal notranslate"><span class="pre">Labels.intersection_and_mapping()</span></code></a></li>
+<li><a class="reference internal" href="#metatensor.torch.Labels.print"><code class="docutils literal notranslate"><span class="pre">Labels.print()</span></code></a></li>
+<li><a class="reference internal" href="#metatensor.torch.Labels.entry"><code class="docutils literal notranslate"><span class="pre">Labels.entry()</span></code></a></li>
+<li><a class="reference internal" href="#metatensor.torch.Labels.column"><code class="docutils literal notranslate"><span class="pre">Labels.column()</span></code></a></li>
+<li><a class="reference internal" href="#metatensor.torch.Labels.view"><code class="docutils literal notranslate"><span class="pre">Labels.view()</span></code></a></li>
+<li><a class="reference internal" href="#metatensor.torch.Labels.is_view"><code class="docutils literal notranslate"><span class="pre">Labels.is_view()</span></code></a></li>
+<li><a class="reference internal" href="#metatensor.torch.Labels.to_owned"><code class="docutils literal notranslate"><span class="pre">Labels.to_owned()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#metatensor.torch.LabelsEntry"><code class="docutils literal notranslate"><span class="pre">LabelsEntry</span></code></a><ul>
+<li><a class="reference internal" href="#metatensor.torch.LabelsEntry.names"><code class="docutils literal notranslate"><span class="pre">LabelsEntry.names</span></code></a></li>
+<li><a class="reference internal" href="#metatensor.torch.LabelsEntry.values"><code class="docutils literal notranslate"><span class="pre">LabelsEntry.values</span></code></a></li>
+<li><a class="reference internal" href="#metatensor.torch.LabelsEntry.print"><code class="docutils literal notranslate"><span class="pre">LabelsEntry.print()</span></code></a></li>
+<li><a class="reference internal" href="#metatensor.torch.LabelsEntry.__len__"><code class="docutils literal notranslate"><span class="pre">LabelsEntry.__len__()</span></code></a></li>
+<li><a class="reference internal" href="#metatensor.torch.LabelsEntry.__getitem__"><code class="docutils literal notranslate"><span class="pre">LabelsEntry.__getitem__()</span></code></a></li>
+<li><a class="reference internal" href="#metatensor.torch.LabelsEntry.__eq__"><code class="docutils literal notranslate"><span class="pre">LabelsEntry.__eq__()</span></code></a></li>
+<li><a class="reference internal" href="#metatensor.torch.LabelsEntry.__ne__"><code class="docutils literal notranslate"><span class="pre">LabelsEntry.__ne__()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/scripts/furo.js?v=32e29ea5"></script>
+    <script src="../../_static/toggleprompt.js?v=5801b3bb"></script>
+    <script src="../../_static/design-tabs.js?v=36754332"></script>
+    <script src="../../_static/js/custom.js?v=4b1677b9"></script>
+    </body>
+</html>

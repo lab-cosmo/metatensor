@@ -1,0 +1,4 @@
+multiply
+========
+
+.. autofunction:: metatensor.multiply

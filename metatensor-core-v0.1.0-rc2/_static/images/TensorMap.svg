@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 1654 1300" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:square;stroke-miterlimit:1.5;">
+    <g>
+        <path d="M489.23,889.474L273.644,889.474L119.773,978.311L119.773,1249.81L335.359,1249.81L489.23,1160.97L488.945,1160.48L489.23,1160.48L489.23,889.474Z" style="fill:rgb(153,204,255);stroke:black;stroke-width:4.17px;"/>
+        <path d="M335.926,980.045L119.773,978.728" style="fill:none;stroke:black;stroke-width:4.17px;stroke-linejoin:round;"/>
+        <path d="M335.926,980.045L334.95,1249.81" style="fill:none;stroke:black;stroke-width:4.17px;stroke-linecap:round;stroke-linejoin:round;"/>
+        <path d="M335.926,980.045L489.23,889.474" style="fill:none;stroke:black;stroke-width:4.17px;stroke-linecap:round;stroke-linejoin:round;"/>
+        <rect x="272.857" y="820.094" width="216.373" height="54.201" style="fill:rgb(255,102,102);"/>
+        <rect x="32.45" y="978.805" width="66.246" height="271.005" style="fill:rgb(121,210,121);"/>
+        <path d="M267.032,875.409L236.92,823.254L70.024,919.612L100.136,971.767L267.032,875.409Z" style="fill:rgb(233,233,97);"/>
+    </g>
+    <g>
+        <rect x="1289.92" y="820.094" width="330.168" height="54.201" style="fill:rgb(255,102,102);"/>
+        <rect x="1049.52" y="978.805" width="66.246" height="271.005" style="fill:rgb(121,210,121);"/>
+        <path d="M1284.1,875.409L1253.99,823.254L1087.09,919.612L1117.2,971.767L1284.1,875.409Z" style="fill:rgb(233,233,97);"/>
+        <path d="M1621.09,889.474L1290.38,888.691L1136.84,977.339L1136.84,1249.81L1467.55,1249.81L1621.09,1161.16L1621.09,889.474Z" style="fill:rgb(153,204,255);stroke:black;stroke-width:4.17px;stroke-linecap:butt;stroke-linejoin:round;"/>
+        <path d="M1466.57,979.737L1136.84,977.728" style="fill:none;stroke:black;stroke-width:4.17px;stroke-linejoin:round;"/>
+        <path d="M1467.55,979.386L1466.57,1249.15" style="fill:none;stroke:black;stroke-width:4.17px;stroke-linecap:round;stroke-linejoin:round;"/>
+        <path d="M1466.79,980.262L1620.09,889.691" style="fill:none;stroke:black;stroke-width:4.17px;stroke-linecap:round;stroke-linejoin:round;"/>
+    </g>
+    <g>
+        <rect x="783.68" y="735.5" width="213.058" height="54.201" style="fill:rgb(255,102,102);"/>
+        <rect x="543.273" y="894.21" width="66.246" height="355.571" style="fill:rgb(121,210,121);"/>
+        <path d="M777.855,790.815L747.743,738.66L580.847,835.018L610.959,887.173L777.855,790.815Z" style="fill:rgb(233,233,97);"/>
+        <path d="M996.738,804.879L784.14,804.097L630.597,892.745L630.597,1249.78L843.195,1249.78L996.738,1161.13L996.738,804.879Z" style="fill:rgb(153,204,255);stroke:black;stroke-width:4.17px;stroke-linecap:butt;stroke-linejoin:round;"/>
+        <path d="M843.195,895.668L630.597,893.133" style="fill:none;stroke:black;stroke-width:4.17px;stroke-linejoin:round;"/>
+        <path d="M843.195,895.668L842.707,1249.81" style="fill:none;stroke:black;stroke-width:4.17px;stroke-linecap:round;stroke-linejoin:round;"/>
+        <path d="M843.435,895.668L996.738,805.097" style="fill:none;stroke:black;stroke-width:4.17px;stroke-linecap:round;stroke-linejoin:round;"/>
+    </g>
+    <path d="M489.277,763.449L437.784,785.207L451.274,730.957C452.652,748.581 471.654,764.827 489.277,763.449Z" style="fill:rgb(153,51,255);"/>
+    <path d="M550.882,464.088C565.517,599.845 501.527,705.514 463.777,754.804" style="fill:none;stroke:rgb(153,51,255);stroke-width:16.67px;stroke-linecap:butt;stroke-linejoin:round;"/>
+    <path d="M886.538,657.811L853.391,702.825L837.268,649.299C847.457,663.745 872.092,668.001 886.538,657.811Z" style="fill:rgb(153,51,255);"/>
+    <path d="M826.772,464.088C875.444,499.503 868.36,605.249 860.201,663.409" style="fill:none;stroke:rgb(153,51,255);stroke-width:16.67px;stroke-linecap:butt;stroke-linejoin:round;"/>
+    <path d="M1305.76,730.151L1296.07,785.207L1257.84,744.423C1273.38,752.835 1297.34,745.699 1305.76,730.151Z" style="fill:rgb(153,51,255);"/>
+    <path d="M1098.06,464.088C1197.54,508.953 1260.37,671.83 1284.65,746.871" style="fill:none;stroke:rgb(153,51,255);stroke-width:16.67px;stroke-linecap:butt;stroke-linejoin:round;"/>
+    <g>
+        <g>
+            <path d="M457.259,279.094L457.259,514.059L1531.58,514.059L1531.58,279.094L457.259,279.094Z" style="fill:white;stroke:black;stroke-width:4.17px;stroke-linecap:round;stroke-linejoin:round;"/>
+            <g>
+                <path d="M345.955,279.094L345.955,514.059L457.259,514.059L457.259,279.094L345.955,279.094Z" style="fill:rgb(153,51,255);stroke:black;stroke-width:4.17px;stroke-linecap:round;stroke-linejoin:round;"/>
+                <g transform="matrix(6.07153e-17,-1,1,6.07153e-17,-2630.08,1947.35)">
+                    <text x="1452.54px" y="3051.6px" style="font-family:'Avenir-Medium', 'Avenir';font-weight:500;font-size:58.333px;">lambda</text>
+                </g>
+            </g>
+            <path d="M457.259,49.403L457.259,279.094L1531.58,279.094L1531.58,49.403L457.259,49.403Z" style="fill:white;stroke:black;stroke-width:4.17px;stroke-linecap:round;stroke-linejoin:round;"/>
+            <text x="552.856px" y="187.027px" style="font-family:'Avenir-Medium', 'Avenir';font-weight:500;font-size:64.347px;stroke:black;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:2;">0<tspan x="594.556px 615.406px 636.256px 657.106px 677.956px 698.806px 719.656px 740.506px 761.356px 782.206px 803.056px 844.756px 865.606px 886.456px 907.306px 928.156px 949.006px 969.856px 990.706px 1011.56px 1032.41px 1053.26px 1074.11px 1094.96px 1136.66px 1157.51px 1178.36px 1199.21px 1220.06px 1240.91px 1261.76px 1282.61px 1303.46px 1324.31px 1345.16px 1366.01px " y="187.027px 187.027px 187.027px 187.027px 187.027px 187.027px 187.027px 187.027px 187.027px 187.027px 187.027px 187.027px 187.027px 187.027px 187.027px 187.027px 187.027px 187.027px 187.027px 187.027px 187.027px 187.027px 187.027px 187.027px 187.027px 187.027px 187.027px 187.027px 187.027px 187.027px 187.027px 187.027px 187.027px 187.027px 187.027px 187.027px ">          1            1           …</tspan></text>
+            <text x="552.856px" y="419.356px" style="font-family:'Avenir-Medium', 'Avenir';font-weight:500;font-size:64.347px;stroke:black;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:2;">0<tspan x="594.556px 615.406px 636.256px 657.106px 677.956px 698.806px 719.656px 740.506px 761.356px 782.206px 803.056px 844.756px 865.606px 886.456px 907.306px 928.156px 949.006px 969.856px 990.706px 1011.56px 1032.41px 1053.26px 1074.11px 1094.96px 1136.66px 1157.51px 1178.36px 1199.21px 1220.06px 1240.91px 1261.76px 1282.61px 1303.46px 1324.31px 1345.16px 1366.01px " y="419.356px 419.356px 419.356px 419.356px 419.356px 419.356px 419.356px 419.356px 419.356px 419.356px 419.356px 419.356px 419.356px 419.356px 419.356px 419.356px 419.356px 419.356px 419.356px 419.356px 419.356px 419.356px 419.356px 419.356px 419.356px 419.356px 419.356px 419.356px 419.356px 419.356px 419.356px 419.356px 419.356px 419.356px 419.356px 419.356px ">          0            1           …</tspan></text>
+            <g>
+                <path d="M345.955,49.403L345.955,279.094L457.259,279.094L457.259,49.403L345.955,49.403Z" style="fill:rgb(153,51,255);stroke:black;stroke-width:4.17px;stroke-linecap:round;stroke-linejoin:round;"/>
+                <g transform="matrix(6.07153e-17,-1,1,6.07153e-17,-2376.37,1693.64)">
+                    <text x="1452.54px" y="2797.89px" style="font-family:'Avenir-Medium', 'Avenir';font-weight:500;font-size:58.333px;">sigma</text>
+                </g>
+            </g>
+        </g>
+        <g>
+            <path d="M121.966,50.209L121.966,507.979L302.195,507.979L302.195,50.209L121.966,50.209Z" style="fill:rgb(153,51,255);"/>
+            <g transform="matrix(6.12323e-17,-1,1,6.12323e-17,-2695.88,1633.28)">
+                <text x="1262.6px" y="2927.47px" style="font-family:'Avenir-Medium', 'Avenir';font-weight:500;font-size:83.333px;">Keys</text>
+            </g>
+        </g>
+    </g>
+</svg>

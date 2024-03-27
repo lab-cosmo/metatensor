@@ -1,0 +1,74 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Metatensor"><title>metatensor - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../static.files/rustdoc-9ee3a5e31a2afa3e.css"><meta name="rustdoc-vars" data-root-path="../" data-static-root-path="../static.files/" data-current-crate="metatensor" data-themes="" data-resource-suffix="" data-rustdoc-version="1.75.0 (82e1608df 2023-12-21)" data-channel="1.75.0" data-search-js="search-8fbf244ebcf71464.js" data-settings-js="settings-74424d7eec62a23e.js" ><script src="../static.files/storage-fec3eaa3851e447d.js"></script><script defer src="../crates.js"></script><script defer src="../static.files/main-9dd44ab47b99a0fb.js"></script><noscript><link rel="stylesheet" href="../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="alternate icon" type="image/png" href="../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc mod crate"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><script>
+    const BACK_ARROW = `
+<svg id="svg" xmlns="http://www.w3.org/2000/svg"
+xmlns:xlink="http://www.w3.org/1999/xlink" width="32" height="32" viewBox="0,
+0, 400,400"><g id="svgg"><path id="path0" d="M109.766 53.232 C 77.969
+75.947,49.712 96.143,46.974 98.113 L 41.994 101.693 104.589 143.425 C 139.016
+166.377,167.360 185.156,167.576 185.156 C 167.792 185.156,167.969
+174.950,167.969 162.475 C 167.969 132.051,168.441 131.005,180.675 134.344 C
+230.730 148.005,271.306 202.395,276.574 262.891 C 280.694 310.214,256.740
+357.846,216.072 383.194 C 208.890 387.670,208.989 388.031,216.929 386.304 C
+304.184 367.333,363.604 282.360,351.923 193.258 C 340.956 109.591,275.566
+55.676,182.585 53.635 C 172.898 53.422,172.527 53.351,170.475 51.301 L 168.359
+49.186 167.969 30.559 L 167.578 11.932 109.766 53.232 " stroke="none"
+fill="#000000" fill-rule="evenodd"></path></g></svg>
+`;
+
+    window.addEventListener("DOMContentLoaded", () => {
+        const pathname = window.location.pathname;
+        const metatensorRoot = pathname.replace(/reference\/rust\/metatensor\/.*$/, "index.html");
+
+        const template = document.createElement("template");
+        template.innerHTML = `<div id="metatensor-back-banner" class="width-limiter">
+            <a href="${metatensorRoot}">
+                ${BACK_ARROW}
+            </a>
+            <a href="${metatensorRoot}">
+                back to the main metatensor documentation
+            </a>
+        </div>`;
+
+        const main = document.querySelector("main");
+        main.prepend(template.content.firstChild);
+    })
+</script>
+
+<style>
+#metatensor-back-banner {
+    width: 100%;
+    height: 3em;
+    margin-bottom: 1em;
+    padding: 0.5em;
+    background-color: #d5e3ed;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    column-gap: 8px;
+}
+</style>
+
+<nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button></nav><nav class="sidebar"><div class="sidebar-crate"><h2><a href="../metatensor/index.html">metatensor</a><span class="version">0.1.1</span></h2></div><div class="sidebar-elems"><ul class="block">
+            <li><a id="all-types" href="all.html">All Items</a></li></ul><section><ul class="block"><li><a href="#reexports">Re-exports</a></li><li><a href="#modules">Modules</a></li><li><a href="#structs">Structs</a></li><li><a href="#traits">Traits</a></li><li><a href="#functions">Functions</a></li></ul></section></div></nav><main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Crate <a class="mod" href="#">metatensor</a><button id="copy-path" title="Copy item path to clipboard"><img src="../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><a class="src" href="../src/metatensor/lib.rs.html#1-66">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><h2 id="metatensor"><a href="#metatensor">Metatensor</a></h2>
+<p>Metatensor is a library providing a specialized data storage format for
+atomistic machine learning (think <code>numpy</code> or <code>torch.Tensor</code>, but also
+carrying extra metadata for atomistic systems).</p>
+<p>The core of the format is implemented in <code>metatensor-core</code>, and exported as a
+C API. This C API is then re-exported to Rust in this crate. By default,
+metatensor-core is distributed as a shared library that you’ll need to
+install separately on end user machines.</p>
+<h3 id="features"><a href="#features">Features</a></h3>
+<p>You can enable the <code>static</code> feature in Cargo.toml to use a static build of
+the C API, removing the need to carry around the metatensor-core shared
+library.</p>
+<div class="example-wrap"><pre class="language-toml"><code>[dependencies]
+metatensor = {version = &quot;...&quot;, features = [&quot;static&quot;]}
+</code></pre></div></div></details><h2 id="reexports" class="small-section-header"><a href="#reexports">Re-exports</a></h2><ul class="item-table"><li><div class="item-name" id="reexport.Error"><code>pub use self::errors::<a class="struct" href="errors/struct.Error.html" title="struct metatensor::errors::Error">Error</a>;</code></div></li></ul><h2 id="modules" class="small-section-header"><a href="#modules">Modules</a></h2><ul class="item-table"><li><div class="item-name"><a class="mod" href="c_api/index.html" title="mod metatensor::c_api">c_api</a></div><div class="desc docblock-short">Rust definition corresponding to metatensor-core C-API.</div></li><li><div class="item-name"><a class="mod" href="errors/index.html" title="mod metatensor::errors">errors</a></div></li><li><div class="item-name"><a class="mod" href="io/index.html" title="mod metatensor::io">io</a></div><div class="desc docblock-short">Input/Output facilities for storing <a href="struct.TensorMap.html" title="struct metatensor::TensorMap"><code>crate::TensorMap</code></a> and
+<a href="struct.Labels.html" title="struct metatensor::Labels"><code>crate::Labels</code></a> on disk</div></li></ul><h2 id="structs" class="small-section-header"><a href="#structs">Structs</a></h2><ul class="item-table"><li><div class="item-name"><a class="struct" href="struct.ArrayRef.html" title="struct metatensor::ArrayRef">ArrayRef</a></div><div class="desc docblock-short">Reference to a data array in metatensor-core</div></li><li><div class="item-name"><a class="struct" href="struct.ArrayRefMut.html" title="struct metatensor::ArrayRefMut">ArrayRefMut</a></div><div class="desc docblock-short">Mutable reference to a data array in metatensor-core</div></li><li><div class="item-name"><a class="struct" href="struct.EmptyArray.html" title="struct metatensor::EmptyArray">EmptyArray</a></div><div class="desc docblock-short">An implementation of the <a href="trait.Array.html" title="trait metatensor::Array"><code>Array</code></a> trait without any data.</div></li><li><div class="item-name"><a class="struct" href="struct.GradientsIter.html" title="struct metatensor::GradientsIter">GradientsIter</a></div><div class="desc docblock-short">Iterator over parameter/<a href="struct.TensorBlockRef.html" title="struct metatensor::TensorBlockRef"><code>TensorBlockRef</code></a> pairs for all gradients in a
+<a href="struct.TensorBlockRef.html" title="struct metatensor::TensorBlockRef"><code>TensorBlockRef</code></a></div></li><li><div class="item-name"><a class="struct" href="struct.GradientsMutIter.html" title="struct metatensor::GradientsMutIter">GradientsMutIter</a></div><div class="desc docblock-short">Iterator over parameter/<a href="struct.TensorBlockRefMut.html" title="struct metatensor::TensorBlockRefMut"><code>TensorBlockRefMut</code></a> pairs for all gradients in a
+<a href="struct.TensorBlockRefMut.html" title="struct metatensor::TensorBlockRefMut"><code>TensorBlockRefMut</code></a></div></li><li><div class="item-name"><a class="struct" href="struct.LabelValue.html" title="struct metatensor::LabelValue">LabelValue</a></div><div class="desc docblock-short">A single value inside a label.</div></li><li><div class="item-name"><a class="struct" href="struct.Labels.html" title="struct metatensor::Labels">Labels</a></div><div class="desc docblock-short">A set of labels used to carry metadata associated with a tensor map.</div></li><li><div class="item-name"><a class="struct" href="struct.LabelsBuilder.html" title="struct metatensor::LabelsBuilder">LabelsBuilder</a></div><div class="desc docblock-short">Builder for <a href="struct.Labels.html" title="struct metatensor::Labels"><code>Labels</code></a></div></li><li><div class="item-name"><a class="struct" href="struct.LabelsFixedSizeIter.html" title="struct metatensor::LabelsFixedSizeIter">LabelsFixedSizeIter</a></div><div class="desc docblock-short">Iterator over entries in a set of <a href="struct.Labels.html" title="struct metatensor::Labels"><code>Labels</code></a> as fixed size arrays</div></li><li><div class="item-name"><a class="struct" href="struct.LabelsIter.html" title="struct metatensor::LabelsIter">LabelsIter</a></div><div class="desc docblock-short">Iterator over <a href="struct.Labels.html" title="struct metatensor::Labels"><code>Labels</code></a> entries</div></li><li><div class="item-name"><a class="struct" href="struct.LazyMetadata.html" title="struct metatensor::LazyMetadata">LazyMetadata</a></div><div class="desc docblock-short">Lazily accessed metadata inside a <code>TensorBlock</code></div></li><li><div class="item-name"><a class="struct" href="struct.TensorBlock.html" title="struct metatensor::TensorBlock">TensorBlock</a></div><div class="desc docblock-short">A single block, containing both values &amp; optionally gradients of these
+values w.r.t. any relevant quantity.</div></li><li><div class="item-name"><a class="struct" href="struct.TensorBlockData.html" title="struct metatensor::TensorBlockData">TensorBlockData</a></div><div class="desc docblock-short">All the basic data in a <code>TensorBlockRef</code> as a struct with separate fields.</div></li><li><div class="item-name"><a class="struct" href="struct.TensorBlockDataMut.html" title="struct metatensor::TensorBlockDataMut">TensorBlockDataMut</a></div><div class="desc docblock-short">All the basic data in a <code>TensorBlockRefMut</code> as a struct with separate fields.</div></li><li><div class="item-name"><a class="struct" href="struct.TensorBlockRef.html" title="struct metatensor::TensorBlockRef">TensorBlockRef</a></div><div class="desc docblock-short">Reference to a <a href="struct.TensorBlock.html" title="struct metatensor::TensorBlock"><code>TensorBlock</code></a></div></li><li><div class="item-name"><a class="struct" href="struct.TensorBlockRefMut.html" title="struct metatensor::TensorBlockRefMut">TensorBlockRefMut</a></div><div class="desc docblock-short">Mutable reference to a <a href="struct.TensorBlock.html" title="struct metatensor::TensorBlock"><code>TensorBlock</code></a></div></li><li><div class="item-name"><a class="struct" href="struct.TensorMap.html" title="struct metatensor::TensorMap">TensorMap</a></div><div class="desc docblock-short"><a href="struct.TensorMap.html" title="struct metatensor::TensorMap"><code>TensorMap</code></a> is the main user-facing struct of this library, and can
+store any kind of data used in atomistic machine learning.</div></li><li><div class="item-name"><a class="struct" href="struct.TensorMapIter.html" title="struct metatensor::TensorMapIter">TensorMapIter</a></div><div class="desc docblock-short">Iterator over key/block pairs in a <a href="struct.TensorMap.html" title="struct metatensor::TensorMap"><code>TensorMap</code></a></div></li><li><div class="item-name"><a class="struct" href="struct.TensorMapIterMut.html" title="struct metatensor::TensorMapIterMut">TensorMapIterMut</a></div><div class="desc docblock-short">Iterator over key/block pairs in a <a href="struct.TensorMap.html" title="struct metatensor::TensorMap"><code>TensorMap</code></a>, with mutable access to the
+blocks</div></li></ul><h2 id="traits" class="small-section-header"><a href="#traits">Traits</a></h2><ul class="item-table"><li><div class="item-name"><a class="trait" href="trait.Array.html" title="trait metatensor::Array">Array</a></div><div class="desc docblock-short">The Array trait is used by metatensor to manage different kind of data array
+with a single API. Metatensor only knows about <code>Box&lt;dyn Array&gt;</code>, and
+manipulate the data through the functions on this trait.</div></li></ul><h2 id="functions" class="small-section-header"><a href="#functions">Functions</a></h2><ul class="item-table"><li><div class="item-name"><a class="fn" href="fn.c_api_install_dir.html" title="fn metatensor::c_api_install_dir">c_api_install_dir</a></div><div class="desc docblock-short">Path where the metatensor shared library has been built</div></li></ul></section></div></main></body></html>

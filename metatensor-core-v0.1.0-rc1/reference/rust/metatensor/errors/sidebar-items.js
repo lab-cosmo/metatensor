@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"constant":["LAST_RUST_ERROR"],"fn":["check_ptr","check_status"],"struct":["Error"]};

@@ -1,0 +1,726 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="../../../">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><link rel="author" title="About these documents" href="../../../about.html" /><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
+
+    <!-- Generated with Sphinx 7.2.6 and Furo 2024.01.29 -->
+        <title>metatensor.operations._utils - Metatensor</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=135e06be" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/metatensor.css?v=d517da54" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?v=36a5483c" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../../index.html"><div class="brand">Metatensor</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
+  
+  
+  <span class="sidebar-brand-text">Metatensor</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../about.html">What is metatensor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../core/index.html">Core classes</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of Core classes</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../core/overview.html">Overview</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../core/reference/python/index.html">Python API reference</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of Python API reference</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../core/reference/python/tensor.html">TensorMap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../core/reference/python/block.html">TensorBlock</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../core/reference/python/labels.html">Labels</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../core/reference/python/io.html">Serialization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../core/reference/python/data.html">Data arrays</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../core/reference/python/misc.html">Miscellaneous</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../core/reference/cxx/index.html">C++ API reference</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of C++ API reference</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../core/reference/cxx/tensor.html">TensorMap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../core/reference/cxx/labels.html">Labels</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../core/reference/cxx/block.html">TensorBlock</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../core/reference/cxx/data.html">Data arrays</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../core/reference/cxx/misc.html">Miscellaneous</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../core/reference/c/index.html">C API reference</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of C API reference</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../core/reference/c/tensor.html">TensorMap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../core/reference/c/labels.html">Labels</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../core/reference/c/block.html">TensorBlock</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../core/reference/c/data.html">Data arrays</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../core/reference/c/misc.html">Miscellaneous</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../core/reference/rust/index.html">Rust API reference</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../examples/core/index.html">Tutorials</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle navigation of Tutorials</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../examples/core/1-first-steps.html">First steps with metatensor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../examples/core/2-handling-sparsity.html">Handling sparsity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../examples/core/3-managing-gradients.html">Managing gradients</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../core/CHANGELOG.html">Changelog</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../operations/index.html">Operations</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle navigation of Operations</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../operations/reference/index.html">API reference</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle navigation of API reference</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../operations/reference/creation/index.html">Creation operations</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle navigation of Creation operations</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../operations/reference/creation/empty_like.html">empty_like()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../operations/reference/creation/ones_like.html">ones_like()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../operations/reference/creation/zeros_like.html">zeros_like()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../operations/reference/creation/random_like.html">random_like()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../operations/reference/creation/block_from_array.html">block_from_array()</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../operations/reference/linear_algebra/index.html">Linear algebra</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle navigation of Linear algebra</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../operations/reference/linear_algebra/dot.html">dot()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../operations/reference/linear_algebra/lstsq.html">lstsq()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../operations/reference/linear_algebra/solve.html">solve()</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../operations/reference/logic/index.html">Logic function</a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle navigation of Logic function</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../operations/reference/logic/allclose.html">allclose()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../operations/reference/logic/equal.html">equal()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../operations/reference/logic/equal_metadata.html">equal_metadata()</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../operations/reference/manipulation/index.html">Manipulation operations</a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><div class="visually-hidden">Toggle navigation of Manipulation operations</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../operations/reference/manipulation/detach.html">detach()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../operations/reference/manipulation/drop-blocks.html">drop_blocks()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../operations/reference/manipulation/join.html">join()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../operations/reference/manipulation/manipulate-dimension.html">manipulate dimension</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../operations/reference/manipulation/one-hot.html">one_hot()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../operations/reference/manipulation/remove-gradients.html">remove_gradients()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../operations/reference/manipulation/requires-grad.html">requires_grad()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../operations/reference/manipulation/samples-reduction.html">samples reduction</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../operations/reference/manipulation/slice.html">slice()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../operations/reference/manipulation/split.html">split()</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../operations/reference/math/index.html">Mathematical functions</a><input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><div class="visually-hidden">Toggle navigation of Mathematical functions</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../operations/reference/math/abs.html">abs()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../operations/reference/math/add.html">add()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../operations/reference/math/divide.html">divide()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../operations/reference/math/multiply.html">multiply()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../operations/reference/math/pow.html">pow()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../operations/reference/math/subtract.html">subtract()</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../operations/reference/set/index.html">Set operations</a><input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><div class="visually-hidden">Toggle navigation of Set operations</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../operations/reference/set/unique_metadata.html">unique_metadata()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../operations/reference/set/sort.html">sort()</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../operations/reference/checks.html">Checks</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../operations/CHANGELOG.html">Changelog</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../torch/index.html">TorchScript interface</a><input class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" role="switch" type="checkbox"/><label for="toctree-checkbox-14"><div class="visually-hidden">Toggle navigation of TorchScript interface</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../torch/reference/index.html">API reference</a><input class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><div class="visually-hidden">Toggle navigation of API reference</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../torch/reference/tensor.html">TensorMap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../torch/reference/block.html">TensorBlock</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../torch/reference/labels.html">Labels</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../torch/reference/serialization.html">Serialization</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../torch/reference/cxx/index.html">TorchScript C++ API reference</a><input class="toctree-checkbox" id="toctree-checkbox-16" name="toctree-checkbox-16" role="switch" type="checkbox"/><label for="toctree-checkbox-16"><div class="visually-hidden">Toggle navigation of TorchScript C++ API reference</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../torch/reference/cxx/tensor.html">TensorMap</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../torch/reference/cxx/block.html">TensorBlock</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../torch/reference/cxx/labels.html">Labels</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../torch/reference/cxx/miscellaneous.html">Miscellaneous</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../torch/CHANGELOG.html">Changelog</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../learn/index.html">Learning utilities</a><input class="toctree-checkbox" id="toctree-checkbox-17" name="toctree-checkbox-17" role="switch" type="checkbox"/><label for="toctree-checkbox-17"><div class="visually-hidden">Toggle navigation of Learning utilities</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../learn/reference/index.html">API reference</a><input class="toctree-checkbox" id="toctree-checkbox-18" name="toctree-checkbox-18" role="switch" type="checkbox"/><label for="toctree-checkbox-18"><div class="visually-hidden">Toggle navigation of API reference</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../learn/reference/data/index.html">Data utilites</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../learn/reference/nn/index.html">Neural Network</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../examples/learn/index.html">Tutorials</a><input class="toctree-checkbox" id="toctree-checkbox-19" name="toctree-checkbox-19" role="switch" type="checkbox"/><label for="toctree-checkbox-19"><div class="visually-hidden">Toggle navigation of Tutorials</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../examples/learn/1-dataset-dataloader.html">Datasets and data loaders</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../examples/learn/2-indexed-dataset.html">Using IndexedDataset</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../learn/CHANGELOG.html">Changelog</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../atomistic/index.html">Atomistic applications</a><input class="toctree-checkbox" id="toctree-checkbox-20" name="toctree-checkbox-20" role="switch" type="checkbox"/><label for="toctree-checkbox-20"><div class="visually-hidden">Toggle navigation of Atomistic applications</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../atomistic/overview.html">Overview</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../atomistic/reference/index.html">API reference</a><input class="toctree-checkbox" id="toctree-checkbox-21" name="toctree-checkbox-21" role="switch" type="checkbox"/><label for="toctree-checkbox-21"><div class="visually-hidden">Toggle navigation of API reference</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../atomistic/reference/systems.html">Systems</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../atomistic/reference/models/index.html">Models</a><input class="toctree-checkbox" id="toctree-checkbox-22" name="toctree-checkbox-22" role="switch" type="checkbox"/><label for="toctree-checkbox-22"><div class="visually-hidden">Toggle navigation of Models</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../atomistic/reference/models/export.html">Exporting models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../atomistic/reference/models/metadata.html">Information about models</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../atomistic/reference/ase.html">Atomic Simulation Environment (ASE) integration</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../atomistic/reference/cxx/index.html">C++ API reference</a><input class="toctree-checkbox" id="toctree-checkbox-23" name="toctree-checkbox-23" role="switch" type="checkbox"/><label for="toctree-checkbox-23"><div class="visually-hidden">Toggle navigation of C++ API reference</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../atomistic/reference/cxx/systems.html">Systems</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../atomistic/reference/cxx/models.html">Models</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../atomistic/outputs.html">Standard model outputs</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../examples/atomistic/index.html">Tutorials</a><input class="toctree-checkbox" id="toctree-checkbox-24" name="toctree-checkbox-24" role="switch" type="checkbox"/><label for="toctree-checkbox-24"><div class="visually-hidden">Toggle navigation of Tutorials</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../examples/atomistic/1-export-atomistic-model.html">Exporting a model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../examples/atomistic/2-running-ase-md.html">Running Molecular Dynamics with ASE</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../devdoc/index.html">Developer documentation</a><input class="toctree-checkbox" id="toctree-checkbox-25" name="toctree-checkbox-25" role="switch" type="checkbox"/><label for="toctree-checkbox-25"><div class="visually-hidden">Toggle navigation of Developer documentation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../devdoc/get-started.html">Getting started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../devdoc/architecture.html">Code organization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../devdoc/versions.html">Version number management</a></li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <h1>Source code for metatensor.operations._utils</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">from</span> <span class="nn">._backend</span> <span class="kn">import</span> <span class="n">TensorBlock</span><span class="p">,</span> <span class="n">TensorMap</span>
+
+
+<div class="viewcode-block" id="NotEqualError">
+<a class="viewcode-back" href="../../../operations/reference/logic/equal.html#metatensor.NotEqualError">[docs]</a>
+<span class="k">class</span> <span class="nc">NotEqualError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Exception used to indicate that two metatensor objects are different&quot;&quot;&quot;</span>
+
+    <span class="k">pass</span></div>
+
+
+
+<span class="k">def</span> <span class="nf">_check_same_keys</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="n">TensorMap</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="n">TensorMap</span><span class="p">,</span> <span class="n">fname</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns true if the keys of 2 TensorMaps are the same, without specification of the</span>
+<span class="sd">    order, and false otherwise.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="ow">not</span> <span class="nb">bool</span><span class="p">(</span><span class="n">_check_same_keys_impl</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">fname</span><span class="p">))</span>
+
+
+<span class="k">def</span> <span class="nf">_check_same_keys_raise</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="n">TensorMap</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="n">TensorMap</span><span class="p">,</span> <span class="n">fname</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    If the keys of 2 TensorMaps are not the same, raises a NotEqualError, otherwise</span>
+<span class="sd">    returns None.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">message</span> <span class="o">=</span> <span class="n">_check_same_keys_impl</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">fname</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">message</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">NotEqualError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_check_same_keys_impl</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="n">TensorMap</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="n">TensorMap</span><span class="p">,</span> <span class="n">fname</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Checks if the keys of 2 TensorMaps are the same, without specification of the order.</span>
+<span class="sd">    Returns an empty str if they are the same, otherwise returns a str message of a</span>
+<span class="sd">    meaningful error.</span>
+
+<span class="sd">    The functions verifies that the key names and length are the same, and that the key</span>
+<span class="sd">    values are the same without specification of exact order.</span>
+
+<span class="sd">    :param a: first :py:class:`TensorMap` for check</span>
+<span class="sd">    :param b: second :py:class:`TensorMap` for check</span>
+<span class="sd">    :param fname: name of the function where the check is performed. The input will be</span>
+<span class="sd">        used to generate a meaningful error message.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">keys_a</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">keys</span>
+    <span class="n">keys_b</span> <span class="o">=</span> <span class="n">b</span><span class="o">.</span><span class="n">keys</span>
+
+    <span class="k">if</span> <span class="n">keys_a</span><span class="o">.</span><span class="n">names</span> <span class="o">!=</span> <span class="n">keys_b</span><span class="o">.</span><span class="n">names</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;inputs to &#39;</span><span class="si">{</span><span class="n">fname</span><span class="si">}</span><span class="s2">&#39; should have the same keys names, &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;got &#39;</span><span class="si">{</span><span class="n">keys_a</span><span class="o">.</span><span class="n">names</span><span class="si">}</span><span class="s2">&#39; and &#39;</span><span class="si">{</span><span class="n">keys_b</span><span class="o">.</span><span class="n">names</span><span class="si">}</span><span class="s2">&#39;&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">keys_a</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">keys_b</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;inputs to &#39;</span><span class="si">{</span><span class="n">fname</span><span class="si">}</span><span class="s2">&#39; should have the same number of blocks, &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;got </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">keys_a</span><span class="p">)</span><span class="si">}</span><span class="s2"> and </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">keys_b</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">([</span><span class="n">keys_b</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">in</span> <span class="n">keys_a</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">keys_b</span><span class="p">))]):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;inputs to &#39;</span><span class="si">{</span><span class="n">fname</span><span class="si">}</span><span class="s2">&#39; should have the same keys&quot;</span>
+
+    <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+
+<span class="k">def</span> <span class="nf">_check_blocks</span><span class="p">(</span>
+    <span class="n">a</span><span class="p">:</span> <span class="n">TensorBlock</span><span class="p">,</span>
+    <span class="n">b</span><span class="p">:</span> <span class="n">TensorBlock</span><span class="p">,</span>
+    <span class="n">fname</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">check</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;all&quot;</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Checks if the metadata of 2 TensorBlocks are the same. If not, returns false.</span>
+<span class="sd">    Otherwise returns true.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="ow">not</span> <span class="nb">bool</span><span class="p">(</span><span class="n">_check_blocks_impl</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="n">check</span><span class="p">))</span>
+
+
+<span class="k">def</span> <span class="nf">_check_blocks_raise</span><span class="p">(</span>
+    <span class="n">a</span><span class="p">:</span> <span class="n">TensorBlock</span><span class="p">,</span>
+    <span class="n">b</span><span class="p">:</span> <span class="n">TensorBlock</span><span class="p">,</span>
+    <span class="n">fname</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">check</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;all&quot;</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Checks if the metadata of two TensorBlocks are the same. If not, raises a</span>
+<span class="sd">    NotEqualError. If invalid `check` are given, this function raises a `ValueError`.</span>
+<span class="sd">    Otherwise returns it None.</span>
+
+<span class="sd">    The message associated with the exception will contain more information on where the</span>
+<span class="sd">    two :py:class:`TensorBlock` differ. See :py:func:`_check_blocks_impl` for more</span>
+<span class="sd">    information on when two :py:class:`TensorBlock` are considered as equal.</span>
+
+<span class="sd">    :param a: first :py:class:`TensorBlock` for check</span>
+<span class="sd">    :param b: second :py:class:`TensorBlock` for check</span>
+<span class="sd">    :param fname: name of the function where the check is performed. The input will be</span>
+<span class="sd">        used to generate a meaningful error message.</span>
+<span class="sd">    :param check: Which parts of the metadata to check. This can be a list containing</span>
+<span class="sd">        any of ``&#39;samples&#39;``, ``&#39;components&#39;``, and ``&#39;properties&#39;``; or the string</span>
+<span class="sd">        ``&#39;all&#39;`` to check everything. Defaults to ``&#39;all&#39;``.</span>
+
+<span class="sd">    :raises: :py:class:`metatensor.NotEqualError` if the metadata of the blocks are</span>
+<span class="sd">        different</span>
+<span class="sd">    :raises: :py:class:`ValueError` if an invalid prop name in :param check: is</span>
+<span class="sd">        given. See :param check: description for valid prop names</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">message</span> <span class="o">=</span> <span class="n">_check_blocks_impl</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="n">check</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">message</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">NotEqualError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_check_blocks_impl</span><span class="p">(</span>
+    <span class="n">a</span><span class="p">:</span> <span class="n">TensorBlock</span><span class="p">,</span>
+    <span class="n">b</span><span class="p">:</span> <span class="n">TensorBlock</span><span class="p">,</span>
+    <span class="n">fname</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">check</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;all&quot;</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Check if metadata between two TensorBlocks is consistent for an operation.</span>
+
+<span class="sd">    The functions verifies that that the metadata of the given check is the same, in</span>
+<span class="sd">    terms of length, dimension names, and order of the values.</span>
+
+<span class="sd">    If they are not the same, an error message as a str is returned. Otherwise, an empty</span>
+<span class="sd">    str is returned.</span>
+
+<span class="sd">    :param a: first :py:class:`TensorBlock` for check</span>
+<span class="sd">    :param b: second :py:class:`TensorBlock` for check</span>
+<span class="sd">    :param fname: name of the function where the check is performed. The input will be</span>
+<span class="sd">        used to generate a meaningful error message.</span>
+<span class="sd">    :param check: Which parts of the metadata to check. This can be a list containing</span>
+<span class="sd">        any of ``&#39;samples&#39;``, ``&#39;components&#39;``, and ``&#39;properties&#39;``; or the string</span>
+<span class="sd">        ``&#39;all&#39;`` to check everything. Defaults to ``&#39;all&#39;``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">check</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">check</span> <span class="o">==</span> <span class="s2">&quot;all&quot;</span><span class="p">:</span>
+            <span class="n">metadata_to_check</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;samples&quot;</span><span class="p">,</span> <span class="s2">&quot;components&quot;</span><span class="p">,</span> <span class="s2">&quot;properties&quot;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;`check` must be a list of strings or &#39;all&#39;&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">metadata_to_check</span> <span class="o">=</span> <span class="n">check</span>
+
+    <span class="k">for</span> <span class="n">metadata</span> <span class="ow">in</span> <span class="n">metadata_to_check</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">metadata</span> <span class="o">==</span> <span class="s2">&quot;samples&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">a</span><span class="o">.</span><span class="n">samples</span> <span class="o">==</span> <span class="n">b</span><span class="o">.</span><span class="n">samples</span><span class="p">:</span>
+                <span class="k">return</span> <span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;inputs to &#39;</span><span class="si">{</span><span class="n">fname</span><span class="si">}</span><span class="s2">&#39; should have the same samples, &quot;</span>
+                    <span class="s2">&quot;but they are not the same or not in the same order&quot;</span>
+                <span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">metadata</span> <span class="o">==</span> <span class="s2">&quot;properties&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">a</span><span class="o">.</span><span class="n">properties</span> <span class="o">==</span> <span class="n">b</span><span class="o">.</span><span class="n">properties</span><span class="p">:</span>
+                <span class="k">return</span> <span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;inputs to &#39;</span><span class="si">{</span><span class="n">fname</span><span class="si">}</span><span class="s2">&#39; should have the same properties, &quot;</span>
+                    <span class="s2">&quot;but they are not the same or not in the same order&quot;</span>
+                <span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">metadata</span> <span class="o">==</span> <span class="s2">&quot;components&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">components</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">components</span><span class="p">):</span>
+                <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;inputs to &#39;</span><span class="si">{</span><span class="n">fname</span><span class="si">}</span><span class="s2">&#39; have a different number of components&quot;</span>
+
+            <span class="k">for</span> <span class="n">c1</span><span class="p">,</span> <span class="n">c2</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">components</span><span class="p">,</span> <span class="n">b</span><span class="o">.</span><span class="n">components</span><span class="p">):</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">c1</span> <span class="o">==</span> <span class="n">c2</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;inputs to &#39;</span><span class="si">{</span><span class="n">fname</span><span class="si">}</span><span class="s2">&#39; should have the same components, &quot;</span>
+                        <span class="s2">&quot;but they are not the same or not in the same order&quot;</span>
+                    <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="n">metadata</span><span class="si">}</span><span class="s2">&#39; does not refer to metadata to check, &quot;</span>
+                <span class="s2">&quot;choose from &#39;samples&#39;, &#39;properties&#39; and &#39;components&#39;&quot;</span>
+            <span class="p">)</span>
+    <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+
+<span class="k">def</span> <span class="nf">_check_same_gradients</span><span class="p">(</span>
+    <span class="n">a</span><span class="p">:</span> <span class="n">TensorBlock</span><span class="p">,</span>
+    <span class="n">b</span><span class="p">:</span> <span class="n">TensorBlock</span><span class="p">,</span>
+    <span class="n">fname</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">check</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;all&quot;</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Check if metadata between the gradients of 2 TensorBlocks is consistent for an</span>
+<span class="sd">    operation. If they are the same, true is returned, otherwise false.</span>
+
+<span class="sd">    The functions verifies that that the metadata of the given check is the same, in</span>
+<span class="sd">    terms of length, dimension names, and order of the values.</span>
+
+<span class="sd">    If check is None it only checks if the ``&#39;parameters&#39;`` are consistent.</span>
+
+<span class="sd">    :param a: first :py:class:`TensorBlock` for check</span>
+<span class="sd">    :param b: second :py:class:`TensorBlock` for check</span>
+<span class="sd">    :param fname: name of the function where the check is performed. The input will be</span>
+<span class="sd">        used to generate a meaningful error message.</span>
+<span class="sd">    :param check: Which parts of the metadata to check. This can be a list containing</span>
+<span class="sd">        any of ``&#39;samples&#39;``, ``&#39;components&#39;``, and ``&#39;properties&#39;``; or the string</span>
+<span class="sd">        ``&#39;all&#39;`` to check everything. Defaults to ``&#39;all&#39;``. If you only want to check</span>
+<span class="sd">        if the two blocks have the same gradients, pass an empty list ``check=[]``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="ow">not</span> <span class="nb">bool</span><span class="p">(</span><span class="n">_check_same_gradients_impl</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="n">check</span><span class="p">))</span>
+
+
+<span class="k">def</span> <span class="nf">_check_same_gradients_raise</span><span class="p">(</span>
+    <span class="n">a</span><span class="p">:</span> <span class="n">TensorBlock</span><span class="p">,</span>
+    <span class="n">b</span><span class="p">:</span> <span class="n">TensorBlock</span><span class="p">,</span>
+    <span class="n">fname</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">check</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;all&quot;</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Check if two TensorBlocks gradients have identical metadata.</span>
+
+<span class="sd">    The message associated with the exception will contain more information on where the</span>
+<span class="sd">    gradients of the two :py:class:`TensorBlock` differ. See</span>
+<span class="sd">    :py:func:`_check_same_gradients_impl` for more information on when gradients of</span>
+<span class="sd">    :py:class:`TensorBlock` are considered as equal.</span>
+
+<span class="sd">    :param a: first :py:class:`TensorBlock` for check</span>
+<span class="sd">    :param b: second :py:class:`TensorBlock` for check</span>
+<span class="sd">    :param fname: name of the function where the check is performed. The input will be</span>
+<span class="sd">        used to generate a meaningful error message.</span>
+<span class="sd">    :param check: Which parts of the metadata to check. This can be a list containing</span>
+<span class="sd">        any of ``&#39;samples&#39;``, ``&#39;components&#39;``, and ``&#39;properties&#39;``; or the string</span>
+<span class="sd">        ``&#39;all&#39;`` to check everything. Defaults to ``&#39;all&#39;``. If you only want to check</span>
+<span class="sd">        if the two blocks have the same gradients, pass an empty list ``check=[]``.</span>
+
+<span class="sd">    :raises: :py:class:`metatensor.NotEqualError` if the gradients of the blocks are</span>
+<span class="sd">        different</span>
+<span class="sd">    :raises: :py:class:`ValueError` if an invalid prop name in :param check: is</span>
+<span class="sd">        given. See :param check: description for valid prop names</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">message</span> <span class="o">=</span> <span class="n">_check_same_gradients_impl</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="n">check</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">message</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">NotEqualError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_check_same_gradients_impl</span><span class="p">(</span>
+    <span class="n">a</span><span class="p">:</span> <span class="n">TensorBlock</span><span class="p">,</span>
+    <span class="n">b</span><span class="p">:</span> <span class="n">TensorBlock</span><span class="p">,</span>
+    <span class="n">fname</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">check</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;all&quot;</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Check if metadata between the gradients of two TensorBlocks is consistent for an</span>
+<span class="sd">    operation.</span>
+
+<span class="sd">    The functions verifies that that the 2 TensorBlocks have the same gradient</span>
+<span class="sd">    parameters, then checks the metadata of the given ``check`` is the same, in terms of</span>
+<span class="sd">    length, dimension names, and order of the values.</span>
+
+<span class="sd">    If they are not the same, an error message as a str is returned. Otherwise, an empty</span>
+<span class="sd">    str is returned. If the 2 blocks have no gradients, an empty string is returned.</span>
+
+<span class="sd">    :param a: first :py:class:`TensorBlock` whose gradients are to be checked</span>
+<span class="sd">    :param b: second :py:class:`TensorBlock` whose gradients are to be checked</span>
+<span class="sd">    :param fname: name of the function where the check is performed. The input will be</span>
+<span class="sd">        used to generate a meaningful error message.</span>
+<span class="sd">    :param check: Which parts of the metadata to check. This can be a list containing</span>
+<span class="sd">        any of ``&#39;samples&#39;``, ``&#39;components&#39;``, and ``&#39;properties&#39;``; or the string</span>
+<span class="sd">        ``&#39;all&#39;`` to check everything. Defaults to ``&#39;all&#39;``. If you only want to check</span>
+<span class="sd">        if the two blocks have the same gradients, pass an empty list ``check=[]``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">check</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">check</span> <span class="o">==</span> <span class="s2">&quot;all&quot;</span><span class="p">:</span>
+            <span class="n">metadata_to_check</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;samples&quot;</span><span class="p">,</span> <span class="s2">&quot;components&quot;</span><span class="p">,</span> <span class="s2">&quot;properties&quot;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;`check` must be a list of strings or &#39;all&#39;&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">metadata_to_check</span> <span class="o">=</span> <span class="n">check</span>
+
+    <span class="n">err_msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;inputs to &#39;</span><span class="si">{</span><span class="n">fname</span><span class="si">}</span><span class="s2">&#39; should have the same gradients: &quot;</span>
+    <span class="n">gradients_list_a</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">gradients_list</span><span class="p">()</span>
+    <span class="n">gradients_list_b</span> <span class="o">=</span> <span class="n">b</span><span class="o">.</span><span class="n">gradients_list</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">gradients_list_a</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">gradients_list_b</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span>
+        <span class="ow">not</span> <span class="nb">all</span><span class="p">([</span><span class="n">parameter</span> <span class="ow">in</span> <span class="n">gradients_list_b</span> <span class="k">for</span> <span class="n">parameter</span> <span class="ow">in</span> <span class="n">gradients_list_a</span><span class="p">])</span>
+    <span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;inputs to &#39;</span><span class="si">{</span><span class="n">fname</span><span class="si">}</span><span class="s2">&#39; should have the same gradient parameters&quot;</span>
+
+    <span class="k">for</span> <span class="n">parameter</span><span class="p">,</span> <span class="n">grad_a</span> <span class="ow">in</span> <span class="n">a</span><span class="o">.</span><span class="n">gradients</span><span class="p">():</span>
+        <span class="n">grad_b</span> <span class="o">=</span> <span class="n">b</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">parameter</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">metadata</span> <span class="ow">in</span> <span class="n">metadata_to_check</span><span class="p">:</span>
+            <span class="n">err_msg_1</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;gradient &#39;</span><span class="si">{</span><span class="n">parameter</span><span class="si">}</span><span class="s2">&#39; </span><span class="si">{</span><span class="n">metadata</span><span class="si">}</span><span class="s2"> are not the same or not in the &quot;</span>
+                <span class="s2">&quot;same order&quot;</span>
+            <span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">metadata</span> <span class="o">==</span> <span class="s2">&quot;samples&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">grad_a</span><span class="o">.</span><span class="n">samples</span> <span class="o">==</span> <span class="n">grad_b</span><span class="o">.</span><span class="n">samples</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">err_msg</span> <span class="o">+</span> <span class="n">err_msg_1</span>
+
+            <span class="k">elif</span> <span class="n">metadata</span> <span class="o">==</span> <span class="s2">&quot;properties&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">grad_a</span><span class="o">.</span><span class="n">properties</span> <span class="o">==</span> <span class="n">grad_b</span><span class="o">.</span><span class="n">properties</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">err_msg</span> <span class="o">+</span> <span class="n">err_msg_1</span>
+
+            <span class="k">elif</span> <span class="n">metadata</span> <span class="o">==</span> <span class="s2">&quot;components&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">grad_a</span><span class="o">.</span><span class="n">components</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">grad_b</span><span class="o">.</span><span class="n">components</span><span class="p">):</span>
+                    <span class="n">extra</span> <span class="o">=</span> <span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;gradient &#39;</span><span class="si">{</span><span class="n">parameter</span><span class="si">}</span><span class="s2">&#39; have different number of components&quot;</span>
+                    <span class="p">)</span>
+                    <span class="k">return</span> <span class="n">err_msg</span> <span class="o">+</span> <span class="n">extra</span>
+
+                <span class="k">for</span> <span class="n">c1</span><span class="p">,</span> <span class="n">c2</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">grad_a</span><span class="o">.</span><span class="n">components</span><span class="p">,</span> <span class="n">grad_b</span><span class="o">.</span><span class="n">components</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">c1</span> <span class="o">==</span> <span class="n">c2</span><span class="p">:</span>
+                        <span class="k">return</span> <span class="n">err_msg</span> <span class="o">+</span> <span class="n">err_msg_1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">metadata</span><span class="si">}</span><span class="s2"> is not a valid property to check, &quot;</span>
+                    <span class="s2">&quot;choose from &#39;samples&#39;, &#39;properties&#39; and &#39;components&#39;&quot;</span>
+                <span class="p">)</span>
+    <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+
+<span class="k">def</span> <span class="nf">_check_gradient_presence_raise</span><span class="p">(</span>
+    <span class="n">block</span><span class="p">:</span> <span class="n">TensorBlock</span><span class="p">,</span>
+    <span class="n">parameters</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="n">fname</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    For a single TensorBlock checks if each of the passed ``parameters`` are present as</span>
+<span class="sd">    parameters of its gradients. If all of them are present, None is returned. Otherwise</span>
+<span class="sd">    a ValueError is raised.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">parameter</span> <span class="ow">in</span> <span class="n">parameters</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">parameter</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">block</span><span class="o">.</span><span class="n">gradients_list</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;requested gradient &#39;</span><span class="si">{</span><span class="n">parameter</span><span class="si">}</span><span class="s2">&#39; in &#39;</span><span class="si">{</span><span class="n">fname</span><span class="si">}</span><span class="s2">&#39; is not defined &quot;</span>
+                <span class="s2">&quot;in this tensor&quot;</span>
+            <span class="p">)</span>
+</pre></div>
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2024, Guillaume Fraux, Davide Tisi, Philip Loche, Joseph W. Abbott, Jigyasa Nigam, Chiheb Ben Mahmoud
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer no-toc">
+      
+      
+      
+    </aside>
+  </div>
+</div><script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/scripts/furo.js?v=32e29ea5"></script>
+    <script src="../../../_static/toggleprompt.js?v=5801b3bb"></script>
+    <script src="../../../_static/design-tabs.js?v=36754332"></script>
+    <script src="../../../_static/js/custom.js?v=4b1677b9"></script>
+    </body>
+</html>

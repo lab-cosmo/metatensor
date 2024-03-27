@@ -1,0 +1,34 @@
+article figure {
+    margin-bottom: 2.5em;
+}
+
+/* Change the color of download links from sphinx-gallery */
+div.sphx-glr-download a {
+    background-image: none !important;
+}
+
+body[data-theme="dark"] {
+    div.sphx-glr-download a {
+        background-color: #053e8d !important;
+    }
+}
+
+body[data-theme="light"] {
+    div.sphx-glr-download a {
+        background-color: #e0edff !important;
+    }
+}
+
+body[data-theme="auto"] {
+    @media (prefers-color-scheme: light) {
+        div.sphx-glr-download a {
+            background-color: #e0edff !important;
+        }
+    }
+
+    @media (prefers-color-scheme: dark) {
+        div.sphx-glr-download a {
+            background-color: #053e8d !important;
+        }
+    }
+}

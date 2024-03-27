@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 2599 2008" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.5;">
+    <g>
+        <g>
+            <rect x="371.014" y="278.566" width="826.772" height="1062.99" style="fill:rgb(153,204,255);stroke:black;stroke-width:4.17px;"/>
+            <text x="603.983px" y="868.062px" style="font-family:'Avenir-Medium', 'Avenir';font-weight:500;font-size:166.667px;stroke:black;stroke-width:4.17px;stroke-linecap:butt;stroke-miterlimit:2;">Data</text>
+        </g>
+        <g>
+            <rect x="371.014" y="6.766" width="826.772" height="212.598" style="fill:rgb(255,102,102);"/>
+            <text x="506.533px" y="138.032px" style="font-family:'Avenir-Medium', 'Avenir';font-weight:500;font-size:116.667px;">Pr<tspan x="616.783px 686.083px " y="138.032px 138.032px ">op</tspan>erties</text>
+        </g>
+        <g>
+            <rect x="40.149" y="278.566" width="259.843" height="1062.99" style="fill:rgb(121,210,121);"/>
+            <g transform="matrix(6.12323e-17,-1,1,6.12323e-17,-3389.05,2258.72)">
+                <text x="1228.74px" y="3586.77px" style="font-family:'Avenir-Medium', 'Avenir';font-weight:500;font-size:116.667px;">Samples</text>
+            </g>
+        </g>
+    </g>
+    <g>
+        <g>
+            <rect x="1703.37" y="282.165" width="826.772" height="1535.43" style="fill:rgb(153,204,255);stroke:black;stroke-width:4.17px;"/>
+            <text x="1936.33px" y="1107.88px" style="font-family:'Avenir-Medium', 'Avenir';font-weight:500;font-size:166.667px;stroke:black;stroke-width:4.17px;stroke-linecap:butt;stroke-miterlimit:2;">Data</text>
+        </g>
+        <g>
+            <rect x="1703.37" y="10.365" width="826.772" height="212.598" style="fill:white;stroke:white;stroke-width:1px;"/>
+            <rect x="1703.37" y="10.365" width="826.772" height="212.598" style="fill:rgb(255,102,102);fill-opacity:0.3;"/>
+            <text x="1838.88px" y="141.631px" style="font-family:'Avenir-Medium', 'Avenir';font-weight:500;font-size:116.667px;fill-opacity:0.7;">Pr<tspan x="1949.13px 2018.43px " y="141.631px 141.631px ">op</tspan>erties</text>
+        </g>
+        <g>
+            <rect x="1372.5" y="282.165" width="259.843" height="1535.43" style="fill:rgb(121,210,121);"/>
+            <g transform="matrix(6.12323e-17,-1,1,6.12323e-17,-2540.35,4074.73)">
+                <text x="2561.1px" y="4070.42px" style="font-family:'Avenir-Medium', 'Avenir';font-weight:500;font-size:116.667px;">Gradient samples</text>
+            </g>
+        </g>
+    </g>
+    <g>
+        <g>
+            <rect x="1703.6" y="1534.87" width="826.772" height="35.433" style="fill:none;stroke:rgb(255,0,0);stroke-width:6.25px;"/>
+            <rect x="1703.37" y="1570.31" width="826.772" height="35.433" style="fill:none;stroke:rgb(255,0,0);stroke-width:6.25px;"/>
+            <rect x="1703.37" y="1605.74" width="826.772" height="35.433" style="fill:none;stroke:rgb(255,0,0);stroke-width:6.25px;"/>
+            <rect x="1703.37" y="1641.17" width="826.772" height="35.433" style="fill:none;stroke:rgb(255,0,0);stroke-width:6.25px;"/>
+            <rect x="1703.37" y="1676.61" width="826.772" height="35.433" style="fill:none;stroke:rgb(255,0,0);stroke-width:6.25px;"/>
+        </g>
+        <rect x="371.014" y="1212.12" width="826.772" height="35.433" style="fill:none;stroke:rgb(255,0,0);stroke-width:6.25px;"/>
+        <path d="M1659.21,1604.09L1703.37,1623.46L1661.38,1647.16C1671.6,1635.85 1670.52,1614.31 1659.21,1604.09Z" style="fill:rgb(255,0,0);"/>
+        <path d="M1197.79,1229.83C1472.19,1198.97 1144.74,1642.56 1668.91,1625.19" style="fill:none;stroke:rgb(255,0,0);stroke-width:9.58px;"/>
+    </g>
+    <text x="550.133px" y="1505.48px" style="font-family:'Avenir-MediumOblique', 'Avenir';font-weight:500;font-style:italic;font-size:116.667px;fill:rgb(115,115,115);">&quot;values&quot;</text>
+    <g transform="matrix(1,0,0,1,-457.479,1205.33)">
+        <text x="1793.91px" y="762.882px" style="font-family:'Avenir-Medium', 'Avenir';font-weight:500;font-size:116.667px;fill:rgb(115,115,115);">parameter=</text>
+        <text x="2422.62px" y="762.882px" style="font-family:'Avenir-MediumOblique', 'Avenir';font-weight:500;font-style:italic;font-size:116.667px;fill:rgb(115,115,115);">&quot;positions&quot;</text>
+    </g>
+</svg>

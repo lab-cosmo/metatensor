@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["load","load_buffer","save","save_buffer"]};
