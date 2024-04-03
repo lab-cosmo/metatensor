@@ -15,12 +15,6 @@ from .allclose import (  # noqa
     allclose_raise,
 )
 from .block_from_array import block_from_array  # noqa
-from .contiguous import (  # noqa: F401
-    is_contiguous,
-    is_contiguous_block,
-    make_contiguous,
-    make_contiguous_block,
-)
 from .detach import detach, detach_block  # noqa
 from .divide import divide  # noqa
 from .dot import dot  # noqa
@@ -33,8 +27,16 @@ from .equal_metadata import (  # noqa
     equal_metadata_raise,
     equal_metadata_block_raise,
 )
+from .is_contiguous import (  # noqa: F401
+    is_contiguous,
+    is_contiguous_block,
+)
 from .join import join  # noqa
 from .lstsq import lstsq  # noqa
+from .make_contiguous import (  # noqa: F401
+    make_contiguous,
+    make_contiguous_block,
+)
 from .manipulate_dimension import (  # noqa
     append_dimension,
     insert_dimension,

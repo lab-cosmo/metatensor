@@ -7,6 +7,7 @@ Manipulation operations
     detach() <detach>
     drop_blocks() <drop-blocks>
     join() <join>
+    make_contiguous() <make-contiguous>
     manipulate dimension <manipulate-dimension>
     one_hot() <one-hot>
     remove_gradients() <remove-gradients>
