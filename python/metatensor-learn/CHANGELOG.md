@@ -17,6 +17,18 @@ follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Removed
 -->
 
+## [Version 0.2.1](https://github.com/lab-cosmo/metatensor/releases/tag/metatensor-learn-v0.2.1) - 2024-03-01
+
+### Changed
+
+- `metatensor-learn` is no longer re-exported from `metatensor` and
+  `metatensor.torch`, all functions are still available inside
+  `metatensor.learn` and `metatensor.torch.learn`.
+
+### Fixed
+
+- Make sure the `Dataset` class is iterable (#500)
+
 ## [Version 0.2.0](https://github.com/lab-cosmo/metatensor/releases/tag/metatensor-learn-v0.2.0) - 2024-02-07
 
 ### Changed

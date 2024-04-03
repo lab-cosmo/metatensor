@@ -11,6 +11,10 @@ Python API reference
   .. grid::
     :margin: 0 0 0 0
 
+    .. grid-item-version:: 0.1.4
+      :tag-prefix: metatensor-core-v
+      :url-suffix: core/reference/python/index.html
+
     .. grid-item-version:: 0.1.3
       :tag-prefix: metatensor-core-v
       :url-suffix: core/reference/python/index.html

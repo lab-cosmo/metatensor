@@ -19,8 +19,8 @@ def test_empty_like():
 
     assert metatensor.equal_metadata(empty_tensor, tensor)
 
-    tensor_no_cell = metatensor.remove_gradients(tensor, "cell")
-    assert metatensor.equal_metadata(empty_tensor_positions, tensor_no_cell)
+    tensor_no_strain = metatensor.remove_gradients(tensor, "strain")
+    assert metatensor.equal_metadata(empty_tensor_positions, tensor_no_strain)
 
 
 def test_empty_like_error():

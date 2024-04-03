@@ -13,7 +13,8 @@ concurrency:
 jobs:
   rust-tests:
     runs-on: ${{ matrix.os }}
-    name: ${{ matrix.os }} / Torch ${{ matrix.torch-version }}
+    name: ${{ matrix.os }} / Torch ${{ matrix.torch-version }}${{ matrix.extra-name }}
+    container: ${{ matrix.container }}
     strategy:
       matrix:
         include:
@@ -24,6 +25,8 @@ jobs:
             do-valgrind: true
 
           - os: ubuntu-20.04
+            container: ubuntu:20.04
+            extra-name: ", cmake 3.16"
             torch-version: 2.2.*
             python-version: "3.12"
             cargo-test-flags: ""
@@ -39,9 +42,20 @@ jobs:
             python-version: "3.12"
             cargo-test-flags: --release
     steps:
+      - name: install dependencies in container
+        if: matrix.container == 'ubuntu:20.04'
+        run: |
+          apt update
+          apt install -y software-properties-common
+          apt install -y cmake make gcc g++ git curl
+
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
+      - name: Configure git safe directory
+        if: matrix.container == 'ubuntu:20.04'
+        run: git config --global --add safe.directory /__w/metatensor/metatensor
 
       - name: setup rust
         uses: dtolnay/rust-toolchain@master
@@ -77,5 +91,5 @@ jobs:
         env:
           # Use the CPU only version of torch when building/running the code
           PIP_EXTRA_INDEX_URL: https://download.pytorch.org/whl/cpu
-          METATENSOR_TORCH_TEST_VERSION: ${{ matrix.torch-version }}
+          METATENSOR_TESTS_TORCH_VERSION: ${{ matrix.torch-version }}
           CXXFLAGS: ${{ matrix.cxx-flags }}

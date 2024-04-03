@@ -54,3 +54,17 @@ indent = 4
 include_trailing_comma = true
 lines_after_imports = 2
 known_first_party = "metatensor"
+
+### ======================================================================== ###
+
+[tool.coverage.paths]
+# path remapping for coverage. `coverage` will map path matching the second
+# string to the first string.
+core = ["python/metatensor-core/", ".tox/*/lib/python*/site-packages/"]
+torch = ["python/metatensor-torch/", ".tox/*/lib/python*/site-packages/"]
+operations = ["python/metatensor-operations/", ".tox/*/lib/python*/site-packages/"]
+learn = ["python/metatensor-learn/", ".tox/*/lib/python*/site-packages/"]
+
+[tool.coverage.report]
+show_missing = true
+omit = ["documentation.py"]

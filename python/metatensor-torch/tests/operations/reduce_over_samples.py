@@ -11,11 +11,11 @@ from ._data import load_data
 def check_operation(reduce_over_samples):
     tensor = load_data("qm7-power-spectrum.npz")
 
-    assert tensor.sample_names == ["structure", "center"]
-    reduced_tensor = reduce_over_samples(tensor, "center")
+    assert tensor.sample_names == ["system", "atom"]
+    reduced_tensor = reduce_over_samples(tensor, "atom")
 
     assert isinstance(reduced_tensor, torch.ScriptObject)
-    assert reduced_tensor.sample_names == ["structure"]
+    assert reduced_tensor.sample_names == ["system"]
 
 
 def test_reduce_over_samples():
@@ -37,9 +37,9 @@ def test_reduction_all_samples():
         ),
         samples=Labels.range("s", 3),
         components=[],
-        properties=Labels(["p"], torch.IntTensor([[0], [1], [5]])),
+        properties=Labels(["p"], torch.tensor([[0], [1], [5]])),
     )
-    keys = Labels(names=["key_1", "key_2"], values=torch.IntTensor([[0, 0]]))
+    keys = Labels(names=["key_1", "key_2"], values=torch.tensor([[0, 0]]))
     X = TensorMap(keys, [block_1])
 
     sum_X = metatensor.torch.sum_over_samples(X, sample_names=["s"])

@@ -21,8 +21,8 @@ def _unique_from_blocks(
     names: List[str],
 ) -> Labels:
     """
-    Finds the unique metadata of a list of blocks along the given ``axis`` and
-    for the specified ``names``.
+    Finds the unique metadata of a list of blocks along the given ``axis`` and for the
+    specified ``names``.
     """
     all_values = []
     for block in blocks:
@@ -73,88 +73,94 @@ def unique_metadata(
     gradient: Optional[str] = None,
 ) -> Labels:
     """
-    Returns a :py:class:`Labels` object containing the unique metadata across
-    all blocks of the input :py:class:`TensorMap`  ``tensor``. Unique Labels are
-    returned for the specified ``axis`` (either ``"samples"`` or
-    ``"properties"``) and metadata ``names``.
+    Returns a :py:class:`Labels` object containing the unique metadata across all blocks
+    of the input :py:class:`TensorMap`  ``tensor``. Unique Labels are returned for the
+    specified ``axis`` (either ``"samples"`` or ``"properties"``) and metadata
+    ``names``.
 
     Passing ``gradient`` as a ``str`` corresponding to a gradient parameter (for
-    instance ``"cell"`` or ``"positions"``) returns the unique indices only for
-    the gradient blocks. Note that gradient blocks by definition have the same
-    properties metadata as their parent :py:class:`TensorBlock`.
+    instance ``"strain"`` or ``"positions"``) returns the unique indices only for the
+    gradient blocks. Note that gradient blocks by definition have the same properties
+    metadata as their parent :py:class:`TensorBlock`.
 
-    An empty :py:class:`Labels` object is returned if there are no indices in
-    the (gradient) blocks of ``tensor`` corresponding to the specified ``axis``
-    and ``names``. This will have length zero but the names will be the same as
-    passed in ``names``.
+    An empty :py:class:`Labels` object is returned if there are no indices in the
+    (gradient) blocks of ``tensor`` corresponding to the specified ``axis`` and
+    ``names``. This will have length zero but the names will be the same as passed in
+    ``names``.
 
-    For example, to find the unique ``"structure"`` indices in the ``"samples"``
-    metadata present in a given :py:class:`TensorMap`:
+    For example, to find the unique ``"system"`` indices in the ``"samples"`` metadata
+    present in a given :py:class:`TensorMap`:
 
-    .. code-block:: python
+    >>> import numpy as np
+    >>> from metatensor import Labels, TensorBlock, TensorMap
+    >>> import metatensor
+    >>> block = TensorBlock(
+    ...     values=np.random.rand(5, 3),
+    ...     samples=Labels(
+    ...         names=["system", "atom"],
+    ...         values=np.array([[0, 0], [0, 1], [1, 0], [1, 1], [2, 3]]),
+    ...     ),
+    ...     components=[],
+    ...     properties=Labels.range("properties", 3),
+    ... )
+    >>> keys = Labels(names=["key"], values=np.array([[0]]))
+    >>> tensor = TensorMap(keys, [block.copy()])
+    >>> unique_systems = metatensor.unique_metadata(
+    ...     tensor,
+    ...     axis="samples",
+    ...     names=["system"],
+    ... )
+    >>> unique_systems
+    Labels(
+        system
+          0
+          1
+          2
+    )
 
-        import metatensor
-
-        unique_structures = metatensor.unique_metadata(
-            tensor,
-            axis="samples",
-            names=["structure"],
-        )
-
-    Or, to find the unique ``"atom"`` indices in the ``"samples"`` metadata
-    present in the ``"positions"`` gradient blocks of a given
+    Or, to find the unique ``(system, atom)`` pairs of indices in the ``"samples"``
+    metadata present in the ``"positions"`` gradient blocks of a given
     :py:class:`TensorMap`:
 
-    .. code-block:: python
-
-        unique_grad_atoms = metatensor.unique_metadata(
-            tensor,
-            axis="samples",
-            names=["atom"],
-            gradient="positions",
-        )
-
-    The unique indices can then be used to split the :py:class:`TensorMap` into
-    several smaller :py:class:`TensorMap` objects. Say, for example, that the
-    ``unique_structures`` from the example above are:
-
-    .. code-block:: python
-
-        Labels(
-            [(0,), (1,), (2,), (3,), (4,), (5,), (6,), (7,), (8,), (9,)],
-            dtype=[("structure", "<i4")],
-        )
-
-    Then, the following code will split the :py:class:`TensorMap` into 2
-    :py:class:`TensorMap` objects, with first containing structure indices 0-3
-    and the second containing structure indices 4-9:
-
-    .. code-block:: python
-
-        import metatensor
-
-        [tensor_1, tensor_2] = metatensor.split(
-            tensor,
-            axis="samples",
-            grouped_labels=[unique_structures[:4], unique_structures[4:]],
-        )
+    >>> gradient = TensorBlock(
+    ...     values=np.random.rand(4, 3, 3),
+    ...     samples=Labels(
+    ...         names=["sample", "system", "atom"],
+    ...         values=np.array([[0, 0, 0], [1, 0, 0], [2, 1, 4], [3, 2, 5]]),
+    ...     ),
+    ...     components=[Labels.range("xyz", 3)],
+    ...     properties=Labels.range("properties", 3),
+    ... )
+    >>> block.add_gradient("positions", gradient)
+    >>> tensor = TensorMap(keys, [block])
+    >>> metatensor.unique_metadata(
+    ...     tensor,
+    ...     axis="samples",
+    ...     names=["system", "atom"],
+    ...     gradient="positions",
+    ... )
+    Labels(
+        system  atom
+          0      0
+          1      4
+          2      5
+    )
 
     :param tensor: the :py:class:`TensorMap` to find unique indices for.
-    :param axis: a ``str``, either ``"samples"`` or ``"properties"``,
-        corresponding to the ``axis`` along which the named unique indices
-        should be found.
-    :param names: a ``str``, ``list`` of ``str``, or ``tuple`` of ``str``
-        corresponding to the name(s) of the indices along the specified ``axis``
-        for which the unique values should be found.
-    :param gradient: a ``str`` corresponding to the gradient parameter name for
-        the gradient blocks to find the unique indices for. If :py:obj:`None`
-        (default), the unique indices of the regular :py:class:`TensorBlock`
-        objects will be calculated.
+    :param axis: a ``str``, either ``"samples"`` or ``"properties"``, corresponding to
+        the ``axis`` along which the named unique indices should be found.
+    :param names: a ``str``, ``list`` of ``str``, or ``tuple`` of ``str`` corresponding
+        to the name(s) of the indices along the specified ``axis`` for which the unique
+        values should be found.
+    :param gradient: a ``str`` corresponding to the gradient parameter name for the
+        gradient blocks to find the unique indices for. If :py:obj:`None` (default), the
+        unique indices of the :py:class:`TensorBlock` containing the values will be
+        calculated.
 
-    :return: a sorted :py:class:`Labels` object containing the unique metadata
-        for the blocks of the input ``tensor`` or its gradient blocks for the
-        specified parameter. Each element in the returned :py:class:`Labels`
-        object has len(``names``) entries.
+    :return: a sorted :py:class:`Labels` object containing the unique metadata for the
+        blocks of the input ``tensor`` or its gradient blocks for the specified
+        parameter. Each element in the returned :py:class:`Labels` object has
+        len(``names``) entries.
     """
     # Parse input args
     if not torch_jit_is_scripting():
@@ -187,61 +193,34 @@ def unique_metadata_block(
     gradient: Optional[str] = None,
 ) -> Labels:
     """
-    Returns a :py:class:`Labels` object containing the unique metadata in the
-    input :py:class:`TensorBlock`  ``block``, for the specified ``axis`` (either
-    ``"samples"`` or ``"properties"``) and metadata ``names``.
+    Returns a :py:class:`Labels` object containing the unique metadata in the input
+    :py:class:`TensorBlock`  ``block``, for the specified ``axis`` (either ``"samples"``
+    or ``"properties"``) and metadata ``names``.
 
     Passing ``gradient`` as a ``str`` corresponding to a gradient parameter (for
-    instance ``"cell"`` or ``"positions"``) returns the unique indices only for
-    the gradient block associated with ``block``. Note that gradient blocks by
-    definition have the same properties metadata as their parent
-    :py:class:`TensorBlock`.
+    instance ``"strain"`` or ``"positions"``) returns the unique indices only for the
+    gradient block associated with ``block``. Note that gradient blocks by definition
+    have the same properties metadata as their parent :py:class:`TensorBlock`.
 
-    An empty :py:class:`Labels` object is returned if there are no indices in
-    the (gradient) blocks of ``tensor`` corresponding to the specified ``axis``
-    and ``names``. This will have length zero but the names will be the same as
-    passed in ``names``.
-
-    For example, to find the unique ``"structure"`` indices in the ``"samples"``
-    metadata present in a given :py:class:`TensorBlock`:
-
-    .. code-block:: python
-
-        import metatensor
-
-        unique_samples = metatensor.unique_metadata_block(
-            block,
-            axis="samples",
-            names=["structure"],
-        )
-
-    To find the unique ``"atom"`` indices along the ``"samples"`` axis present
-    in the ``"positions"`` gradient block of a given :py:class:`TensorBlock`:
-
-    .. code-block:: python
-
-        unique_grad_samples = metatensor.unique_metadata_block(
-            block,
-            axis="samples",
-            names=["atom"],
-            gradient="positions",
-        )
+    An empty :py:class:`Labels` object is returned if there are no indices in the
+    (gradient) blocks of ``tensor`` corresponding to the specified ``axis`` and
+    ``names``. This will have length zero but the names will be the same as passed in
+    ``names``.
 
     :param block: the :py:class:`TensorBlock` to find unique indices for.
-    :param axis: a str, either ``"samples"`` or ``"properties"``, corresponding
-        to the ``axis`` along which the named unique metadata should be found.
-    :param names: a ``str``, ``list`` of ``str``, or ``tuple`` of ``str``
-        corresponding to the name(s) of the metadata along the specified
-        ``axis`` for which the unique indices should be found.
-    :param gradient: a ``str`` corresponding to the gradient parameter name for
-        the gradient blocks to find the unique metadata for. If :py:obj:`None`
-        (default), the unique metadata of the regular :py:class:`TensorBlock`
-        objects will be calculated.
+    :param axis: a str, either ``"samples"`` or ``"properties"``, corresponding to the
+        ``axis`` along which the named unique metadata should be found.
+    :param names: a ``str``, ``list`` of ``str``, or ``tuple`` of ``str`` corresponding
+        to the name(s) of the metadata along the specified ``axis`` for which the unique
+        indices should be found.
+    :param gradient: a ``str`` corresponding to the gradient parameter name for the
+        gradient blocks to find the unique metadata for. If :py:obj:`None` (default),
+        the unique metadata of the regular :py:class:`TensorBlock` objects will be
+        calculated.
 
-    :return: a sorted :py:class:`Labels` object containing the unique metadata
-        for the input ``block`` or its gradient for the specified parameter.
-        Each element in the returned :py:class:`Labels` object has
-        len(``names``) entries.
+    :return: a sorted :py:class:`Labels` object containing the unique metadata for the
+        input ``block`` or its gradient for the specified parameter. Each element in the
+        returned :py:class:`Labels` object has len(``names``) entries.
     """
     # Parse input args
     if not torch_jit_is_scripting():

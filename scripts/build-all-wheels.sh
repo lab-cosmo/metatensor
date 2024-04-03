@@ -8,9 +8,6 @@ cd "$ROOT_DIR"
 TMP_DIR="$1"
 rm -rf "$TMP_DIR"/dist
 
-./scripts/package-core.sh
-./scripts/package-torch.sh
-
 # check building sdist from a checkout, and wheel from the sdist
 python -m build python/metatensor-core --outdir "$TMP_DIR"/dist
 

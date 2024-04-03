@@ -13,7 +13,7 @@ def test_remove_everything():
         use_numpy=True,
     )
 
-    assert set(tensor.block(0).gradients_list()) == set(["cell", "positions"])
+    assert set(tensor.block(0).gradients_list()) == set(["strain", "positions"])
 
     tensor = metatensor.remove_gradients(tensor)
     assert tensor.block(0).gradients_list() == []
@@ -26,7 +26,7 @@ def test_remove_subset():
         use_numpy=True,
     )
 
-    assert set(tensor.block(0).gradients_list()) == set(["cell", "positions"])
+    assert set(tensor.block(0).gradients_list()) == set(["strain", "positions"])
 
     tensor = metatensor.remove_gradients(tensor, ["positions"])
-    assert tensor.block(0).gradients_list() == ["cell"]
+    assert tensor.block(0).gradients_list() == ["strain"]

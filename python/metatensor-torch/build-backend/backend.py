@@ -1,6 +1,9 @@
-# this is a custom Python build backend wrapping setuptool's to add a build-time
-# dependencies to metatensor-core, using the local version if it exists, and
-# otherwise falling back to the one on PyPI.
+# This is a custom Python build backend wrapping setuptool's to add a build-time
+# dependencies to metatensor-core, using the local version if it exists, and otherwise
+# falling back to the one on PyPI.
+#
+# This also allows to only depend on torch/cmake when building the wheel and not the
+# sdist
 import os
 import uuid
 
@@ -37,7 +40,7 @@ build_sdist = build_meta.build_sdist
 
 def get_requires_for_build_wheel(config_settings=None):
     defaults = build_meta.get_requires_for_build_wheel(config_settings)
-    return defaults + [METATENSOR_CORE_DEP]
+    return defaults + ["cmake", "torch >=1.11", METATENSOR_CORE_DEP]
 
 
 get_requires_for_build_sdist = build_meta.get_requires_for_build_sdist

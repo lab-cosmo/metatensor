@@ -223,7 +223,13 @@ def create_test_array(shape_ptr, shape_count, array):
 
 def test_parent_keepalive():
     path = os.path.join(
-        os.path.dirname(__file__), "..", "..", "..", "metatensor", "tests", "data.npz"
+        os.path.dirname(__file__),
+        "..",
+        "..",
+        "..",
+        "metatensor-core",
+        "tests",
+        "data.npz",
     )
     tensor = metatensor.io.load_custom_array(path.encode("utf8"), create_test_array)
 

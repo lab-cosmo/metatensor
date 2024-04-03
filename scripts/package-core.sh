@@ -1,11 +1,15 @@
 #!/usr/bin/env bash
 
 # This script creates an archive containing the sources for the metatensor-core
-# Rust crate, and copy it to be included in the metatensor crate source release,
-# and the metatensor-core python package sdist.
+# Rust crate, and copy it to the path given as argument
+
+set -eux
+
+OUTPUT_DIR="$1"
+mkdir -p "$OUTPUT_DIR"
+OUTPUT_DIR=$(cd "$OUTPUT_DIR" 2>/dev/null && pwd)
 
 ROOT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")"/.. && pwd)
-set -eux
 
 rm -rf "$ROOT_DIR/target/package"
 cd "$ROOT_DIR/metatensor-core"
@@ -44,12 +48,5 @@ cargo generate-lockfile --manifest-path "$ARCHIVE_NAME/Cargo.toml"
 tar cf "$ARCHIVE_NAME.tar" "$ARCHIVE_NAME"
 gzip -9 "$ARCHIVE_NAME.tar"
 
-rm -f "$ROOT_DIR"/metatensor/metatensor-core-cxx-*.tar.gz
-cp "$TMP_DIR/$ARCHIVE_NAME.tar.gz" "$ROOT_DIR/metatensor/"
-
 rm -f "$ROOT_DIR"/python/metatensor-core/metatensor-core-cxx-*.tar.gz
-cp "$TMP_DIR/$ARCHIVE_NAME.tar.gz" "$ROOT_DIR/python/metatensor-core/"
-
-mkdir -p "$ROOT_DIR/dist/cxx"
-rm -f "$ROOT_DIR"/dist/cxx/metatensor-core-cxx-*.tar.gz
-cp "$TMP_DIR/$ARCHIVE_NAME.tar.gz" "$ROOT_DIR/dist/cxx/"
+cp "$TMP_DIR/$ARCHIVE_NAME.tar.gz" "$OUTPUT_DIR/"

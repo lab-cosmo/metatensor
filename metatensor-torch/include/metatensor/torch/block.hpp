@@ -124,12 +124,26 @@ public:
         return this->values().scalar_type();
     }
 
-    /// Move all arrays in this block to the given `dtype`, `device` and
-    /// `arrays` backend. Only `"torch"` is supported for the `arrays` backend.
+    /// Move all arrays in this block to the given `dtype` and `device`.
     TorchTensorBlock to(
         torch::optional<torch::Dtype> dtype = torch::nullopt,
-        torch::optional<torch::Device> device = torch::nullopt,
-        torch::optional<std::string> arrays = torch::nullopt
+        torch::optional<torch::Device> device = torch::nullopt
+    ) const;
+
+    /// Wrapper of the `to` function to enable using it with positional
+    /// parameters from Python; for example `to(dtype)`, `to(device)`,
+    /// `to(dtype, device=device)`, `to(dtype, device)`, `to(device, dtype)`,
+    /// etc.
+    ///
+    /// `arrays` is left as a keyword argument since it is mainly here for
+    /// compatibility with the pure Python backend, and only `"torch"` is
+    /// supported.
+    TorchTensorBlock to_positional(
+        torch::IValue positional_1,
+        torch::IValue positional_2,
+        torch::optional<torch::Dtype> dtype,
+        torch::optional<torch::Device> device,
+        torch::optional<std::string> arrays
     ) const;
 
     /// Implementation of __repr__/__str__ for Python

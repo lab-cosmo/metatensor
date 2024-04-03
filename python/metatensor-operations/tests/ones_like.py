@@ -20,8 +20,8 @@ def test_ones_like():
 
     assert metatensor.equal_metadata(ones_tensor, tensor)
 
-    tensor_no_cell = metatensor.remove_gradients(tensor, "cell")
-    assert metatensor.equal_metadata(ones_tensor_positions, tensor_no_cell)
+    tensor_no_strain = metatensor.remove_gradients(tensor, "strain")
+    assert metatensor.equal_metadata(ones_tensor_positions, tensor_no_strain)
 
     # check the values
     for key, block in tensor.items():

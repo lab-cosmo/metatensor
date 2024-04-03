@@ -8,20 +8,12 @@ from metatensor.torch import Labels, TensorBlock, TensorMap
 from metatensor.torch.atomistic import (
     MetatensorAtomisticModel,
     ModelCapabilities,
+    ModelMetadata,
     ModelOutput,
     NeighborsListOptions,
     System,
     check_atomistic_model,
 )
-from metatensor.torch.atomistic.units import KNOWN_QUANTITIES
-
-
-try:
-    import ase.units
-
-    HAVE_ASE = True
-except ImportError:
-    HAVE_ASE = False
 
 
 class MinimalModel(torch.nn.Module):
@@ -36,21 +28,22 @@ class MinimalModel(torch.nn.Module):
         if "dummy" in outputs:
             block = TensorBlock(
                 values=torch.tensor([[0.0]]),
-                samples=Labels("s", torch.IntTensor([[0]])),
-                components=[],
-                properties=Labels("p", torch.IntTensor([[0]])),
+                samples=Labels("s", torch.tensor([[0]])),
+                components=torch.jit.annotate(List[Labels], []),
+                properties=Labels("p", torch.tensor([[0]])),
             )
+            tensor = TensorMap(Labels("_", torch.tensor([[0]])), [block])
             return {
-                "dummy": TensorMap(Labels("_", torch.IntTensor([[0]])), [block]),
+                "dummy": tensor,
             }
         else:
             return {}
 
     def requested_neighbors_lists(self) -> List[NeighborsListOptions]:
         return [
-            NeighborsListOptions(model_cutoff=1.2, full_list=False),
-            NeighborsListOptions(model_cutoff=4.3, full_list=True),
-            NeighborsListOptions(model_cutoff=1.2, full_list=False),
+            NeighborsListOptions(cutoff=1.2, full_list=False),
+            NeighborsListOptions(cutoff=4.3, full_list=True),
+            NeighborsListOptions(cutoff=1.2, full_list=False),
         ]
 
 
@@ -61,7 +54,8 @@ def model():
 
     capabilities = ModelCapabilities(
         length_unit="angstrom",
-        species=[1, 2, 3],
+        atomic_types=[1, 2, 3],
+        interaction_range=4.3,
         outputs={
             "dummy": ModelOutput(
                 quantity="",
@@ -70,9 +64,12 @@ def model():
                 explicit_gradients=[],
             ),
         },
+        supported_devices=["cpu"],
+        dtype="float64",
     )
 
-    return MetatensorAtomisticModel(model, capabilities)
+    metadata = ModelMetadata()
+    return MetatensorAtomisticModel(model, metadata, capabilities)
 
 
 def test_export(model, tmpdir):
@@ -143,12 +140,17 @@ def test_requested_neighbors_lists():
     model = FullModel()
     model.train(False)
 
-    atomistic = MetatensorAtomisticModel(model, ModelCapabilities())
+    capabilities = ModelCapabilities(
+        interaction_range=0.0,
+        supported_devices=["cpu"],
+        dtype="float64",
+    )
+    atomistic = MetatensorAtomisticModel(model, ModelMetadata(), capabilities)
     requests = atomistic.requested_neighbors_lists()
 
     assert len(requests) == 2
 
-    assert requests[0].model_cutoff == 1.0
+    assert requests[0].cutoff == 1.0
     assert not requests[0].full_list
     assert requests[0].requestors() == [
         "first module",
@@ -157,7 +159,7 @@ def test_requested_neighbors_lists():
         "FullModel.second",
     ]
 
-    assert requests[1].model_cutoff == 2.0
+    assert requests[1].cutoff == 2.0
     assert requests[1].full_list
     assert requests[1].requestors() == [
         "other module",
@@ -165,32 +167,47 @@ def test_requested_neighbors_lists():
     ]
 
 
-@pytest.mark.skipif(not HAVE_ASE, reason="this tests requires ASE units")
-def test_units():
-    length = KNOWN_QUANTITIES["length"]
-    assert length._baseline == "angstrom"
-    for name, value in length._conversions.items():
-        if name == "angstrom":
-            assert value == ase.units.Ang / ase.units.Ang
-        elif name == "bohr":
-            assert value == ase.units.Ang / ase.units.Bohr
-        elif name in ["nanometer", "nm"]:
-            assert value == ase.units.Ang / ase.units.nm
-        else:
-            raise Exception(f"missing name in test: {name}")
+def test_bad_capabilities():
+    model = FullModel()
+    model.train(False)
 
-    energy = KNOWN_QUANTITIES["energy"]
-    assert energy._baseline == "ev"
-    for name, value in energy._conversions.items():
-        if name == "ev":
-            assert value == ase.units.eV / ase.units.eV
-        elif name == "mev":
-            assert value == ase.units.eV / (ase.units.eV / 1000)
-        elif name == "hartree":
-            assert value == ase.units.eV / ase.units.Hartree
-        elif name == "kcal/mol":
-            assert value == ase.units.eV / (ase.units.kcal / ase.units.mol)
-        elif name == "kj/mol":
-            assert value == ase.units.eV / (ase.units.kJ / ase.units.mol)
-        else:
-            raise Exception(f"missing name in test: {name}")
+    capabilities = ModelCapabilities(
+        supported_devices=["cpu"],
+        dtype="float64",
+    )
+    message = (
+        "`capabilities.interaction_range` was not set, "
+        "but it is required to run simulations"
+    )
+    with pytest.raises(ValueError, match=message):
+        MetatensorAtomisticModel(model, ModelMetadata(), capabilities)
+
+    capabilities = ModelCapabilities(
+        interaction_range=12,
+        dtype="float64",
+    )
+    message = (
+        "`capabilities.supported_devices` was not set, "
+        "but it is required to run simulations"
+    )
+    with pytest.raises(ValueError, match=message):
+        MetatensorAtomisticModel(model, ModelMetadata(), capabilities)
+
+    capabilities = ModelCapabilities(
+        interaction_range=float("nan"),
+        supported_devices=["cpu"],
+        dtype="float64",
+    )
+    message = (
+        "`capabilities.interaction_range` should be a float between 0 and infinity"
+    )
+    with pytest.raises(ValueError, match=message):
+        MetatensorAtomisticModel(model, ModelMetadata(), capabilities)
+
+    capabilities = ModelCapabilities(
+        interaction_range=12.0,
+        supported_devices=["cpu"],
+    )
+    message = "`capabilities.dtype` was not set, but it is required to run simulations"
+    with pytest.raises(ValueError, match=message):
+        MetatensorAtomisticModel(model, ModelMetadata(), capabilities)

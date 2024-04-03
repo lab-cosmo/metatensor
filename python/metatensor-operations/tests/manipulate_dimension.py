@@ -152,9 +152,9 @@ def test_permute_keys():
     )
 
     assert new_tensor.keys.names == [
-        "species_neighbor_2",
-        "species_center",
-        "species_neighbor_1",
+        "neighbor_2_type",
+        "center_type",
+        "neighbor_1_type",
     ]
     assert_equal(new_tensor.keys.values, ref_tensor.keys.values[:, dimensions_indexes])
 
@@ -166,7 +166,7 @@ def test_permute_samples():
         ref_tensor, axis="samples", dimensions_indexes=dimensions_indexes
     )
 
-    assert new_tensor.sample_names == ["center", "structure"]
+    assert new_tensor.sample_names == ["atom", "system"]
 
     for key, block in new_tensor.items():
         ref_block = ref_tensor.block(key)
@@ -175,8 +175,8 @@ def test_permute_samples():
         )
         for parameter, gradient in block.gradients():
             if parameter == "positions":
-                gradient_sample_names = ["sample", "structure", "atom"]
-            elif parameter == "cell":
+                gradient_sample_names = ["sample", "system", "atom"]
+            elif parameter == "strain":
                 gradient_sample_names = ["sample"]
             assert gradient.samples.names == gradient_sample_names
 
@@ -188,7 +188,7 @@ def test_permute_properties():
         ref_tensor, axis="properties", dimensions_indexes=dimensions_indexes
     )
 
-    assert new_tensor.property_names == ["n2", "l", "n1"]
+    assert new_tensor.property_names == ["n_2", "l", "n_1"]
 
     for key, block in new_tensor.items():
         ref_block = ref_tensor.block(key)
@@ -213,7 +213,7 @@ def test_rename_samples():
     new_tensor = metatensor.rename_dimension(
         tensor(),
         axis="samples",
-        old="structure",
+        old="system",
         new="foo",
     )
     assert new_tensor.sample_names[0] == "foo"
@@ -222,7 +222,7 @@ def test_rename_samples():
         for parameter, gradient in block.gradients():
             if parameter == "positions":
                 gradient_sample_names = ["sample", "foo", "atom"]
-            elif parameter == "cell":
+            elif parameter == "strain":
                 gradient_sample_names = ["sample"]
             assert gradient.samples.names == gradient_sample_names
 
@@ -287,4 +287,29 @@ def test_not_unique_after():
         r"is already present at position 0"
     )
     with pytest.raises(metatensor.status.MetatensorError, match=match):
-        metatensor.remove_dimension(tensor(), axis="keys", name="species_center")
+        metatensor.remove_dimension(tensor(), axis="keys", name="center_type")
+
+
+def test_insert_dimension_wrong_size():
+    """
+    Tests that passing an int for the `values` is ok, but an array of the
+    wrong size isn't
+    """
+
+    message = "the new `values` contains 1 entries, but the Labels contains 52"
+    with pytest.raises(ValueError, match=message):
+        metatensor.insert_dimension(
+            tensor(),
+            axis="samples",
+            name="new_dimension",
+            values=np.array([0]),
+            index=0,
+        )
+
+    metatensor.insert_dimension(
+        tensor(),
+        axis="samples",
+        name="new_dimension",
+        values=0,
+        index=0,
+    )

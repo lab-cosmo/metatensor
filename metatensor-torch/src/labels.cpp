@@ -5,7 +5,7 @@
 #include <metatensor.hpp>
 
 #include "metatensor/torch/labels.hpp"
-#include "internal/scalar_type_name.hpp"
+#include "internal/utils.hpp"
 
 using namespace metatensor_torch;
 
@@ -287,6 +287,14 @@ TorchLabels LabelsHolder::insert(int64_t index, std::string name, torch::Tensor 
         C10_THROW_ERROR(
             ValueError,
             "`values` must be a 1D tensor"
+        );
+    }
+
+    if (values.size(0) != this->count()) {
+        C10_THROW_ERROR(
+            ValueError,
+            "the new `values` contains " + std::to_string(values.size(0)) + " entries, "
+            "but the Labels contains " + std::to_string(this->count())
         );
     }
 

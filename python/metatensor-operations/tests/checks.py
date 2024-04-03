@@ -7,7 +7,7 @@ import metatensor
 
 
 def set_initial_state(state):
-    metatensor.operations.checks._CHECKS_ENABLED = state
+    metatensor.operations._checks._CHECKS_ENABLED = state
 
 
 @pytest.mark.parametrize("inital_state", [True, False])
@@ -88,5 +88,5 @@ def test_environment_variable(original_state):
     """Test environment variable METATENSOR_unsafe_disable_checks"""
     os.environ["METATENSOR_UNSAFE_DISABLE_CHECKS"] = str(not original_state)
 
-    reload(metatensor.operations.checks)
+    reload(metatensor.operations._checks)
     assert metatensor.checks_enabled() == original_state

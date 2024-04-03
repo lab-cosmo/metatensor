@@ -18,7 +18,7 @@ def tensor_path():
         "..",
         "..",
         "..",
-        "metatensor",
+        "metatensor-core",
         "tests",
         "data.npz",
     )
@@ -31,7 +31,7 @@ def labels_path():
         "..",
         "..",
         "..",
-        "metatensor",
+        "metatensor-core",
         "tests",
         "keys.npy",
     )
@@ -39,9 +39,10 @@ def labels_path():
 
 def check_labels(labels):
     assert labels.names == [
-        "spherical_harmonics_l",
-        "center_species",
-        "neighbor_species",
+        "o3_lambda",
+        "o3_sigma",
+        "center_type",
+        "neighbor_type",
     ]
     assert len(labels) == 27
 
@@ -49,14 +50,12 @@ def check_labels(labels):
 def check_tensor(tensor):
     check_labels(tensor.keys)
 
-    block = tensor.block(
-        dict(spherical_harmonics_l=2, center_species=6, neighbor_species=1)
-    )
-    assert block.samples.names == ["structure", "center"]
+    block = tensor.block(dict(o3_lambda=2, center_type=6, neighbor_type=1))
+    assert block.samples.names == ["system", "atom"]
     assert block.values.shape == (9, 5, 3)
 
     gradient = block.gradient("positions")
-    assert gradient.samples.names == ["sample", "structure", "atom"]
+    assert gradient.samples.names == ["sample", "system", "atom"]
     assert gradient.values.shape == (59, 3, 5, 3)
 
 

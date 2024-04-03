@@ -83,17 +83,23 @@ print(tensor)
 
 # %%
 #
-# We can see that here, the keys of the :py:class:`TensorMap` have three named
-# *dimensions*:
+# We can see that here, the keys of the :py:class:`TensorMap` have four named
+# *dimensions*. Two of these are used to describe the behavior of the data under spatial
+# transformations (rotations and inversions in the O3 group):
 #
-# - ``spherical_harmonics_l``, representing the angular momentum index in the spherical
-#   harmonics (the :math:`l` in :math:`Y_l^m`) used by the machine learning
-#   representation;
-# - ``species_center`` represents the atomic species of the central atom in
-#   consideration. For |CO2|, we have both carbons (species 6) and oxygens (species 8);
-# - ``species_neighbor`` represents the atomic species of the neighbor atoms considered
-#   by the machine learning representation, in this case it takes the values 6 and 8 as
-#   well.
+# - ``o3_lambda``, indicating the character of o3 irreducible representation this block
+#   is following. In general, a block with ``o3_lambda=3`` will transform under
+#   rotations like a ``l=3`` spherical harmonics.
+# - ``o3_sigma``, which describe the behavior of the data under inversion symmetry. Here
+#   all blocks have ``o3_sigma=1``, meaning we only have data with the usual inversion
+#   symmetry (``o3_sigma=-1`` would be used for pseudo-tensors);
+#
+# And the other two are related to the composition of the system:
+#
+# - ``center_type`` represents the atomic type of the central atom in consideration. For
+#   |CO2|, we have both carbons (type 6) and oxygens (type 8);
+# - ``neighbor_type`` represents the atomic type of the neighbor atoms considered by the
+#   machine learning representation, in this case it takes the values 6 and 8 as well.
 #
 #
 # These keys can be accessed with :py:attr:`TensorMap.keys`, and they are an instance of
@@ -130,21 +136,21 @@ print(keys.values)
 # We can access all the values taken by a given dimension/column in the labels with
 # :py:func:`Labels.column` or by indexing with a string:
 
-print(keys["spherical_harmonics_l"])
+print(keys["o3_lambda"])
 
 # %%
 #
 
-print(keys.column("species_center"))
+print(keys.column("center_type"))
 
 # %%
 #
 # We can also access individual entries in the labels by iterating over them or indexing
 # with an integer:
 
-print("Entries with spherical_harmonics_l=2:")
+print("Entries with o3_lambda=2:")
 for entry in keys:
-    if entry["spherical_harmonics_l"] == 2:
+    if entry["o3_lambda"] == 2:
         print("    ", entry)
 
 print("\nEntry at index 3:")
@@ -164,7 +170,7 @@ print("    ", keys[3])
 # this is equivalent to `block = tensor[tensor.keys[0]]`
 block = tensor[0]
 
-block = tensor.block(spherical_harmonics_l=1, species_center=8, species_neighbor=6)
+block = tensor.block(o3_lambda=1, center_type=8, neighbor_type=6)
 
 print(block)
 
@@ -199,7 +205,7 @@ print(block.values.shape)
 #
 # Here, since we are working with a per-atom representation, the samples contain the
 # index of the structure and atomic center in this structure. Since we are looking at a
-# block for ``species_center=8``, we have two samples, one for each oxygen atom in our
+# block for ``center_type=8``, we have two samples, one for each oxygen atom in our
 # single |CO2| molecule.
 
 print(block.samples)
@@ -219,7 +225,7 @@ print(repr(block.properties))
 # set of :py:attr:`TensorBlock.components` labels. These dimensions correspond to one or
 # more *vectorial components* in the data. Here the only component corresponds to the
 # different :math:`m` number in spherical harmonics :math:`Y_l^m`, going from -1 to 1
-# since we are looking at the block for ``spherical_harmonics_l = 1``:
+# since we are looking at the block for ``o3_lambda = 1``:
 
 print(block.components)
 

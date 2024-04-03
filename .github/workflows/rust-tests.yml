@@ -104,9 +104,9 @@ jobs:
       - name: check the code can be compiled as a standalone crate
         if: matrix.os != 'windows-2019'
         run: |
-          ./scripts/package-core.sh
-          cd metatensor
-          cargo publish --dry-run --allow-dirty
+          ./scripts/package-core.sh rust/metatensor-sys/
+          cd rust/metatensor-sys
+          cargo package --allow-dirty
 
   # check that the C API declarations are correctly used by Rust and Python
   prevent-bitrot:

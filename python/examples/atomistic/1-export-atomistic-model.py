@@ -31,6 +31,7 @@ from metatensor.torch import Labels, TensorBlock, TensorMap
 from metatensor.torch.atomistic import (
     MetatensorAtomisticModel,
     ModelCapabilities,
+    ModelMetadata,
     ModelOutput,
     System,
 )
@@ -67,7 +68,7 @@ class MyCustomModel(torch.nn.Module):
 #
 # Finally, ``selected_atoms`` is also set by whoever is using the model, and is either
 # ``None``, meaning all atoms should be included in the calculation, or a
-# :py:class:`metatensor.torch.Labels` object containing two dimensions: ``"structure"``
+# :py:class:`metatensor.torch.Labels` object containing two dimensions: ``"system"``
 # and ``"atom"``, with values corresponding to the structure/atoms indexes to include in
 # the calculation. For example when working with additive atom-centered models, only
 # atoms in ``selected_atoms`` will be used as atomic centers, but all atoms will be
@@ -82,9 +83,9 @@ class MyCustomModel(torch.nn.Module):
 
 
 class SingleAtomEnergy(torch.nn.Module):
-    def __init__(self, energy_by_species: Dict[int, float]):
+    def __init__(self, energy_by_atom_type: Dict[int, float]):
         super().__init__()
-        self.energy_by_species = energy_by_species
+        self.energy_by_atom_type = energy_by_atom_type
 
     def forward(
         self,
@@ -106,20 +107,18 @@ class SingleAtomEnergy(torch.nn.Module):
         # compute the energy for each system by adding together the energy for each atom
         energy = torch.zeros((len(systems), 1), dtype=systems[0].positions.dtype)
         for i, system in enumerate(systems):
-            for species in system.species:
-                energy[i] += self.energy_by_species[int(species)]
+            for atom_type in system.types:
+                energy[i] += self.energy_by_atom_type[int(atom_type)]
 
         # add metadata to the output
         block = TensorBlock(
             values=energy,
-            samples=Labels("system", torch.arange(len(systems), dtype=torch.int32)),
+            samples=Labels("system", torch.arange(len(systems))),
             components=[],
-            properties=Labels("energy", torch.IntTensor([[0]])),
+            properties=Labels("energy", torch.tensor([[0]])),
         )
         return {
-            "energy": TensorMap(
-                keys=Labels("_", torch.IntTensor([[0]])), blocks=[block]
-            )
+            "energy": TensorMap(keys=Labels("_", torch.tensor([[0]])), blocks=[block])
         }
 
 
@@ -131,7 +130,7 @@ class SingleAtomEnergy(torch.nn.Module):
 # standard PyTorch tools.
 
 model = SingleAtomEnergy(
-    energy_by_species={
+    energy_by_atom_type={
         1: -6.492647589968434,
         6: -38.054950840332474,
         8: -83.97955098636527,
@@ -153,16 +152,32 @@ model = SingleAtomEnergy(
 # -------------------
 #
 # Once your model has been trained, we can export it to a model file, that can be used
-# to run simulations or make predictions on new structures. This is done with the
+# to run simulations or make predictions on new systems. This is done with the
 # :py:class:`MetatensorAtomisticModel` class, which takes your model and make sure it
 # follows the required interface.
 #
-# A big part of model exporting is the definition of your model capabilities, i.e. what
-# can your model do? First we'll need to define which outputs our model can handle:
-# there is only one, called ``"energy"``, which has the dimensionality of an energy
-# (``quantity="energy"``). This energy is returned in electronvolt (``units="eV"``); and
-# with the code above it can not be computed per-atom, only for the full structure
-# (``per_atom=False``).
+# When exporting the model, we can define some metadata about this model, so when the
+# model is shared with others, they still know what this model is and where it comes
+# from.
+
+metadata = ModelMetadata(
+    name="single-atom-energy",
+    description="a long form description of this specific model",
+    authors=["You the Reader <reader@example.com>"],
+    references={
+        # you can add references that should be cited when using this model here,
+        # check the documentation for more information
+    },
+)
+
+# %%
+#
+# A big part of exporting a model is the definition of the model capabilities, i.e. what
+# are the things that this model can do? First we'll need to define which outputs our
+# model can handle: there is only one, called ``"energy"``, which correspond to the
+# physical quantity of energies (``quantity="energy"``). This energy is returned in
+# electronvolt (``units="eV"``); and with the code above it can not be computed
+# per-atom, only for the full structure (``per_atom=False``).
 
 
 outputs = {
@@ -171,27 +186,35 @@ outputs = {
 
 # %%
 #
-# The model capabilities include the set of outputs it can compute, but also the unit of
-# lengths it uses for positions and cell. If someone tries to use your model with a
-# different unit of length, or request some of the outputs in a different unit than the
-# one you defined in ``capabilities.outputs``, then :py:class:`MetatensorAtomisticModel`
-# will handle the necessary conversions for you.
+# In addition to the set of outputs a model can compute, the capabilities also include:
 #
-# Finally, we need to declare which species are supported by the model, to ensure we
-# don't use a model trained for Copper with a Tungsten dataset.
+# - the set of ``atomic_types`` the model can handle;
+# - the ``interaction_range`` of the model, i.e. how far away from one particle the
+#   model needs to know about other particles. This is mainly relevant for domain
+#   decomposition, and running simulations on multiple nodes;
+# - the ``length_unit`` the model expects as input. This applies to the
+#   ``interaction_range``, any neighbors list cutoff, the atoms positions and the system
+#   cell. If this is set to a non empty string, :py:class:`MetatensorAtomisticModel`
+#   will handle the necessary unit conversions for you;
+# - the set of ``supported_devices`` on which the model can run. These should be ordered
+#   according to the model preference.
+# - the dtype ("float32" or "float64") that the model uses for its inputs and outputs
 
 capabilities = ModelCapabilities(
-    length_unit="Angstrom",
-    species=[1, 6, 8],
     outputs=outputs,
+    atomic_types=[1, 6, 8],
+    interaction_range=0.0,
+    length_unit="Angstrom",
+    supported_devices=["cpu"],
+    dtype="float64",
 )
 
 # %%
 #
-# With the model capabilities defined, we can now create a wrapper around the model, and
-# export it to a file:
+# With the model metadata and capabilities defined, we can now create a wrapper around
+# the model, and export it to a file:
 
-wrapper = MetatensorAtomisticModel(model.eval(), capabilities)
+wrapper = MetatensorAtomisticModel(model.eval(), metadata, capabilities)
 wrapper.export("exported-model.pt")
 
 # the file was created in the current directory

@@ -1,7 +1,13 @@
 from typing import List
 
 from . import _dispatch
-from ._backend import TensorBlock, TensorMap, torch_jit_script
+from ._backend import (
+    Labels,
+    TensorBlock,
+    TensorMap,
+    torch_jit_annotate,
+    torch_jit_script,
+)
 from ._utils import _check_same_gradients_raise, _check_same_keys_raise
 
 
@@ -48,7 +54,7 @@ def _solve_block(X: TensorBlock, Y: TensorBlock) -> TensorBlock:
     return TensorBlock(
         values=weights.T,
         samples=Y.properties,
-        components=[],
+        components=torch_jit_annotate(List[Labels], []),
         properties=X.properties,
     )
 

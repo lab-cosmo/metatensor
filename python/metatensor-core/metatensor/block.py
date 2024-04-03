@@ -1,7 +1,7 @@
 import copy
 import ctypes
 import warnings
-from typing import Generator, List, Optional, Sequence, Tuple
+from typing import Generator, List, Sequence, Tuple
 
 from . import data
 from ._c_api import c_uintptr_t, mts_array_t, mts_block_t, mts_labels_t
@@ -16,6 +16,7 @@ from .data import (
 )
 from .labels import Labels
 from .status import _check_pointer
+from .utils import _to_arguments_parse
 
 
 class TensorBlock:
@@ -296,7 +297,7 @@ class TensorBlock:
         >>> from metatensor import Labels, TensorBlock
         >>> block = TensorBlock(
         ...     values=np.full((3, 1, 5), 1.0),
-        ...     samples=Labels(["structure"], np.array([[0], [2], [4]])),
+        ...     samples=Labels(["system"], np.array([[0], [2], [4]])),
         ...     components=[Labels.range("component", 1)],
         ...     properties=Labels.range("property", 5),
         ... )
@@ -376,7 +377,7 @@ class TensorBlock:
         >>> from metatensor import Labels, TensorBlock
         >>> block = TensorBlock(
         ...     values=np.full((3, 1, 1), 1.0),
-        ...     samples=Labels(["structure"], np.array([[0], [2], [4]])),
+        ...     samples=Labels(["system"], np.array([[0], [2], [4]])),
         ...     components=[Labels.range("component", 1)],
         ...     properties=Labels.range("property", 1),
         ... )
@@ -389,7 +390,7 @@ class TensorBlock:
         >>> block.add_gradient("parameter", gradient)
         >>> print(block)
         TensorBlock
-            samples (3): ['structure']
+            samples (3): ['system']
             components (1): ['component']
             properties (1): ['property']
             gradients: ['parameter']
@@ -470,13 +471,7 @@ class TensorBlock:
         """
         return data.array_device(self.values)
 
-    def to(
-        self,
-        *,
-        dtype: Optional[DType] = None,
-        device: Optional[Device] = None,
-        arrays: Optional[str] = None,
-    ) -> "TensorBlock":
+    def to(self, *args, **kwargs) -> "TensorBlock":
         """
         Move all the arrays in this block (values and gradients) to the given ``dtype``,
         ``device`` and ``arrays`` backend.
@@ -486,8 +481,12 @@ class TensorBlock:
         :param device: new device to use for all arrays. The device stays the same if
             this is set to ``None``.
         :param arrays: new backend to use for the arrays. This can be either
-            ``"numpy"``, ``"torch"`` or ``None`` (keeps the existing backend)
+            ``"numpy"``, ``"torch"`` or ``None`` (keeps the existing backend); and must
+            be given as a keyword argument (``arrays="numpy"``).
         """
+        arrays = kwargs.pop("arrays", None)
+        dtype, device = _to_arguments_parse("`TensorBlock.to`", *args, **kwargs)
+
         values = self.values
 
         if arrays is not None:

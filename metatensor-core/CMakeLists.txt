@@ -218,10 +218,17 @@ if (CARGO_VERSION_CHANGED)
             string(REGEX REPLACE "\.lib$" "" "stripped_lib" "${stripped_lib}")
             list(APPEND stripped_lib_list "${stripped_lib}")
         endforeach()
+
         # Special case `msvcrt` to link with the debug version in Debug mode.
         list(TRANSFORM stripped_lib_list REPLACE "^msvcrt$" "\$<\$<CONFIG:Debug>:msvcrtd>")
-        list(REMOVE_DUPLICATES stripped_lib_list)
 
+        if (APPLE)
+            # Prevent warnings about duplicated `System` in linked libraries
+            # from Apple's `ld`
+            list(REMOVE_ITEM stripped_lib_list "System")
+        endif()
+
+        list(REMOVE_DUPLICATES stripped_lib_list)
         set(CARGO_DEFAULT_LIBRARIES "${stripped_lib_list}" CACHE INTERNAL "list of implicitly linked libraries")
 
         if (${METATENSOR_MAIN_PROJECT})
@@ -261,9 +268,15 @@ if (UNIX)
     if (APPLE)
         # set the install name to `@rpath/libmetatensor.dylib`
         set(CARGO_RUSTC_ARGS "-Clink-arg=-Wl,-install_name,@rpath/${METATENSOR_SHARED_LIB_NAME}")
+        set_target_properties(metatensor::shared PROPERTIES
+            IMPORTED_SONAME @rpath/${METATENSOR_SHARED_LIB_NAME}
+        )
     else() # LINUX
         # set the SONAME to libmetatensor.so
         set(CARGO_RUSTC_ARGS "-Clink-arg=-Wl,-soname,${METATENSOR_SHARED_LIB_NAME}")
+        set_target_properties(metatensor::shared PROPERTIES
+            IMPORTED_SONAME ${METATENSOR_SHARED_LIB_NAME}
+        )
     endif()
 else()
     set(CARGO_RUSTC_ARGS "")
@@ -286,12 +299,17 @@ else()
     endif()
 endif()
 
+# Set environement variables for cargo build
+set(CARGO_ENV "METATENSOR_FULL_VERSION=${METATENSOR_FULL_VERSION}")
+if (NOT "${CMAKE_OSX_DEPLOYMENT_TARGET}" STREQUAL "")
+    list(APPEND CARGO_ENV "MACOSX_DEPLOYMENT_TARGET=${CMAKE_OSX_DEPLOYMENT_TARGET}")
+endif()
+if (NOT "$ENV{RUSTC_WRAPPER}" STREQUAL "")
+    list(APPEND CARGO_ENV "RUSTC_WRAPPER=$ENV{RUSTC_WRAPPER}")
+endif()
+
 add_custom_target(cargo-build-metatensor ALL
-    COMMAND
-        ${CMAKE_COMMAND} -E env
-        METATENSOR_FULL_VERSION="${METATENSOR_FULL_VERSION}"
-        MACOSX_DEPLOYMENT_TARGET=${CMAKE_OSX_DEPLOYMENT_TARGET}
-        RUSTC_WRAPPER=$ENV{RUSTC_WRAPPER}
+    COMMAND ${CMAKE_COMMAND} -E env ${CARGO_ENV}
         cargo rustc ${CARGO_BUILD_ARG} -- ${CARGO_RUSTC_ARGS}
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
     DEPENDS ${ALL_RUST_SOURCES}

@@ -12,6 +12,10 @@ API reference
   .. grid::
     :margin: 0 0 0 0
 
+    .. grid-item-version:: 0.2.1
+        :tag-prefix: metatensor-learn-v
+        :url-suffix: learn/reference/index.html
+
     .. grid-item-version:: 0.2.0
         :tag-prefix: metatensor-learn-v
         :url-suffix: learn/reference/index.html

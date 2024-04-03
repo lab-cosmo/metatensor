@@ -6,7 +6,7 @@
 #include "metatensor/torch/array.hpp"
 #include "metatensor/torch/block.hpp"
 
-#include "internal/scalar_type_name.hpp"
+#include "internal/utils.hpp"
 
 using namespace metatensor_torch;
 
@@ -76,15 +76,8 @@ TorchTensorBlock TensorBlockHolder::copy() const {
 
 TorchTensorBlock TensorBlockHolder::to(
     torch::optional<torch::Dtype> dtype,
-    torch::optional<torch::Device> device,
-    torch::optional<std::string> arrays
+    torch::optional<torch::Device> device
 ) const {
-    if (arrays.value_or("torch") != "torch") {
-        C10_THROW_ERROR(ValueError,
-            "`arrays` must be None or 'torch', got '" + arrays.value() + "' instead"
-        );
-    }
-
     auto values = this->values().to(
         dtype,
         /*layout*/ torch::nullopt,
@@ -112,6 +105,30 @@ TorchTensorBlock TensorBlockHolder::to(
         block->add_gradient(parameter, gradient.to(dtype, device));
     }
     return block;
+}
+
+TorchTensorBlock TensorBlockHolder::to_positional(
+    torch::IValue positional_1,
+    torch::IValue positional_2,
+    torch::optional<torch::Dtype> dtype,
+    torch::optional<torch::Device> device,
+    torch::optional<std::string> arrays
+) const {
+    if (arrays.value_or("torch") != "torch") {
+        C10_THROW_ERROR(ValueError,
+            "`arrays` must be None or 'torch', got '" + arrays.value() + "' instead"
+        );
+    }
+
+    auto [parsed_dtype, parsed_device] = to_arguments_parse(
+        positional_1,
+        positional_2,
+        dtype,
+        device,
+        "`TensorBlock.to`"
+    );
+
+    return this->to(parsed_dtype, parsed_device);
 }
 
 torch::Tensor TensorBlockHolder::values() const {

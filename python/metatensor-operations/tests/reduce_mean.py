@@ -21,8 +21,8 @@ def test_mean_samples_block():
     bl1 = tensor_ps[0]
 
     # check both passing a list and a single string for sample_names
-    reduce_tensor_se = metatensor.mean_over_samples(tensor_se, sample_names="center")
-    reduce_tensor_ps = metatensor.mean_over_samples(tensor_ps, sample_names=["center"])
+    reduce_tensor_se = metatensor.mean_over_samples(tensor_se, sample_names="atom")
+    reduce_tensor_ps = metatensor.mean_over_samples(tensor_ps, sample_names=["atom"])
 
     assert np.all(
         np.mean(bl1.values[:4], axis=0) == reduce_tensor_ps.block(0).values[0]
@@ -79,9 +79,9 @@ def test_mean_samples_block():
 
     # The TensorBlock with key=(8,8,8) has nothing to be averaged over
     selection = {
-        "species_center": 8,
-        "species_neighbor_1": 8,
-        "species_neighbor_2": 8,
+        "center_type": 8,
+        "neighbor_1_type": 8,
+        "neighbor_2_type": 8,
     }
     print(tensor_ps.keys.names)
     assert np.allclose(

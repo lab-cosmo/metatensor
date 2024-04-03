@@ -8,15 +8,33 @@ metadata for multiple scientific fields, it comes from the field of atomistic
 machine learning and as such offer some additional facilities for defining and
 using machine learning models applied to atomistic systems.
 
-Metatensor provides tools to build your own models (in the form of
-:ref:`operations <python-api-operations>`), define new models architectures and
-export models you just train to use them in arbitrary simulation engines. If you
-want to train existing architectures with new data or re-use existing trained
-models, look into the (work in progress!) metatensor-models_ project instead.
+The main goal here is to define and train models once, and then be able to
+re-use them across many different simulation engines (such as LAMMPS, GROMACS,
+*etc.*). We strive to achieve this goal without imposing any structure on the
+model itself, and to allow any model architecture to be used.
+
+This part of metatensor focusses on exporting and importing fully working,
+already trained models. There are some tools elsewhere to define new models (in
+the :ref:`operations <python-api-operations>` and :ref:`learn
+<learn-api-reference>` submodules). If you want to train existing architectures
+with new data or re-use existing trained models, look into the (work in
+progress!) metatensor-models_ project instead.
 
 .. _metatensor-models: https://github.com/lab-cosmo/metatensor-models
 
 .. grid::
+
+    .. grid-item-card:: ⚛️ Overview
+        :link: atomistic-overview
+        :link-type: ref
+        :columns: 12 12 12 12
+        :margin: 0 3 0 0
+
+        Why should you use metatensor to define and export your model? What is
+        the point of the interface? How can you use models that follow the
+        interface in your own simulation code?
+
+        All of this and more will find answers in this overview!
 
     .. grid-item-card:: 💡 Tutorials
         :link: atomistic-tutorials
@@ -64,27 +82,7 @@ models, look into the (work in progress!) metatensor-models_ project instead.
     :maxdepth: 2
     :hidden:
 
+    overview
     reference/index
     outputs
     ../examples/atomistic/index
-
-
-Overview
---------
-
-All the model facilities in metatensor are based on PyTorch and in particular
-TorchScript; and as such are part of the ``metatensor-torch`` package. This
-allow users to define new models with Python code (as a custom
-:py:class:`torch.nn.Module` instance), train the models from Python, and export
-them to TorchScript. The exported model can then be loaded into a C++ simulation
-engine such as LAMMPS, GROMACS, *etc.* and executed without relying on a Python
-installation.
-
-Metatensor provides code for using atomistic systems as input of a machine
-learning model with :py:class:`metatensor.torch.atomistic.System`, and exporting
-trained models with
-:py:class:`metatensor.torch.atomistic.MetatensorAtomisticModel`. Such models can
-make predictions for various properties of the atomistic system, and return them
-as a dictionary of :py:class:`metatensor.torch.TensorMap`, one such tensor map
-for each property (i.e. energy, atomic charges, dipole, electronic density,
-chemical shielding, *etc.*)

@@ -87,7 +87,7 @@ plt.show()
 #
 # The radial spectrum representation has two keys: ``central_species`` indicating the
 # species of the central atom (atom :math:`i` in the equations); and
-# ``neighbor_species`` indicating the species of the neighboring atoms (atom :math:`j`
+# ``neighbor_type`` indicating the species of the neighboring atoms (atom :math:`j`
 # in the equations)
 
 radial_spectrum = metatensor.load("radial-spectrum.npz")
@@ -98,8 +98,8 @@ print(radial_spectrum)
 #
 # This shows the first level of sparsity in ``TensorMap``: block sparsity.
 #
-# Out of all possible combinations of ``central_species`` and ``neighbor_species``, some
-# are missing such as ``central_species=7, neighbor_species=8``. This is because we are
+# Out of all possible combinations of ``central_species`` and ``neighbor_type``, some
+# are missing such as ``central_species=7, neighbor_type=8``. This is because we are
 # using a spherical cutoff of 2.5 Å, and as such there are no oxygen neighbor atoms
 # close enough to the nitrogen centers. This means that all the corresponding radial
 # spectrum coefficients :math:`R_i^\alpha(n)` will be zero (since the neighbor density
@@ -114,12 +114,12 @@ print(radial_spectrum)
 # Let's now look at the block containing the representation for oxygen centers and
 # carbon neighbors:
 
-block = radial_spectrum.block(species_center=8, species_neighbor=6)
+block = radial_spectrum.block(center_type=8, neighbor_type=6)
 
 # %%
 #
 # Naively, this block should contain samples for all oxygen atoms (since
-# ``species_center=8``); in practice we only have a single sample!
+# ``center_type=8``); in practice we only have a single sample!
 
 print(block.samples)
 
@@ -151,7 +151,7 @@ print(block.samples)
 dense_block_data = np.zeros((len(atoms), block.values.shape[1]))
 
 # only copy the non-zero data stored in the block
-dense_block_data[block.samples["center"]] = block.values
+dense_block_data[block.samples["atom"]] = block.values
 
 print(dense_block_data)
 
@@ -163,12 +163,12 @@ print(dense_block_data)
 # which merge multiple blocks along the samples or properties dimensions respectively.
 #
 # Which one of these functions to call will depend on the data you are handling.
-# Typically, one-hot encoding (the ``species_neighbors`` key here) should be merged
+# Typically, one-hot encoding (the ``neighbor_types`` key here) should be merged
 # along the properties dimension; and keys that define subsets of the samples
-# (``species_center``) should be merged along the samples dimension.
+# (``center_type``) should be merged along the samples dimension.
 
-dense_radial_spectrum = radial_spectrum.keys_to_samples("species_center")
-dense_radial_spectrum = dense_radial_spectrum.keys_to_properties("species_neighbor")
+dense_radial_spectrum = radial_spectrum.keys_to_samples("center_type")
+dense_radial_spectrum = dense_radial_spectrum.keys_to_properties("neighbor_type")
 
 # %%
 #

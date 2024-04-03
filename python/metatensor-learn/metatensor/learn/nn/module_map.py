@@ -67,7 +67,7 @@ class ModuleMap(ModuleList):
         ...         ]
         ...     ),
         ...     samples=Labels(
-        ...         ["structure", "center"],
+        ...         ["system", "atom"],
         ...         np.array(
         ...             [
         ...                 [0, 0],
@@ -86,7 +86,7 @@ class ModuleMap(ModuleList):
         ...         ]
         ...     ),
         ...     samples=Labels(
-        ...         ["structure", "center"],
+        ...         ["system", "atom"],
         ...         np.array(
         ...             [
         ...                 [0, 0],
@@ -129,13 +129,13 @@ class ModuleMap(ModuleList):
 
         >>> tensor[0]
         TensorBlock
-            samples (2): ['structure', 'center']
+            samples (2): ['system', 'atom']
             components (): []
             properties (3): ['properties']
             gradients: None
         >>> out[0]
         TensorBlock
-            samples (2): ['structure', 'center']
+            samples (2): ['system', 'atom']
             components (): []
             properties (1): ['_']
             gradients: None
@@ -194,7 +194,7 @@ class ModuleMap(ModuleList):
         ...         ]
         ...     ),
         ...     samples=Labels(
-        ...         ["structure", "center"],
+        ...         ["system", "atom"],
         ...         np.array(
         ...             [
         ...                 [0, 0],
@@ -213,7 +213,7 @@ class ModuleMap(ModuleList):
         ...         ]
         ...     ),
         ...     samples=Labels(
-        ...         ["structure", "center"],
+        ...         ["system", "atom"],
         ...         np.array(
         ...             [
         ...                 [0, 0],

@@ -14,7 +14,7 @@ def test_unique_metadata():
     unique_labels = metatensor.torch.unique_metadata(
         tensor,
         axis="samples",
-        names=["structure"],
+        names=["system"],
     )
 
     # check type
@@ -23,7 +23,7 @@ def test_unique_metadata():
         assert unique_labels._type().name() == "Labels"
 
     # check label names
-    assert unique_labels.names == ["structure"]
+    assert unique_labels.names == ["system"]
 
     # repeat with gradients
     unique_labels = metatensor.torch.unique_metadata(
@@ -47,7 +47,7 @@ def test_unique_metadata_block():
     unique_labels = metatensor.torch.unique_metadata_block(
         block,
         axis="samples",
-        names=["structure"],
+        names=["system"],
     )
 
     # check type
@@ -56,7 +56,7 @@ def test_unique_metadata_block():
         assert unique_labels._type().name() == "Labels"
 
     # check label names
-    assert unique_labels.names == ["structure"]
+    assert unique_labels.names == ["system"]
 
     # repeat with gradients
     unique_labels = metatensor.torch.unique_metadata_block(

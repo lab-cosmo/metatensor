@@ -50,11 +50,13 @@ def tensor_complex_result():
             properties=block.properties,
         )
 
+        sign = block.values[0, 0] / np.abs(block.values[0, 0])
+
         for parameter, gradient in block.gradients():
             new_block.add_gradient(
                 parameter=parameter,
                 gradient=TensorBlock(
-                    values=-gradient.values,
+                    values=sign * gradient.values,
                     samples=gradient.samples,
                     components=gradient.components,
                     properties=gradient.properties,
@@ -76,7 +78,7 @@ def test_abs(gradients):
         tensor_result = tensor_complex_result()
 
     tensor_abs = metatensor.abs(tensor)
-    assert metatensor.equal(tensor_abs, tensor_result)
+    metatensor.allclose_raise(tensor_abs, tensor_result)
 
     # Check the tensors haven't be modified in place
     assert not metatensor.equal(tensor_abs, tensor)

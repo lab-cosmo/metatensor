@@ -36,7 +36,7 @@ class LabelsValues(np.ndarray):
         # keep the parent around when creating sub-views of this array
         self._parent = getattr(obj, "_parent", None)
 
-    def __array_wrap__(self, new):
+    def __array_wrap__(self, new, context=None, return_scalar=False):
         self_ptr = self.ctypes.data
         self_size = self.nbytes
 
@@ -60,12 +60,12 @@ class LabelsEntry:
     >>> from metatensor import Labels
     >>> import numpy as np
     >>> labels = Labels(
-    ...     names=["structure", "atom", "species_center"],
+    ...     names=["system", "atom", "center_type"],
     ...     values=np.array([(0, 1, 8), (0, 2, 1), (0, 5, 1)]),
     ... )
     >>> entry = labels[0]  # or labels.entry(0)
     >>> entry.names
-    ['structure', 'atom', 'species_center']
+    ['system', 'atom', 'center_type']
     >>> print(entry.values)
     [0 1 8]
     """
@@ -180,18 +180,18 @@ class Labels:
     >>> from metatensor import Labels
     >>> import numpy as np
     >>> labels = Labels(
-    ...     names=["structure", "atom", "species_center"],
+    ...     names=["system", "atom", "center_type"],
     ...     values=np.array([(0, 1, 8), (0, 2, 1), (0, 5, 1)]),
     ... )
     >>> labels
     Labels(
-        structure  atom  species_center
-            0       1          8
-            0       2          1
-            0       5          1
+        system  atom  center_type
+          0      1         8
+          0      2         1
+          0      5         1
     )
     >>> labels.names
-    ['structure', 'atom', 'species_center']
+    ['system', 'atom', 'center_type']
     >>> print(labels.values)
     [[0 1 8]
      [0 2 1]
@@ -210,9 +210,9 @@ class Labels:
      [2]
      [5]]
     >>> # multiple dimensions
-    >>> view = labels.view(["atom", "structure"])
+    >>> view = labels.view(["atom", "system"])
     >>> view.names
-    ['atom', 'structure']
+    ['atom', 'system']
     >>> print(view.values)
     [[1 0]
      [2 0]
@@ -229,15 +229,15 @@ class Labels:
 
     >>> entry = labels[0]  # or labels.entry(0)
     >>> entry.names
-    ['structure', 'atom', 'species_center']
+    ['system', 'atom', 'center_type']
     >>> print(entry.values)
     [0 1 8]
     >>> for entry in labels:
     ...     print(entry)
     ...
-    LabelsEntry(structure=0, atom=1, species_center=8)
-    LabelsEntry(structure=0, atom=2, species_center=1)
-    LabelsEntry(structure=0, atom=5, species_center=1)
+    LabelsEntry(system=0, atom=1, center_type=8)
+    LabelsEntry(system=0, atom=2, center_type=1)
+    LabelsEntry(system=0, atom=5, center_type=1)
 
     Or get all the values associated with a given dimension/column name
 
@@ -613,6 +613,12 @@ class Labels:
 
         if len(values.shape) != 1:
             raise ValueError("`values` must be a 1D array")
+
+        if values.shape[0] != len(self):
+            raise ValueError(
+                f"the new `values` contains {values.shape[0]} entries, "
+                f"but the Labels contains {len(self)}"
+            )
 
         new_values = np.insert(self.values, index, values, axis=1)
 

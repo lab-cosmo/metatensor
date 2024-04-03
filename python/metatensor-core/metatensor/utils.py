@@ -5,6 +5,21 @@ import os
 
 import numpy as np
 
+
+try:
+    import torch
+
+    TorchDevice = torch.device
+    TorchDtype = torch.dtype
+except ImportError:
+
+    class TorchDevice:
+        pass
+
+    class TorchDtype:
+        pass
+
+
 from ._c_api import MTS_BUFFER_SIZE_ERROR
 from .status import MetatensorError, _save_exception
 
@@ -55,6 +70,45 @@ def _ptr_to_const_ndarray(ptr, shape, dtype):
     array = _ptr_to_ndarray(ptr, shape, dtype)
     array.flags["WRITEABLE"] = False
     return array
+
+
+def _to_arguments_parse(context, *args, **kwargs):
+    """Parse arguments to the various `to()` functions"""
+    dtype = kwargs.get("dtype")
+    device = kwargs.get("device")
+
+    for positional in args:
+        if isinstance(positional, (TorchDevice, str)):
+            if device is None:
+                device = positional
+                continue
+            else:
+                raise ValueError(f"can not give a device twice in {context}")
+        elif isinstance(positional, TorchDtype):
+            if dtype is None:
+                dtype = positional
+                continue
+            else:
+                raise ValueError(f"can not give a dtype twice in {context}")
+        else:
+            # checking for numpy dtype is a bit more complex,
+            # since a lof of things can be dtypes in numpy
+            try:
+                positional_as_dtype = np.dtype(positional)
+            except TypeError:
+                # failed to parse as a dtype, this should end up in the TypeError below
+                positional_as_dtype = np.object_
+
+            if np.issubdtype(positional_as_dtype, np.number):
+                if dtype is None:
+                    dtype = positional
+                    continue
+                else:
+                    raise ValueError(f"can not give a dtype twice in {context}")
+
+        raise TypeError(f"unexpected type in {context}: {type(positional)}")
+
+    return dtype, device
 
 
 cmake_prefix_path = os.path.join(os.path.dirname(__file__), "lib", "cmake")

@@ -33,6 +33,7 @@ from metatensor.torch import Labels, TensorBlock, TensorMap
 from metatensor.torch.atomistic import (
     MetatensorAtomisticModel,
     ModelCapabilities,
+    ModelMetadata,
     ModelOutput,
     System,
 )
@@ -107,17 +108,14 @@ class HarmonicModel(torch.nn.Module):
             energy[i] += torch.sum(self.force_constant * (system.positions - r0) ** 2)
 
         # add metadata to the output
-        systems_id = torch.arange(len(systems), dtype=torch.int32)
         block = TensorBlock(
             values=energy,
-            samples=Labels("system", systems_id.reshape(-1, 1)),
+            samples=Labels("system", torch.arange(len(systems)).reshape(-1, 1)),
             components=[],
-            properties=Labels("energy", torch.IntTensor([[0]])),
+            properties=Labels("energy", torch.tensor([[0]])),
         )
         return {
-            "energy": TensorMap(
-                keys=Labels("_", torch.IntTensor([[0]])), blocks=[block]
-            )
+            "energy": TensorMap(keys=Labels("_", torch.tensor([[0]])), blocks=[block])
         }
 
 
@@ -181,13 +179,19 @@ model = HarmonicModel(
 )
 
 capabilities = ModelCapabilities(
-    length_unit="Angstrom",
-    species=[6],
     outputs={
         "energy": ModelOutput(quantity="energy", unit="eV", per_atom=False),
     },
+    atomic_types=[6],
+    interaction_range=0.0,
+    length_unit="Angstrom",
+    supported_devices=["cpu"],
+    dtype="float32",
 )
-wrapper = MetatensorAtomisticModel(model.eval(), capabilities)
+
+# we don't want to bother with model metadata, so we define it as empty
+metadata = ModelMetadata()
+wrapper = MetatensorAtomisticModel(model.eval(), metadata, capabilities)
 
 # Use the wrapped model as the calculator for these atoms
 atoms.calc = MetatensorCalculator(wrapper)

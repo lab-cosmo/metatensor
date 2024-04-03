@@ -135,8 +135,8 @@ def test_self_equal_grad():
     assert not metatensor.equal(tensor_1, tensor_1_e6)
 
     message = (
-        r"blocks for key \(spherical_harmonics_l=0, species_center=1, "
-        r"species_neighbor=1\) are different: values are not equal"
+        r"blocks for key \(o3_lambda=0, o3_sigma=1, center_type=1, "
+        r"neighbor_type=1\) are different: values are not equal"
     )
     with pytest.raises(NotEqualError, match=message):
         metatensor.equal_raise(tensor_1, tensor_1_e6)

@@ -85,6 +85,7 @@ class cmake_ext(build_ext):
                 "cmake",
                 "--build",
                 build_dir,
+                "--parallel",
                 "--config",
                 "Release",
                 "--target",
@@ -125,20 +126,57 @@ class bdist_egg_disabled(bdist_egg):
         )
 
 
-class sdist_git_version(sdist):
+class sdist_generate_data(sdist):
     """
-    Create a sdist with an additional generated file containing the extra
-    version from git.
+    Create a sdist with an additional generated files:
+        - `n_commits_since_last_tag`
+        - `metatensor-torch-cxx-*.tar.gz`
     """
 
     def run(self):
         with open("n_commits_since_last_tag", "w") as fd:
             fd.write(str(n_commits_since_last_tag()))
 
+        generate_cxx_tar()
+
         # run original sdist
         super().run()
 
         os.unlink("n_commits_since_last_tag")
+        for path in glob.glob("metatensor-torch-cxx*.tar.gz"):
+            os.unlink(path)
+
+
+def generate_cxx_tar():
+    script = os.path.join(ROOT, "..", "..", "scripts", "package-torch.sh")
+    assert os.path.exists(script)
+
+    try:
+        output = subprocess.run(
+            ["bash", "--version"],
+            stderr=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+            encoding="utf8",
+        )
+    except Exception as e:
+        raise RuntimeError("could not run `bash`, is it installed?") from e
+
+    stderr = ""
+    stdout = ""
+
+    output = subprocess.run(
+        ["bash", script, os.getcwd()],
+        stderr=subprocess.PIPE,
+        stdout=subprocess.PIPE,
+        encoding="utf8",
+    )
+    if output.returncode != 0:
+        stderr = output.stderr
+        stdout = output.stdout
+        raise RuntimeError(
+            "failed to collect C++ sources for Python sdist\n"
+            f"stdout:\n {stdout}\n\nstderr:\n {stderr}"
+        )
 
 
 def n_commits_since_last_tag():
@@ -263,7 +301,7 @@ if __name__ == "__main__":
         cmdclass={
             "build_ext": cmake_ext,
             "bdist_egg": bdist_egg if "bdist_egg" in sys.argv else bdist_egg_disabled,
-            "sdist": sdist_git_version,
+            "sdist": sdist_generate_data,
         },
         package_data={
             "metatensor-torch": [

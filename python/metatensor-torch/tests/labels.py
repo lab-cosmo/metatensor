@@ -10,7 +10,7 @@ from metatensor.torch import Labels, LabelsEntry
 
 def test_constructor():
     # keyword arguments + name is a tuple
-    labels = Labels(names=("a", "b"), values=torch.IntTensor([[0, 0], [0, 1]]))
+    labels = Labels(names=("a", "b"), values=torch.tensor([[0, 0], [0, 1]]))
 
     assert len(labels) == 2
 
@@ -23,7 +23,7 @@ def test_constructor():
     assert torch.all(labels.values == torch.Tensor([[0], [2], [-1]]))
 
     # single string for names
-    labels = Labels(names="test", values=torch.IntTensor([[0], [1]]))
+    labels = Labels(names="test", values=torch.tensor([[0], [1]]))
 
     assert labels.names == ["test"]
     assert torch.all(labels.values == torch.Tensor([[0], [1]]))
@@ -38,9 +38,7 @@ def test_constructor():
 
     labels = Labels.range("test", 33)
     assert labels.names == ["test"]
-    assert torch.all(
-        labels.values == torch.arange(33, dtype=torch.int32).reshape(33, 1)
-    )
+    assert torch.all(labels.values == torch.arange(33).reshape(-1, 1))
 
 
 def test_constructor_errors():
@@ -48,15 +46,15 @@ def test_constructor_errors():
         "invalid Labels: the names must have an entry for each column of the array"
     )
     with pytest.raises(ValueError, match=message):
-        _ = Labels(names="ab", values=torch.IntTensor([[0, 0], [0, 1]]))
+        _ = Labels(names="ab", values=torch.tensor([[0, 0], [0, 1]]))
 
     message = "names must be a tuple of strings, got element with type 'int' instead"
     with pytest.raises(TypeError, match=message):
-        _ = Labels(names=(3, 4), values=torch.IntTensor([[0, 0], [0, 1]]))
+        _ = Labels(names=(3, 4), values=torch.tensor([[0, 0], [0, 1]]))
 
     message = "names must be a list of strings, got element with type 'int' instead"
     with pytest.raises(TypeError, match=message):
-        _ = Labels(names=[3, 4], values=torch.IntTensor([[0, 0], [0, 1]]))
+        _ = Labels(names=[3, 4], values=torch.tensor([[0, 0], [0, 1]]))
 
     message = (
         "Expected a value of type 'Tensor' for argument 'values' but "
@@ -71,42 +69,42 @@ def test_constructor_errors():
 
     message = "Labels values must be a 2D Tensor"
     with pytest.raises(ValueError, match=message):
-        _ = Labels(names="test", values=torch.IntTensor([0, 1]))
+        _ = Labels(names="test", values=torch.tensor([0, 1]))
 
     # check that normal validation from metatensor_core is passed through with
     # exceptions
     message = "invalid parameter: 'not an ident' is not a valid label name"
     with pytest.raises(RuntimeError, match=message):
-        _ = Labels(names="not an ident", values=torch.IntTensor([[0]]))
+        _ = Labels(names="not an ident", values=torch.tensor([[0]]))
 
 
 def test_view():
-    labels = Labels(names=("aaa", "bbb"), values=torch.IntTensor([[1, 2], [3, 4]]))
+    labels = Labels(names=("aaa", "bbb"), values=torch.tensor([[1, 2], [3, 4]]))
 
     assert not labels.is_view()
 
     view = labels.view("aaa")
     assert view.is_view()
     assert view.names == ["aaa"]
-    assert torch.all(view.values == torch.IntTensor([[1], [3]]))
+    assert torch.all(view.values == torch.tensor([[1], [3]]))
 
     view = labels.view("bbb")
     assert view.names == ["bbb"]
-    assert torch.all(view.values == torch.IntTensor([[2], [4]]))
+    assert torch.all(view.values == torch.tensor([[2], [4]]))
 
     view = labels.view(["bbb"])
     assert view.is_view()
     assert view.names == ["bbb"]
-    assert torch.all(view.values == torch.IntTensor([[2], [4]]))
+    assert torch.all(view.values == torch.tensor([[2], [4]]))
 
     view = labels.view(["bbb", "aaa"])
     assert view.is_view()
     assert view.names == ["bbb", "aaa"]
-    assert torch.all(view.values == torch.IntTensor([[2, 1], [4, 3]]))
+    assert torch.all(view.values == torch.tensor([[2, 1], [4, 3]]))
 
     view = labels.view(["aaa", "aaa", "aaa"])
     assert view.names == ["aaa", "aaa", "aaa"]
-    assert torch.all(view.values == torch.IntTensor([[1, 1, 1], [3, 3, 3]]))
+    assert torch.all(view.values == torch.tensor([[1, 1, 1], [3, 3, 3]]))
 
     message = "'ccc' not found in the dimensions of these Labels"
     with pytest.raises(ValueError, match=message):
@@ -133,7 +131,7 @@ def test_view():
 
 
 def test_repr():
-    labels = Labels(names=("aaa", "bbb"), values=torch.IntTensor([[1, 2], [3, 4]]))
+    labels = Labels(names=("aaa", "bbb"), values=torch.tensor([[1, 2], [3, 4]]))
 
     expected = "Labels(\n    aaa  bbb\n     1    2\n     3    4\n)"
     assert str(labels) == expected
@@ -149,9 +147,7 @@ def test_repr():
 
     labels = Labels(
         names=("aaa", "bbb"),
-        values=torch.IntTensor(
-            [[0, 0], [1, 1], [2, 2], [3, 3], [4, 4], [5, 5], [6, 6]]
-        ),
+        values=torch.tensor([[0, 0], [1, 1], [2, 2], [3, 3], [4, 4], [5, 5], [6, 6]]),
     )
 
     expected = """ aaa  bbb
@@ -188,12 +184,12 @@ def test_repr():
      6    6"""
     assert labels.print(max_entries=3, indent=3) == expected
 
-    labels = Labels(names=("aaa", "bbb"), values=torch.IntTensor([[0, 0], [0, 1]]))
+    labels = Labels(names=("aaa", "bbb"), values=torch.tensor([[0, 0], [0, 1]]))
     expected = "LabelsView(\n    bbb\n     0\n     1\n)"
     assert str(labels.view("bbb")) == expected
 
     labels = Labels(
-        names=("aaa", "bbb"), values=torch.IntTensor([[111111111, 2], [3, 444444444]])
+        names=("aaa", "bbb"), values=torch.tensor([[111111111, 2], [3, 444444444]])
     )
 
     expected = """Labels(
@@ -205,23 +201,23 @@ def test_repr():
 
 
 def test_indexing():
-    labels = Labels(names=("a", "b"), values=torch.IntTensor([[1, 2], [3, 4]]))
+    labels = Labels(names=("a", "b"), values=torch.tensor([[1, 2], [3, 4]]))
 
     # indexing labels with integer
     entry = labels[0]
     assert entry.names == ["a", "b"]
-    assert torch.all(entry.values == torch.IntTensor([1, 2]))
+    assert torch.all(entry.values == torch.tensor([1, 2]))
 
     entry = labels[-1]
     assert entry.names == ["a", "b"]
-    assert torch.all(entry.values == torch.IntTensor([3, 4]))
+    assert torch.all(entry.values == torch.tensor([3, 4]))
 
     # indexing labels with string
     column = labels["a"]
-    assert torch.all(column == torch.IntTensor([1, 3]))
+    assert torch.all(column == torch.tensor([1, 3]))
 
     column = labels["b"]
-    assert torch.all(column == torch.IntTensor([2, 4]))
+    assert torch.all(column == torch.tensor([2, 4]))
 
     # indexing labels errors
     message = "out of range for tensor of size \\[2, 2\\] at dimension 0"
@@ -264,7 +260,7 @@ def test_indexing():
 def test_iter():
     # we can iterate over Labels/LabelsEntry since they define both __len__ and
     # __getitem__
-    labels = Labels(names=("a", "b"), values=torch.IntTensor([[0, 0], [0, 1]]))
+    labels = Labels(names=("a", "b"), values=torch.tensor([[0, 0], [0, 1]]))
 
     for i, values in enumerate(labels[1]):
         assert values == i
@@ -279,10 +275,10 @@ def test_iter():
 
 
 def test_eq():
-    labels_1 = Labels(names=("a", "b"), values=torch.IntTensor([[0, 0], [0, 1]]))
-    labels_2 = Labels(names=("a", "b"), values=torch.IntTensor([[0, 0], [0, 1]]))
-    labels_3 = Labels(names=("a", "b"), values=torch.IntTensor([[0, 2], [0, 1]]))
-    labels_4 = Labels(names=("a", "c"), values=torch.IntTensor([[0, 0], [0, 1]]))
+    labels_1 = Labels(names=("a", "b"), values=torch.tensor([[0, 0], [0, 1]]))
+    labels_2 = Labels(names=("a", "b"), values=torch.tensor([[0, 0], [0, 1]]))
+    labels_3 = Labels(names=("a", "b"), values=torch.tensor([[0, 2], [0, 1]]))
+    labels_4 = Labels(names=("a", "c"), values=torch.tensor([[0, 0], [0, 1]]))
 
     assert labels_1 == labels_2
     assert labels_1 != labels_3
@@ -297,7 +293,11 @@ def test_eq():
 
 def test_to():
     devices = ["meta", torch.device("meta")]
-    if torch.backends.mps.is_available() and torch.backends.mps.is_built():
+    if (
+        hasattr(torch.backends, "mps")
+        and torch.backends.mps.is_available()
+        and torch.backends.mps.is_built()
+    ):
         devices.append("mps")
         devices.append(torch.device("mps"))
 
@@ -307,7 +307,7 @@ def test_to():
         devices.append(torch.device("cuda"))
 
     for device in devices:
-        labels = Labels(names=("a", "b"), values=torch.IntTensor([[0, 0], [0, 1]]))
+        labels = Labels(names=("a", "b"), values=torch.tensor([[0, 0], [0, 1]]))
         assert labels.values.device.type == "cpu"
         assert labels.device.type == "cpu"
 
@@ -317,12 +317,12 @@ def test_to():
 
 
 def test_position():
-    labels = Labels(names=("a", "b"), values=torch.IntTensor([[0, 0], [0, 1]]))
+    labels = Labels(names=("a", "b"), values=torch.tensor([[0, 0], [0, 1]]))
 
-    assert labels.position(torch.IntTensor([0, 0])) == 0
-    assert labels.position(torch.IntTensor([1, 0])) is None
-    assert torch.IntTensor([0, 0]) in labels
-    assert torch.IntTensor([1, 0]) not in labels
+    assert labels.position(torch.tensor([0, 0])) == 0
+    assert labels.position(torch.tensor([1, 0])) is None
+    assert torch.tensor([0, 0]) in labels
+    assert torch.tensor([1, 0]) not in labels
 
     # list
     assert labels.position([0, 1]) == 1
@@ -340,7 +340,7 @@ def test_position():
     assert labels.position(labels[0]) == 0
     assert labels.position(labels[1]) == 1
 
-    other_labels = Labels(names=("a", "b"), values=torch.IntTensor([[0, 1], [2, 3]]))
+    other_labels = Labels(names=("a", "b"), values=torch.tensor([[0, 1], [2, 3]]))
     assert labels.position(other_labels[0]) == 1
     assert labels.position(other_labels[1]) is None
 
@@ -357,12 +357,12 @@ def test_position():
 
 
 def test_union():
-    first = Labels(["aa", "bb"], torch.IntTensor([[0, 1], [1, 2]]))
-    second = Labels(["aa", "bb"], torch.IntTensor([[2, 3], [1, 2], [4, 5]]))
+    first = Labels(["aa", "bb"], torch.tensor([[0, 1], [1, 2]]))
+    second = Labels(["aa", "bb"], torch.tensor([[2, 3], [1, 2], [4, 5]]))
 
     union = first.union(second)
     assert union.names == ["aa", "bb"]
-    assert torch.all(union.values == torch.IntTensor([[0, 1], [1, 2], [2, 3], [4, 5]]))
+    assert torch.all(union.values == torch.tensor([[0, 1], [1, 2], [2, 3], [4, 5]]))
 
     union_2, first_mapping, second_mapping = first.union_and_mapping(second)
 
@@ -391,12 +391,12 @@ def test_union():
 
 
 def test_intersection():
-    first = Labels(["aa", "bb"], torch.IntTensor([[0, 1], [1, 2]]))
-    second = Labels(["aa", "bb"], torch.IntTensor([[2, 3], [1, 2], [4, 5]]))
+    first = Labels(["aa", "bb"], torch.tensor([[0, 1], [1, 2]]))
+    second = Labels(["aa", "bb"], torch.tensor([[2, 3], [1, 2], [4, 5]]))
 
     intersection = first.intersection(second)
     assert intersection.names == ["aa", "bb"]
-    assert torch.all(intersection.values == torch.IntTensor([[1, 2]]))
+    assert torch.all(intersection.values == torch.tensor([[1, 2]]))
 
     intersection_2, first_mapping, second_mapping = first.intersection_and_mapping(
         second

@@ -64,8 +64,8 @@ foreach(_file_ ${ALL_TESTS})
     )
 
     # Give path to tests data files to the tests through defines
-    target_compile_definitions(${_name_} PRIVATE "-DTEST_DATA_NPZ_PATH=\"${CMAKE_CURRENT_SOURCE_DIR}/../../../metatensor/tests/data.npz\"")
-    target_compile_definitions(${_name_} PRIVATE "-DTEST_KEYS_NPY_PATH=\"${CMAKE_CURRENT_SOURCE_DIR}/../../../metatensor/tests/keys.npy\"")
+    target_compile_definitions(${_name_} PRIVATE "-DTEST_DATA_NPZ_PATH=\"${CMAKE_CURRENT_SOURCE_DIR}/../data.npz\"")
+    target_compile_definitions(${_name_} PRIVATE "-DTEST_KEYS_NPY_PATH=\"${CMAKE_CURRENT_SOURCE_DIR}/../keys.npy\"")
 
     add_test(
         NAME ${_name_}

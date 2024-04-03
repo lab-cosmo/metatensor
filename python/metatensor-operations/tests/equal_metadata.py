@@ -196,9 +196,9 @@ def test_after_drop_raise(test_tensor_map_1):
 def test_single_nonexisting_meta(test_tensor_map_1):
     """check behavior if non existing metadata is provided"""
     # wrong metadata key alone
-    wrong_meta = "species"
+    wrong_meta = "wrong"
     error_message = (
-        "species is not a valid property to check, choose from "
+        "'wrong' does not refer to metadata to check, choose from "
         "'samples', 'properties' and 'components'"
     )
 
@@ -222,9 +222,9 @@ def test_single_nonexisting_meta(test_tensor_map_1):
 def test_single_nonexisting_meta_block(test_tensor_block_1):
     """check behavior if non existing metadata is provided"""
     # wrong metadata key alone
-    wrong_meta = "species"
+    wrong_meta = "wrong"
     error_message = (
-        "species is not a valid property to check, choose from "
+        "'wrong' does not refer to metadata to check, choose from "
         "'samples', 'properties' and 'components'"
     )
     with pytest.raises(ValueError, match=error_message):

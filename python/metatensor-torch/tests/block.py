@@ -12,9 +12,9 @@ def test_constructor():
     # keyword arguments
     block = TensorBlock(
         values=torch.full((3, 2), 11),
-        samples=Labels(names=["s"], values=torch.IntTensor([[0], [2], [1]])),
+        samples=Labels(names=["s"], values=torch.tensor([[0], [2], [1]])),
         components=[],
-        properties=Labels(names=["p"], values=torch.IntTensor([[1], [0]])),
+        properties=Labels(names=["p"], values=torch.tensor([[1], [0]])),
     )
 
     assert torch.all(block.values == torch.full((3, 2), 11))
@@ -25,9 +25,9 @@ def test_constructor():
     # positional arguments
     block = TensorBlock(
         torch.full((3, 2), 33),
-        Labels(names=["s"], values=torch.IntTensor([[0], [2], [1]])),
+        Labels(names=["s"], values=torch.tensor([[0], [2], [1]])),
         [],
-        Labels(names=["p"], values=torch.IntTensor([[1], [0]])),
+        Labels(names=["p"], values=torch.tensor([[1], [0]])),
     )
 
     assert torch.all(block.values == torch.full((3, 2), 33))
@@ -39,9 +39,9 @@ def test_constructor():
 def test_repr():
     block = TensorBlock(
         values=torch.full((3, 2), 11),
-        samples=Labels(names=["s"], values=torch.IntTensor([[0], [2], [1]])),
+        samples=Labels(names=["s"], values=torch.tensor([[0], [2], [1]])),
         components=[],
-        properties=Labels(names=["p"], values=torch.IntTensor([[1], [0]])),
+        properties=Labels(names=["p"], values=torch.tensor([[1], [0]])),
     )
 
     expected = """TensorBlock
@@ -56,16 +56,16 @@ def test_repr():
     block = TensorBlock(
         values=torch.full((3, 3, 1, 2, 5), 11),
         samples=Labels(
-            names=["s_1", "s_2"], values=torch.IntTensor([[0, 0], [1, 1], [2, 2]])
+            names=["s_1", "s_2"], values=torch.tensor([[0, 0], [1, 1], [2, 2]])
         ),
         components=[
-            Labels(names=["c_1"], values=torch.IntTensor([[0], [1], [2]])),
-            Labels(names=["c_2"], values=torch.IntTensor([[0]])),
-            Labels(names=["c_3"], values=torch.IntTensor([[0], [1]])),
+            Labels(names=["c_1"], values=torch.tensor([[0], [1], [2]])),
+            Labels(names=["c_2"], values=torch.tensor([[0]])),
+            Labels(names=["c_3"], values=torch.tensor([[0], [1]])),
         ],
         properties=Labels(
             names=["p_1", "p_2"],
-            values=torch.IntTensor([[0, 0], [1, 1], [2, 2], [3, 3], [4, 4]]),
+            values=torch.tensor([[0, 0], [1, 1], [2, 2], [3, 3], [4, 4]]),
         ),
     )
 
@@ -74,16 +74,16 @@ def test_repr():
         TensorBlock(
             values=torch.full((3, 3, 1, 2, 5), 11),
             samples=Labels(
-                names=["sample", "g"], values=torch.IntTensor([[0, 0], [1, 1], [2, 2]])
+                names=["sample", "g"], values=torch.tensor([[0, 0], [1, 1], [2, 2]])
             ),
             components=[
-                Labels(names=["c_1"], values=torch.IntTensor([[0], [1], [2]])),
-                Labels(names=["c_2"], values=torch.IntTensor([[0]])),
-                Labels(names=["c_3"], values=torch.IntTensor([[0], [1]])),
+                Labels(names=["c_1"], values=torch.tensor([[0], [1], [2]])),
+                Labels(names=["c_2"], values=torch.tensor([[0]])),
+                Labels(names=["c_3"], values=torch.tensor([[0], [1]])),
             ],
             properties=Labels(
                 names=["p_1", "p_2"],
-                values=torch.IntTensor([[0, 0], [1, 1], [2, 2], [3, 3], [4, 4]]),
+                values=torch.tensor([[0, 0], [1, 1], [2, 2], [3, 3], [4, 4]]),
             ),
         ),
     )
@@ -117,9 +117,9 @@ def test_copy():
     values = torch.full((3, 2), 11)
     block = TensorBlock(
         values=values,
-        samples=Labels(names=["s"], values=torch.IntTensor([[0], [2], [1]])),
+        samples=Labels(names=["s"], values=torch.tensor([[0], [2], [1]])),
         components=[],
-        properties=Labels(names=["p"], values=torch.IntTensor([[1], [0]])),
+        properties=Labels(names=["p"], values=torch.tensor([[1], [0]])),
     )
 
     assert values.data_ptr() == block.values.data_ptr()
@@ -133,9 +133,9 @@ def test_copy():
 def test_gradients():
     block = TensorBlock(
         values=torch.full((3, 2), 1),
-        samples=Labels(names=["s"], values=torch.IntTensor([[0], [2], [1]])),
+        samples=Labels(names=["s"], values=torch.tensor([[0], [2], [1]])),
         components=[],
-        properties=Labels(names=["p"], values=torch.IntTensor([[1], [0]])),
+        properties=Labels(names=["p"], values=torch.tensor([[1], [0]])),
     )
 
     assert block.gradients_list() == []
@@ -146,9 +146,9 @@ def test_gradients():
             values=torch.full((1, 3, 2), 11),
             samples=Labels(
                 names=("sample", "g"),
-                values=torch.IntTensor([[0, 1]]),
+                values=torch.tensor([[0, 1]]),
             ),
-            components=[Labels(names=("c"), values=torch.IntTensor([[0], [1], [2]]))],
+            components=[Labels(names=("c"), values=torch.tensor([[0], [1], [2]]))],
             properties=block.properties,
         ),
     )
@@ -194,7 +194,11 @@ def test_different_device():
     )
 
     devices = []
-    if torch.backends.mps.is_available() and torch.backends.mps.is_built():
+    if (
+        hasattr(torch.backends, "mps")
+        and torch.backends.mps.is_available()
+        and torch.backends.mps.is_built()
+    ):
         devices.append("mps")
 
     if torch.cuda.is_available():
@@ -257,15 +261,21 @@ def test_to():
     )
 
     assert block.device.type == torch.device("cpu").type
-    check_dtype(block, torch.float32)
-    check_dtype(block.gradient("g"), torch.float32)
+    if version.parse(torch.__version__) >= version.parse("2.1"):
+        check_dtype(block, torch.float32)
+        check_dtype(block.gradient("g"), torch.float32)
 
     converted = block.to(dtype=torch.float64)
-    check_dtype(converted, torch.float64)
-    check_dtype(converted.gradient("g"), torch.float64)
+    if version.parse(torch.__version__) >= version.parse("2.1"):
+        check_dtype(converted, torch.float64)
+        check_dtype(converted.gradient("g"), torch.float64)
 
     devices = ["meta", torch.device("meta")]
-    if torch.backends.mps.is_available() and torch.backends.mps.is_built():
+    if (
+        hasattr(torch.backends, "mps")
+        and torch.backends.mps.is_available()
+        and torch.backends.mps.is_built()
+    ):
         devices.append("mps")
         devices.append(torch.device("mps"))
 
@@ -286,6 +296,25 @@ def test_to():
     message = "`arrays` must be None or 'torch', got 'numpy' instead"
     with pytest.raises(ValueError, match=message):
         moved = block.to(arrays="numpy")
+
+    # check that the code handles both positional and keyword arguments
+    device = "meta"
+    moved = block.to(device, dtype=torch.float32)
+    moved = block.to(torch.float32, device)
+    moved = block.to(torch.float32, device=device)
+    moved = block.to(device, torch.float32)
+
+    message = "can not give a device twice in `TensorBlock.to`"
+    with pytest.raises(ValueError, match=message):
+        moved = block.to("meta", device="meta")
+
+    message = "can not give a dtype twice in `TensorBlock.to`"
+    with pytest.raises(ValueError, match=message):
+        moved = block.to(torch.float32, dtype=torch.float32)
+
+    message = "unexpected type in `TensorBlock.to`: Tensor"
+    with pytest.raises(TypeError, match=message):
+        moved = block.to(torch.tensor([0]))
 
 
 # This function only works in script mode, because `block.dtype` is always an `int`, and

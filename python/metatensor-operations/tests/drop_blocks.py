@@ -70,7 +70,7 @@ def test_not_existent(test_tensor_map):
         test_tensor_map.keys.names, np.array([[-1, -1, -1], [0, 0, 0]])
     )
     message = (
-        "\\(species_center=-1, species_neighbor_1=-1, species_neighbor_2=-1\\) "
+        "\\(center_type=-1, neighbor_1_type=-1, neighbor_2_type=-1\\) "
         "is not present in this tensor"
     )
     with pytest.raises(ValueError, match=message):

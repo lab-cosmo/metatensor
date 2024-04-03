@@ -16,9 +16,10 @@ changing the columns of the :py:class:`metatensor.Labels` within).
 .. autofunction:: metatensor.rename_dimension
 """
 
-from typing import List
+from typing import List, Union
 
-from ._backend import TensorBlock, TensorMap, torch_jit_script
+from . import _dispatch
+from ._backend import Array, TensorBlock, TensorMap, torch_jit_script
 
 
 def _check_axis(axis: str):
@@ -35,7 +36,7 @@ def insert_dimension(
     axis: str,
     index: int,
     name: str,
-    values,
+    values: Union[Array, int],
 ) -> TensorMap:
     """Insert a :py:class:`metatensor.Labels` dimension along the given axis before the
     given index.
@@ -44,12 +45,13 @@ def insert_dimension(
 
     :param tensor: the input :py:class:`TensorMap`.
     :param axis: axis for which the ``name`` should be inserted. Allowed are ``"keys"``,
-                 ``"properties"`` or ``"samples"``.
+        ``"properties"`` or ``"samples"``.
     :param index: index before the new dimension is inserted.
     :param name: the name to be inserted
-    :param values: values to be inserted
-        (``np.array`` or ``torch.Tensor`` according to whether ``metatensor`` or
-        ``metatensor.torch`` is being used)
+    :param values: values to be inserted. This can be an array (``np.array`` or
+        ``torch.Tensor`` according to whether ``metatensor`` or ``metatensor.torch`` is
+        being used); or an integer. In the latter case, the new dimension will have the
+        given integer value for all entries in the labels
 
     :raises ValueError: if ``axis`` is a not valid value
 
@@ -57,6 +59,7 @@ def insert_dimension(
 
     Examples
     --------
+
     >>> import numpy as np
     >>> import metatensor
     >>> values = np.array([[1, 2], [3, 4]])
@@ -81,8 +84,20 @@ def insert_dimension(
     _check_axis(axis)
 
     keys = tensor.keys
+
+    if isinstance(values, int):
+        values = _dispatch.int_array_like([values], keys.values)
+        label_values = values
+        values_was_int = True
+    else:
+        label_values = values
+        values_was_int = False
+
     if axis == "keys":
-        keys = keys.insert(index=index, name=name, values=values)
+        if values_was_int:
+            label_values = _dispatch.concatenate([values] * len(keys), axis=0)
+
+        keys = keys.insert(index=index, name=name, values=label_values)
 
     blocks: List[TensorBlock] = []
     for block in tensor.blocks():
@@ -90,9 +105,16 @@ def insert_dimension(
         properties = block.properties
 
         if axis == "samples":
-            samples = samples.insert(index=index, name=name, values=values)
+            if values_was_int:
+                label_values = _dispatch.concatenate([values] * len(samples), axis=0)
+
+            samples = samples.insert(index=index, name=name, values=label_values)
+
         elif axis == "properties":
-            properties = properties.insert(index=index, name=name, values=values)
+            if values_was_int:
+                label_values = _dispatch.concatenate([values] * len(properties), axis=0)
+
+            properties = properties.insert(index=index, name=name, values=label_values)
 
         new_block = TensorBlock(
             values=block.values,
@@ -118,7 +140,12 @@ def insert_dimension(
 
 
 @torch_jit_script
-def append_dimension(tensor: TensorMap, axis: str, name: str, values) -> TensorMap:
+def append_dimension(
+    tensor: TensorMap,
+    axis: str,
+    name: str,
+    values: Union[Array, int],
+) -> TensorMap:
     """Append a :py:class:`metatensor.Labels` dimension along the given axis.
 
     For ``axis=="samples"`` the new dimension is `not` appended to gradients.
@@ -129,7 +156,8 @@ def append_dimension(tensor: TensorMap, axis: str, name: str, values) -> TensorM
     :param name: name of the dimension be appended
     :param values: values of the dimension to be appended (``np.array`` or
         ``torch.Tensor`` according to whether ``metatensor`` or ``metatensor.torch`` is
-        being used)
+        being used); or an integer. In the latter case, the new dimension will have the
+        given integer value for all entries in the labels
 
     :raises ValueError: if ``axis`` is a not valid value
 

@@ -398,12 +398,12 @@ def test_empty_tensor():
 
     assert empty_tensor.blocks() == []
 
-    selection = Labels(names="key", values=torch.IntTensor([[3]]))
+    selection = Labels(names="key", values=torch.tensor([[3]]))
     assert empty_tensor.blocks_matching(selection) == []
 
     message = "invalid parameter: 'not_a_key' is not part of the keys for this tensor"
     with pytest.raises(RuntimeError, match=message):
-        selection = Labels(names="not_a_key", values=torch.IntTensor([[3]]))
+        selection = Labels(names="not_a_key", values=torch.tensor([[3]]))
         empty_tensor.blocks_matching(selection)
 
     message = "block index out of bounds: we have 0 blocks but the index is 3"
@@ -510,13 +510,19 @@ def test_different_dtype(meta_tensor):
 
 def test_to(tensor):
     assert tensor.device.type == torch.device("cpu").type
-    check_dtype(tensor, torch.float32)
+    if version.parse(torch.__version__) >= version.parse("2.1"):
+        check_dtype(tensor, torch.float32)
 
     converted = tensor.to(dtype=torch.float64)
-    check_dtype(converted, torch.float64)
+    if version.parse(torch.__version__) >= version.parse("2.1"):
+        check_dtype(converted, torch.float64)
 
     devices = ["meta", torch.device("meta")]
-    if torch.backends.mps.is_available() and torch.backends.mps.is_built():
+    if (
+        hasattr(torch.backends, "mps")
+        and torch.backends.mps.is_available()
+        and torch.backends.mps.is_built()
+    ):
         devices.append("mps")
         devices.append(torch.device("mps"))
 
@@ -536,6 +542,25 @@ def test_to(tensor):
     message = "`arrays` must be None or 'torch', got 'numpy' instead"
     with pytest.raises(ValueError, match=message):
         moved = tensor.to(arrays="numpy")
+
+    # check that the code handles both positional and keyword arguments
+    device = "meta"
+    moved = tensor.to(device, dtype=torch.float32)
+    moved = tensor.to(torch.float32, device)
+    moved = tensor.to(torch.float32, device=device)
+    moved = tensor.to(device, torch.float32)
+
+    message = "can not give a device twice in `TensorMap.to`"
+    with pytest.raises(ValueError, match=message):
+        moved = tensor.to("meta", device="meta")
+
+    message = "can not give a dtype twice in `TensorMap.to`"
+    with pytest.raises(ValueError, match=message):
+        moved = tensor.to(torch.float32, dtype=torch.float32)
+
+    message = "unexpected type in `TensorMap.to`: Tensor"
+    with pytest.raises(TypeError, match=message):
+        moved = tensor.to(torch.tensor([0]))
 
 
 # This function only works in script mode, because `block.dtype` is always an `int`, and

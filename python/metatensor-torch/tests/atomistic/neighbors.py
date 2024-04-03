@@ -22,7 +22,7 @@ except ImportError:
 def test_neighbors_lists_options():
     options = NeighborsListOptions(3.4, True, "hello")
 
-    assert options.model_cutoff == 3.4
+    assert options.cutoff == 3.4
     assert options.full_list
     assert options.requestors() == ["hello"]
 
@@ -42,7 +42,7 @@ def test_neighbors_lists_options():
     assert str(options) == expected
 
     expected = """NeighborsListOptions
-    model_cutoff: 3.400000
+    cutoff: 3.400000
     full_list: True
     requested by:
         - hello
@@ -69,7 +69,7 @@ def test_neighbors_autograd():
             cell=cell.detach().numpy(),
             pbc=True,
         )
-        neighbors = _compute_ase_neighbors(atoms, options)
+        neighbors = _compute_ase_neighbors(atoms, options, dtype=torch.float64)
 
         system = System(
             torch.from_numpy(atoms.numbers).to(torch.int32), positions, cell
@@ -78,14 +78,14 @@ def test_neighbors_autograd():
 
         return neighbors.values
 
-    options = NeighborsListOptions(model_cutoff=2.0, full_list=False)
+    options = NeighborsListOptions(cutoff=2.0, full_list=False)
     torch.autograd.gradcheck(
         compute,
         (positions, cell, options),
         fast_mode=True,
     )
 
-    options = NeighborsListOptions(model_cutoff=2.0, full_list=True)
+    options = NeighborsListOptions(cutoff=2.0, full_list=True)
     torch.autograd.gradcheck(
         compute,
         (positions, cell, options),
@@ -108,8 +108,8 @@ def test_neighbors_autograd_errors():
         cell=cell.detach().numpy(),
         pbc=True,
     )
-    options = NeighborsListOptions(model_cutoff=2.0, full_list=False)
-    neighbors = _compute_ase_neighbors(atoms, options)
+    options = NeighborsListOptions(cutoff=2.0, full_list=False)
+    neighbors = _compute_ase_neighbors(atoms, options, dtype=torch.float64)
     system = System(torch.from_numpy(atoms.numbers).to(torch.int32), positions, cell)
     register_autograd_neighbors(system, neighbors)
 
@@ -126,12 +126,12 @@ def test_neighbors_autograd_errors():
         "\\[0.489917, 1.24926, 0.102936\\] but has a distance vector of "
         "\\[1.46975, 3.74777, 0.308807\\]"
     )
-    neighbors = _compute_ase_neighbors(atoms, options)
+    neighbors = _compute_ase_neighbors(atoms, options, dtype=torch.float64)
     neighbors.values[:] *= 3
     with pytest.raises(ValueError, match=message):
         register_autograd_neighbors(system, neighbors, check_consistency=True)
 
-    neighbors = _compute_ase_neighbors(atoms, options)
+    neighbors = _compute_ase_neighbors(atoms, options, dtype=torch.float64)
     message = (
         "`system` and `neighbors` must have the same dtype, "
         "got torch.float32 and torch.float64"

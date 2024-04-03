@@ -21,12 +21,12 @@ def test_sum_samples_block():
     bl1 = tensor_ps[0]
 
     # check both passing a list and a single string for sample_names
-    reduce_tensor_se = metatensor.sum_over_samples(tensor_se, sample_names=["center"])
-    reduce_tensor_ps = metatensor.sum_over_samples(tensor_ps, sample_names="center")
+    reduce_tensor_se = metatensor.sum_over_samples(tensor_se, sample_names=["atom"])
+    reduce_tensor_ps = metatensor.sum_over_samples(tensor_ps, sample_names="atom")
 
     # checks that reduction over a block is the same as the tensormap operation
     reduce_block_se = metatensor.sum_over_samples_block(
-        tensor_se.block(0), sample_names="center"
+        tensor_se.block(0), sample_names="atom"
     )
     assert np.allclose(reduce_block_se.values, reduce_tensor_se.block(0).values)
 
@@ -73,11 +73,9 @@ def test_sum_samples_block():
 
     # The TensorBlock with key=(8,8,8) has nothing to be summed over
     assert np.allclose(
-        tensor_ps.block(
-            species_center=8, species_neighbor_1=8, species_neighbor_2=8
-        ).values,
+        tensor_ps.block(center_type=8, neighbor_1_type=8, neighbor_2_type=8).values,
         reduce_tensor_ps.block(
-            species_center=8, species_neighbor_1=8, species_neighbor_2=8
+            center_type=8, neighbor_1_type=8, neighbor_2_type=8
         ).values,
     )
 

@@ -22,8 +22,8 @@ def test_random_uniform_like():
 
     assert metatensor.equal_metadata(random_tensor, tensor)
 
-    tensor_no_cell = metatensor.remove_gradients(tensor, "cell")
-    assert metatensor.equal_metadata(random_tensor_positions, tensor_no_cell)
+    tensor_no_strain = metatensor.remove_gradients(tensor, "strain")
+    assert metatensor.equal_metadata(random_tensor_positions, tensor_no_strain)
 
     # check the values
     for random_block in random_tensor:

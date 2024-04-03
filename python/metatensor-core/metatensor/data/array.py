@@ -244,7 +244,11 @@ def _mts_array_data(this, data):
         raise ValueError("can not get data pointer for non contiguous array")
 
     if not array.dtype == np.float64:
-        raise ValueError(f"can not get data pointer for array type {array.dtype}")
+        raise ValueError(
+            f"can not get data pointer for array type {array.dtype}, "
+            "only float64 is supported. If you are trying to save a TensorMap "
+            "to a file, you can set `use_numpy=True`."
+        )
 
     data[0] = array.ctypes.data_as(ctypes.POINTER(ctypes.c_double))
 

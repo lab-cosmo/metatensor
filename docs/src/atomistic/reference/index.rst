@@ -12,6 +12,10 @@ API reference
   .. grid::
     :margin: 0 0 0 0
 
+    .. grid-item-version:: 0.3.0
+        :tag-prefix: metatensor-torch-v
+        :url-suffix: atomistic/reference/index.html
+
     .. grid-item-version:: 0.2.1
         :tag-prefix: metatensor-torch-v
         :url-suffix: atomistic/reference/index.html
@@ -23,16 +27,16 @@ API reference
 
 The atomistic machine learning models capabilities of metatensor are part of the
 :ref:`TorchScript API <torch-api-reference>`, and are installed when
-:ref:`installing the TorchScript API <install-torch>`.
-
-These capabilities can be used from either Python or C++. The Python API is
-documented below, and is part of the ``metatensor.torch.atomistic`` module.
+:ref:`installing the TorchScript API <install-torch>`. We provide code for using
+atomistic systems as input of a machine learning model with
+:py:class:`metatensor.torch.atomistic.System`, and exporting trained models with
+:py:class:`metatensor.torch.atomistic.MetatensorAtomisticModel`.
 
 .. toctree::
     :maxdepth: 1
 
     systems
-    models
+    models/index
     ase
 
 

@@ -1,0 +1,32 @@
+[package]
+name = "metatensor-sys"
+version = "0.1.4"
+edition = "2021"
+
+description = "Bindings to the metatensor C library"
+readme = "README.md"
+homepage = "https://lab-cosmo.github.io/metatensor/latest/"
+repository = "https://github.com/lab-cosmo/metatensor"
+license = "BSD-3-Clause"
+
+include = [
+    "build.rs",
+    "src/",
+    "metatensor-core-cxx-*.tar.gz",
+]
+
+[lib]
+bench = false
+
+[features]
+default = []
+# use the static build of metatensor-core instead of the shared one
+static = []
+
+[build-dependencies]
+# we want a recent version of the cmake crate
+cmake = "0.1.49"
+which = "5"
+
+# This is the last version supporting rustc 1.65
+home = "=0.5.5"

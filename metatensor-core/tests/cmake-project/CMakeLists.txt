@@ -1,16 +1,20 @@
 cmake_minimum_required(VERSION 3.16)
 
+message(STATUS "Running with CMake version ${CMAKE_VERSION}")
+
 project(metatensor-test-cmake-project C CXX)
 
 option(USE_CMAKE_SUBDIRECTORY OFF)
 
 if (USE_CMAKE_SUBDIRECTORY)
+    message(STATUS "Using metatensor with add_subdirectory")
     # build metatensor as part of this project
     add_subdirectory(../../../ metatensor)
 
     # load metatensor from the build path
     set(CMAKE_BUILD_RPATH "$<TARGET_FILE_DIR:metatensor::shared>")
 else()
+    message(STATUS "Using metatensor with find_package")
     # If building a dev version, we also need to update the REQUIRED_METATENSOR_VERSION
     # in the same way we update the metatensor-torch version
     include(../../cmake/dev-versions.cmake)

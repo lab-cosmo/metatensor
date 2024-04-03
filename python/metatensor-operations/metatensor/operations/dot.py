@@ -68,7 +68,7 @@ def dot(tensor_1: TensorMap, tensor_2: TensorMap) -> TensorMap:
     ...             [4, 5, 6],
     ...         ]
     ...     ),
-    ...     samples=Labels(["structure"], np.array([[0], [1]])),
+    ...     samples=Labels(["system"], np.array([[0], [1]])),
     ...     components=[],
     ...     properties=Labels(["properties"], np.array([[0], [1], [2]])),
     ... )
@@ -79,7 +79,7 @@ def dot(tensor_1: TensorMap, tensor_2: TensorMap) -> TensorMap:
     ...             [4, 5, 6],
     ...         ]
     ...     ),
-    ...     samples=Labels(["structure"], np.array([[0], [1]])),
+    ...     samples=Labels(["system"], np.array([[0], [1]])),
     ...     components=[],
     ...     properties=Labels(["properties"], np.array([[0], [1], [2]])),
     ... )
@@ -89,15 +89,15 @@ def dot(tensor_1: TensorMap, tensor_2: TensorMap) -> TensorMap:
     >>> tensor_dot = dot(A, B)
     >>> print(tensor_dot.block(0))
     TensorBlock
-        samples (2): ['structure']
+        samples (2): ['system']
         components (): []
-        properties (2): ['structure']
+        properties (2): ['system']
         gradients: None
     >>> print(tensor_dot.block(0).samples)
     Labels(
-        structure
-            0
-            1
+        system
+          0
+          1
     )
     >>> print(tensor_dot.block(0).values)
     [[14 32]

@@ -5,6 +5,7 @@ from ._backend import (
     Labels,
     TensorBlock,
     TensorMap,
+    torch_jit_annotate,
     torch_jit_is_scripting,
     torch_jit_script,
 )
@@ -53,7 +54,9 @@ def _sort_single_gradient_block(
         # adapt sample column in gradient samples to the one of the sorted values of
         # the gradient_block the gradient is attached to
         sample_values = _dispatch.copy(sample_values)
-        sample_values[:, 0] = sorted_idx_inverse[sample_values[:, 0]]
+        sample_values[:, 0] = sorted_idx_inverse[
+            _dispatch.to_index_array(sample_values[:, 0])
+        ]
 
         # sort the samples in gradient regularly moving the rows considering all columns
         sorted_idx = _dispatch.argsort_labels_values(sample_values, reverse=descending)
@@ -169,15 +172,13 @@ def sort_block(
     >>> from metatensor import TensorBlock, TensorMap, Labels
     >>> block = TensorBlock(
     ...     values=np.arange(9).reshape(3, 3),
-    ...     samples=Labels(
-    ...         ["structures", "centers"], np.array([[0, 3], [0, 1], [0, 2]])
-    ...     ),
+    ...     samples=Labels(["system", "atom"], np.array([[0, 3], [0, 1], [0, 2]])),
     ...     components=[],
     ...     properties=Labels(["n", "l"], np.array([[2, 0], [3, 0], [1, 0]])),
     ... )
     >>> print(block)
     TensorBlock
-        samples (3): ['structures', 'centers']
+        samples (3): ['system', 'atom']
         components (): []
         properties (3): ['n', 'l']
         gradients: None
@@ -291,26 +292,24 @@ def sort(
     >>> from metatensor import TensorBlock, TensorMap, Labels
     >>> block_1 = TensorBlock(
     ...     values=np.arange(9).reshape(3, 3),
-    ...     samples=Labels(
-    ...         ["structures", "centers"], np.array([[0, 3], [0, 1], [0, 2]])
-    ...     ),
+    ...     samples=Labels(["system", "atom"], np.array([[0, 3], [0, 1], [0, 2]])),
     ...     components=[],
     ...     properties=Labels(["n", "l"], np.array([[1, 0], [2, 0], [0, 0]])),
     ... )
     >>> block_2 = TensorBlock(
     ...     values=np.arange(3).reshape(1, 3),
-    ...     samples=Labels(["structures", "centers"], np.array([[0, 0]])),
+    ...     samples=Labels(["system", "atom"], np.array([[0, 0]])),
     ...     components=[],
     ...     properties=Labels(["n", "l"], np.array([[1, 0], [2, 0], [0, 0]])),
     ... )
-    >>> tm = TensorMap(
-    ...     keys=Labels(["species"], np.array([[1], [0]])), blocks=[block_2, block_1]
+    >>> tensor = TensorMap(
+    ...     keys=Labels(["types"], np.array([[1], [0]])), blocks=[block_2, block_1]
     ... )
-    >>> metatensor.sort(tm, axes="keys")
+    >>> metatensor.sort(tensor, axes="keys")
     TensorMap with 2 blocks
-    keys: species
-             0
-             1
+    keys: types
+            0
+            1
     """
     if isinstance(axes, str):
         axes_list: List[str] = []
@@ -318,7 +317,7 @@ def sort(
             axes_list = ["samples", "components", "properties"]
             sort_keys = True
         elif axes == "keys":
-            axes_list = []
+            axes_list = torch_jit_annotate(List[str], [])
             sort_keys = True
         else:
             axes_list = [axes]

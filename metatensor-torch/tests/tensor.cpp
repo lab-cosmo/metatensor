@@ -179,18 +179,19 @@ TEST_CASE("TensorMap serialization") {
         auto tensor = metatensor_torch::load(DATA_NPZ);
 
         auto keys = tensor->keys();
-        CHECK(keys->names().size() == 3);
-        CHECK(keys->names()[0] == std::string("spherical_harmonics_l"));
-        CHECK(keys->names()[1] == std::string("center_species"));
-        CHECK(keys->names()[2] == std::string("neighbor_species"));
+        CHECK(keys->names().size() == 4);
+        CHECK(keys->names()[0] == std::string("o3_lambda"));
+        CHECK(keys->names()[1] == std::string("o3_sigma"));
+        CHECK(keys->names()[2] == std::string("center_type"));
+        CHECK(keys->names()[3] == std::string("neighbor_type"));
         CHECK(keys->count() == 27);
 
         auto block = TensorMapHolder::block_by_id(tensor, 21);
 
         auto samples = block->samples();
         CHECK(samples->names().size() == 2);
-        CHECK(samples->names()[0] == std::string("structure"));
-        CHECK(samples->names()[1] == std::string("center"));
+        CHECK(samples->names()[0] == std::string("system"));
+        CHECK(samples->names()[1] == std::string("atom"));
 
         CHECK(block->values().sizes() == std::vector<int64_t>{9, 5, 3});
 
@@ -198,7 +199,7 @@ TEST_CASE("TensorMap serialization") {
         samples = gradient->samples();
         CHECK(samples->names().size() == 3);
         CHECK(samples->names()[0] == std::string("sample"));
-        CHECK(samples->names()[1] == std::string("structure"));
+        CHECK(samples->names()[1] == std::string("system"));
         CHECK(samples->names()[2] == std::string("atom"));
 
         CHECK(gradient->values().sizes() == std::vector<int64_t>{59, 3, 5, 3});

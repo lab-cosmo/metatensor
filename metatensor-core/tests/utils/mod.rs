@@ -37,6 +37,7 @@ pub fn cmake_build(build_dir: &Path) -> Command {
     cmake_build.current_dir(build_dir);
     cmake_build.arg("--build");
     cmake_build.arg(".");
+    cmake_build.arg("--parallel");
     cmake_build.arg("--config");
     cmake_build.arg(build_type());
 

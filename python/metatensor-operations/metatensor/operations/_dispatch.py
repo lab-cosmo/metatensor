@@ -1,3 +1,4 @@
+import re
 import warnings
 from typing import List, Optional, Union
 
@@ -6,12 +7,21 @@ import numpy as np
 from ._backend import torch_jit_is_scripting
 
 
+def parse_version(version):
+    match = re.match(r"(\d+)\.(\d+)\.(\d+).*", version)
+    if match:
+        return tuple(map(int, match.groups()))
+    else:
+        raise ValueError("Invalid version string format")
+
+
 try:
     import torch
     from torch import Tensor as TorchTensor
 
     torch_dtype = torch.dtype
     torch_device = torch.device
+    torch_version = parse_version(torch.__version__)
 
 except ImportError:
 
@@ -23,6 +33,8 @@ except ImportError:
 
     class torch_device:
         pass
+
+    torch_version = (0, 0, 0)
 
 
 UNKNOWN_ARRAY_TYPE = (
@@ -70,11 +82,11 @@ def all(a, axis: Optional[int] = None):
         # torch.all has two implementation, and picks one depending if more than one
         # parameter is given. The second one does not supports setting dim to `None`
         if axis is None:
-            return torch.all(input=a)
+            return torch.all(a)
         else:
-            return torch.all(input=a, dim=axis)
+            return torch.all(a, dim=axis)
     elif isinstance(a, np.ndarray):
-        return np.all(a=a, axis=axis)
+        return np.all(a, axis=axis)
     else:
         raise TypeError(UNKNOWN_ARRAY_TYPE)
 
@@ -93,12 +105,10 @@ def allclose(
     """
     if isinstance(a, TorchTensor):
         _check_all_torch_tensor([b])
-        return torch.allclose(
-            input=a, other=b, rtol=rtol, atol=atol, equal_nan=equal_nan
-        )
+        return torch.allclose(a, b, rtol=rtol, atol=atol, equal_nan=equal_nan)
     elif isinstance(a, np.ndarray):
         _check_all_np_ndarray([b])
-        return np.allclose(a=a, b=b, rtol=rtol, atol=atol, equal_nan=equal_nan)
+        return np.allclose(a, b, rtol=rtol, atol=atol, equal_nan=equal_nan)
     else:
         raise TypeError(UNKNOWN_ARRAY_TYPE)
 
@@ -185,7 +195,7 @@ def concatenate(arrays: List[TorchTensor], axis: int):
     """
     if isinstance(arrays[0], TorchTensor):
         _check_all_torch_tensor(arrays)
-        return torch.concatenate(arrays, axis)
+        return torch.cat(arrays, axis)
     elif isinstance(arrays[0], np.ndarray):
         _check_all_np_ndarray(arrays)
         return np.concatenate(arrays, axis)
@@ -544,12 +554,15 @@ def sign(array):
     """
     Returns an indication of the sign of the elements in the array.
 
-    It is equivalent of np.sign(array) and torch.sign(tensor)
+    It is equivalent of np.sign(array) (as defined in v2.0) and torch.sgn(tensor)
     """
     if isinstance(array, TorchTensor):
-        return torch.sign(array)
+        return torch.sgn(array)
     elif isinstance(array, np.ndarray):
-        return np.sign(array)
+        if np.issubdtype(array.dtype, np.complexfloating):
+            return array / np.abs(array)
+        else:
+            return np.sign(array)
     else:
         raise TypeError(UNKNOWN_ARRAY_TYPE)
 
@@ -677,27 +690,45 @@ def to(
         raise TypeError(UNKNOWN_ARRAY_TYPE)
 
 
-def to_index_array(array):
-    """Returns an array that is suitable for indexing a dimension of
-    a different array.
-
-    After a few checks (int, 1D), this operation will convert the dtype to
-    torch.long (which is, in some torch versions, the only acceptable type
-    of index tensor). Numpy arrays are left unchanged.
-    """
+def _to_index_array_checks(array):
     if len(array.shape) != 1:
         raise ValueError("Index arrays must be 1D")
 
     if isinstance(array, TorchTensor):
         if torch.is_floating_point(array):
             raise ValueError("Index arrays must be integers")
-        return array.to(torch.long)
     elif isinstance(array, np.ndarray):
         if not np.issubdtype(array.dtype, np.integer):
             raise ValueError("Index arrays must be integers")
-        return array
     else:
         raise TypeError(UNKNOWN_ARRAY_TYPE)
+
+
+if torch_version >= (2, 0, 0):
+
+    def to_index_array(array):
+        """
+        Returns an array that is suitable for indexing a dimension of
+        a different array.
+        """
+        _to_index_array_checks(array)
+        return array
+
+else:
+
+    def to_index_array(array):
+        """
+        Returns an array that is suitable for indexing a dimension of
+        a different array, converting torch data to long/64-bit integers
+        """
+        _to_index_array_checks(array)
+
+        if isinstance(array, TorchTensor):
+            return array.to(torch.long)
+        elif isinstance(array, np.ndarray):
+            return array
+        else:
+            raise TypeError(UNKNOWN_ARRAY_TYPE)
 
 
 def unique(array, axis: Optional[int] = None):

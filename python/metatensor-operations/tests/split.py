@@ -16,12 +16,12 @@ def test_split_block_samples():
         os.path.join(DATA_ROOT, "qm7-spherical-expansion.npz"),
         use_numpy=True,
     )
-    block = tensor.block(spherical_harmonics_l=2, species_center=6, species_neighbor=6)
+    block = tensor.block(o3_lambda=2, center_type=6, neighbor_type=6)
 
     grouped_labels = [
-        Labels(names=["structure"], values=np.array([[0], [6], [7]])),
-        Labels(names=["structure"], values=np.array([[2], [3], [4]])),
-        Labels(names=["structure"], values=np.array([[1], [5], [8], [9]])),
+        Labels(names=["system"], values=np.array([[0], [6], [7]])),
+        Labels(names=["system"], values=np.array([[2], [3], [4]])),
+        Labels(names=["system"], values=np.array([[1], [5], [8], [9]])),
     ]
 
     splitted = metatensor.split_block(
@@ -32,7 +32,7 @@ def test_split_block_samples():
     assert sum(len(b.samples) for b in splitted) == len(block.samples)
 
     for split_block, expected_samples in zip(splitted, grouped_labels):
-        structure_values = np.unique(split_block.samples["structure"]).reshape(-1, 1)
+        structure_values = np.unique(split_block.samples["system"]).reshape(-1, 1)
         assert np.all(structure_values == expected_samples.values)
 
         # no changes to components & properties
@@ -42,7 +42,7 @@ def test_split_block_samples():
         # check that the values where split in the right way
         mask = np.zeros(len(block.samples), dtype=bool)
         for structure in expected_samples.values:
-            mask = np.logical_or(block.samples["structure"] == structure, mask)
+            mask = np.logical_or(block.samples["system"] == structure, mask)
 
         assert np.all(split_block.values == block.values[mask])
 
@@ -69,15 +69,15 @@ def test_split_block_samples_not_everything():
         os.path.join(DATA_ROOT, "qm7-spherical-expansion.npz"),
         use_numpy=True,
     )
-    block = tensor.block(spherical_harmonics_l=2, species_center=6, species_neighbor=6)
+    block = tensor.block(o3_lambda=2, center_type=6, neighbor_type=6)
 
     # using `grouped_labels` with some samples not present in the initial block,
     # and not including all samples
     grouped_labels = [
         # 1 is in the samples, 12 is not
-        Labels(names=["structure"], values=np.array([[1], [12]])),
+        Labels(names=["system"], values=np.array([[1], [12]])),
         # 18 is not in the samples
-        Labels(names=["structure"], values=np.array([[18]])),
+        Labels(names=["system"], values=np.array([[18]])),
     ]
     splitted = metatensor.split_block(
         block, axis="samples", grouped_labels=grouped_labels
@@ -85,7 +85,7 @@ def test_split_block_samples_not_everything():
 
     assert len(splitted) == 2
     partial = splitted[0]
-    assert np.unique(partial.samples["structure"]) == 1
+    assert np.unique(partial.samples["system"]) == 1
     assert partial.components == block.components
     assert partial.properties == block.properties
 
@@ -105,9 +105,9 @@ def test_split_samples():
     )
 
     grouped_labels = [
-        Labels(names=["structure"], values=np.array([[0], [6], [7]])),
-        Labels(names=["structure"], values=np.array([[2], [3], [4]])),
-        Labels(names=["structure"], values=np.array([[1], [5], [8], [9]])),
+        Labels(names=["system"], values=np.array([[0], [6], [7]])),
+        Labels(names=["system"], values=np.array([[2], [3], [4]])),
+        Labels(names=["system"], values=np.array([[1], [5], [8], [9]])),
     ]
 
     splitted = metatensor.split(tensor, axis="samples", grouped_labels=grouped_labels)
@@ -118,12 +118,12 @@ def test_split_samples():
     for split_tensor, expected_samples in zip(splitted, grouped_labels):
         for split_block, block in zip(split_tensor, tensor):
             split_structures = Labels(
-                ["structure"],
-                np.unique(split_block.samples["structure"]).reshape(-1, 1),
+                ["system"],
+                np.unique(split_block.samples["system"]).reshape(-1, 1),
             )
 
             block_structures = Labels(
-                ["structure"], np.unique(block.samples["structure"]).reshape(-1, 1)
+                ["system"], np.unique(block.samples["system"]).reshape(-1, 1)
             )
             assert split_structures == block_structures.intersection(expected_samples)
 
@@ -141,12 +141,12 @@ def test_split_block_properties():
         os.path.join(DATA_ROOT, "qm7-power-spectrum.npz"),
         use_numpy=True,
     )
-    block = tensor.block(species_center=8, species_neighbor_1=6, species_neighbor_2=8)
+    block = tensor.block(center_type=8, neighbor_1_type=6, neighbor_2_type=8)
 
     grouped_labels = [
-        Labels(names=["l", "n2"], values=np.array([[0, 0], [1, 3], [3, 1]])),
-        Labels(names=["l", "n2"], values=np.array([[4, 2], [4, 3], [4, 1]])),
-        Labels(names=["l", "n2"], values=np.array([[3, 2], [1, 1]])),
+        Labels(names=["l", "n_2"], values=np.array([[0, 0], [1, 3], [3, 1]])),
+        Labels(names=["l", "n_2"], values=np.array([[4, 2], [4, 3], [4, 1]])),
+        Labels(names=["l", "n_2"], values=np.array([[3, 2], [1, 1]])),
     ]
     splitted = metatensor.split_block(
         block, axis="properties", grouped_labels=grouped_labels
@@ -190,9 +190,9 @@ def test_split_properties():
     )
 
     grouped_labels = [
-        Labels(names=["l", "n2"], values=np.array([[0, 0], [1, 3], [3, 1]])),
-        Labels(names=["l", "n2"], values=np.array([[4, 2], [4, 3], [4, 1]])),
-        Labels(names=["l", "n2"], values=np.array([[3, 2], [1, 1]])),
+        Labels(names=["l", "n_2"], values=np.array([[0, 0], [1, 3], [3, 1]])),
+        Labels(names=["l", "n_2"], values=np.array([[4, 2], [4, 3], [4, 1]])),
+        Labels(names=["l", "n_2"], values=np.array([[3, 2], [1, 1]])),
     ]
     splitted = metatensor.split(
         tensor, axis="properties", grouped_labels=grouped_labels
@@ -221,9 +221,9 @@ def test_split_errors():
     )
     block = tensor.block(4)
     grouped_labels = [
-        Labels(names=["structure"], values=np.array([[0], [6], [7]])),
-        Labels(names=["structure"], values=np.array([[2], [3], [4]])),
-        Labels(names=["structure"], values=np.array([[1], [5], [8], [9]])),
+        Labels(names=["system"], values=np.array([[0], [6], [7]])),
+        Labels(names=["system"], values=np.array([[2], [3], [4]])),
+        Labels(names=["system"], values=np.array([[1], [5], [8], [9]])),
     ]
 
     message = (
@@ -265,20 +265,16 @@ def test_split_errors():
         metatensor.split(tensor, axis="samples", grouped_labels=grouped_labels)
 
     grouped_labels = [
+        Labels(names=["missing", "atom"], values=np.array([[0, 1], [6, 7], [7, 4]])),
+        Labels(names=["missing", "atom"], values=np.array([[2, 4], [3, 3], [4, 7]])),
         Labels(
-            names=["front_and", "center"], values=np.array([[0, 1], [6, 7], [7, 4]])
-        ),
-        Labels(
-            names=["front_and", "center"], values=np.array([[2, 4], [3, 3], [4, 7]])
-        ),
-        Labels(
-            names=["front_and", "center"],
+            names=["missing", "atom"],
             values=np.array([[1, 5], [5, 3], [8, 10]]),
         ),
     ]
 
     message = (
-        "the 'front_and' dimension name in `grouped_labels` is not part of "
+        "the 'missing' dimension name in `grouped_labels` is not part of "
         "the samples names of the input tensor"
     )
     with pytest.raises(ValueError, match=message):

@@ -36,12 +36,11 @@ changelog = "https://lab-cosmo.github.io/metatensor/latest/torch/CHANGELOG.html"
 requires = [
     "setuptools >=68",
     "packaging >=23",
-    "cmake",
-    "torch >= 1.11",
 ]
 
-# use a custom build backend to add a dependency on the right version of
-# metatensor-core
+# use a custom build backend to :
+# - add a dependency on the right version of metatensor-core
+# - only depend on torch/cmake when building the wheel and not the sdist
 build-backend = "backend"
 backend-path = ["build-backend"]
 

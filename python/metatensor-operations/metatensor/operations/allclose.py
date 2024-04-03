@@ -121,7 +121,7 @@ def allclose(
     ...         ]
     ...     ),
     ...     samples=Labels(
-    ...         ["structure", "center"],
+    ...         ["system", "atom"],
     ...         np.array(
     ...             [
     ...                 [0, 0],
@@ -143,7 +143,7 @@ def allclose(
     ...         ]
     ...     ),
     ...     samples=Labels(
-    ...         ["structure", "center"],
+    ...         ["system", "atom"],
     ...         np.array(
     ...             [
     ...                 [0, 0],
@@ -179,7 +179,7 @@ def allclose(
     ...         ]
     ...     ),
     ...     samples=Labels(
-    ...         ["structure", "center"],
+    ...         ["system", "atom"],
     ...         np.array(
     ...             [
     ...                 [0, 0],
@@ -261,7 +261,7 @@ def allclose_raise(
     ...         ]
     ...     ),
     ...     samples=Labels(
-    ...         ["structure", "center"],
+    ...         ["system", "atom"],
     ...         np.array(
     ...             [
     ...                 [0, 0],
@@ -283,7 +283,7 @@ def allclose_raise(
     ...         ]
     ...     ),
     ...     samples=Labels(
-    ...         ["structure", "center"],
+    ...         ["system", "atom"],
     ...         np.array(
     ...             [
     ...                 [0, 0],
@@ -376,7 +376,7 @@ def allclose_block(
     ...         ]
     ...     ),
     ...     samples=Labels(
-    ...         ["structure", "center"],
+    ...         ["system", "atom"],
     ...         np.array(
     ...             [
     ...                 [0, 0],
@@ -398,7 +398,7 @@ def allclose_block(
     ...         ]
     ...     ),
     ...     samples=Labels(
-    ...         ["structure", "center"],
+    ...         ["system", "atom"],
     ...         np.array(
     ...             [
     ...                 [0, 0],
@@ -471,7 +471,7 @@ def allclose_block_raise(
     ...         ]
     ...     ),
     ...     samples=Labels(
-    ...         ["structure", "center"],
+    ...         ["system", "atom"],
     ...         np.array(
     ...             [
     ...                 [0, 0],
@@ -494,7 +494,7 @@ def allclose_block_raise(
     ...         ]
     ...     ),
     ...     samples=Labels(
-    ...         ["structure", "center"],
+    ...         ["system", "atom"],
     ...         np.array(
     ...             [
     ...                 [0, 0],

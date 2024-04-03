@@ -946,7 +946,8 @@ WARN_LOGFILE           =
 INPUT                  = \
     ../metatensor-core/include/ \
     ../metatensor-torch/include/metatensor \
-    ../metatensor-torch/include/metatensor/torch
+    ../metatensor-torch/include/metatensor/torch \
+    ../metatensor-torch/include/metatensor/torch/atomistic
 
 # This tag can be used to specify the character encoding of the source files
 # that doxygen parses. Internally doxygen uses the UTF-8 encoding. Doxygen uses

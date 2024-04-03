@@ -33,7 +33,7 @@ cmake() do cmake_path
     @info "Configuring CMake" cmd
     run(cmd)
 
-    cmd = `$cmake_path --build $(build_dir) --target install`
+    cmd = `$cmake_path --build $(build_dir) --parallel --target install`
     @info "Building with CMake" cmd
     run(cmd)
 end

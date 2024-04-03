@@ -17,7 +17,7 @@ def test_remove_gradients():
     if version.parse(torch.__version__) >= version.parse("2.1"):
         assert tensor._type().name() == "TensorMap"
 
-    assert set(tensor.block(0).gradients_list()) == set(["cell", "positions"])
+    assert set(tensor.block(0).gradients_list()) == set(["strain", "positions"])
 
     tensor = metatensor.torch.remove_gradients(tensor, ["positions"])
 
@@ -25,7 +25,7 @@ def test_remove_gradients():
     if version.parse(torch.__version__) >= version.parse("2.1"):
         assert tensor._type().name() == "TensorMap"
 
-    assert tensor.block(0).gradients_list() == ["cell"]
+    assert tensor.block(0).gradients_list() == ["strain"]
 
 
 def test_save_load():

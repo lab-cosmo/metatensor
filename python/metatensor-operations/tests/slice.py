@@ -80,11 +80,11 @@ def _check_sliced_block_samples(block, sliced_block, structures_to_keep):
 
     # samples have been sliced to the correct dimension
     assert len(sliced_block.samples) == len(
-        [s for s in block.samples["structure"] if s in structures_to_keep]
+        [s for s in block.samples["system"] if s in structures_to_keep]
     )
 
     # samples in sliced block only feature desired structure indices
-    assert np.all([s in structures_to_keep for s in sliced_block.samples["structure"]])
+    assert np.all([s in structures_to_keep for s in sliced_block.samples["system"]])
 
     # no components have been sliced
     assert len(sliced_block.components) == len(block.components)
@@ -93,7 +93,7 @@ def _check_sliced_block_samples(block, sliced_block, structures_to_keep):
 
     # we have the right values
     samples_filter = np.array(
-        [sample["structure"] in structures_to_keep for sample in block.samples]
+        [sample["system"] in structures_to_keep for sample in block.samples]
     )
     assert np.all(sliced_block.values == block.values[samples_filter, ...])
 
@@ -193,11 +193,11 @@ def _check_empty_block(block, sliced_block, axis):
 
 
 def test_slice_block_samples(tensor):
-    # Slice only 'structures' 2, 4, 6, 8
-    structures_to_keep = np.arange(2, 10, 2).reshape(-1, 1)
+    # Slice only 'systems' 2, 4, 6, 8
+    systems_to_keep = np.arange(2, 10, 2).reshape(-1, 1)
     samples = Labels(
-        names=["structure"],
-        values=structures_to_keep,
+        names=["system"],
+        values=systems_to_keep,
     )
     block = tensor.block(0)
     sliced_block = metatensor.slice_block(
@@ -205,12 +205,12 @@ def test_slice_block_samples(tensor):
         axis="samples",
         labels=samples,
     )
-    _check_sliced_block_samples(block, sliced_block, structures_to_keep)
+    _check_sliced_block_samples(block, sliced_block, systems_to_keep)
 
     # Slice to an empty block
-    # Slice only 'structures' -1 (i.e. a sample that doesn't exist in the data)
+    # Slice only 'systems' -1 (i.e. a sample that doesn't exist in the data)
     samples = Labels(
-        names=["structure"],
+        names=["system"],
         values=np.array([-1]).reshape(-1, 1),
     )
 
@@ -224,11 +224,11 @@ def test_slice_block_samples(tensor):
 
 
 def test_slice_samples(tensor):
-    # Slice only 'structures' 2, 4, 6, 8
-    structures_to_keep = np.arange(2, 10, 2).reshape(-1, 1)
+    # Slice only 'systems' 2, 4, 6, 8
+    systems_to_keep = np.arange(2, 10, 2).reshape(-1, 1)
     samples = Labels(
-        names=["structure"],
-        values=structures_to_keep,
+        names=["system"],
+        values=systems_to_keep,
     )
     sliced_tensor = metatensor.slice(
         tensor,
@@ -238,15 +238,15 @@ def test_slice_samples(tensor):
 
     for key, block in tensor.items():
         sliced_block = sliced_tensor.block(key)
-        _check_sliced_block_samples(block, sliced_block, structures_to_keep)
+        _check_sliced_block_samples(block, sliced_block, systems_to_keep)
 
     # all the keys in the sliced tensor are in the original
     assert np.all(tensor.keys == sliced_tensor.keys)
 
     # ===== Slice to all empty blocks =====
-    # Slice only 'structures' -1 (i.e. a sample that doesn't exist in the data)
+    # Slice only 'systems' -1 (i.e. a sample that doesn't exist in the data)
     samples = Labels(
-        names=["structure"],
+        names=["system"],
         values=np.array([-1]).reshape(-1, 1),
     )
 
@@ -342,7 +342,7 @@ def test_slice_block_samples_and_properties(tensor):
     # Slice 'center' 1, 3, 5
     centers_to_keep = np.arange(1, 7, 2).reshape(-1, 1)
     samples = Labels(
-        names=["center"],
+        names=["atom"],
         values=centers_to_keep,
     )
     # Slice 'n' (i.e. radial channel) 0, 1, 2
@@ -365,14 +365,14 @@ def test_slice_block_samples_and_properties(tensor):
     )
 
     # only desired samples are in the output.
-    assert np.all([c in centers_to_keep for c in sliced_block.samples["center"]])
+    assert np.all([c in centers_to_keep for c in sliced_block.samples["atom"]])
 
     # only desired properties are in the output
     assert np.all([n in channels_to_keep for n in sliced_block.properties["n"]])
 
     # There are the correct number of samples
     assert sliced_block.values.shape[0] == len(
-        [s for s in block.samples if s["center"] in centers_to_keep]
+        [s for s in block.samples if s["atom"] in centers_to_keep]
     )
 
     # There are the correct number of properties
@@ -381,7 +381,7 @@ def test_slice_block_samples_and_properties(tensor):
     )
 
     # we have the right values
-    samples_filter = [sample["center"] in centers_to_keep for sample in block.samples]
+    samples_filter = [sample["atom"] in centers_to_keep for sample in block.samples]
     properties_filter = [
         property["n"] in channels_to_keep for property in block.properties
     ]
@@ -401,14 +401,14 @@ def test_slice_block_samples_and_properties(tensor):
     )
 
     # only desired samples are in the output.
-    assert np.all([c in centers_to_keep for c in sliced_block.samples["center"]])
+    assert np.all([c in centers_to_keep for c in sliced_block.samples["atom"]])
 
     # only desired properties are in the output
     assert np.all([n in channels_to_keep for n in sliced_block.properties["n"]])
 
     # There are the correct number of samples
     assert sliced_block.values.shape[0] == len(
-        [s for s in block.samples if s["center"] in centers_to_keep]
+        [s for s in block.samples if s["atom"] in centers_to_keep]
     )
 
     # There are the correct number of properties
@@ -417,7 +417,7 @@ def test_slice_block_samples_and_properties(tensor):
     )
 
     # we have the right values
-    samples_filter = [sample["center"] in centers_to_keep for sample in block.samples]
+    samples_filter = [sample["atom"] in centers_to_keep for sample in block.samples]
     properties_filter = [
         property["n"] in channels_to_keep for property in block.properties
     ]
@@ -552,7 +552,7 @@ def test_slice_different_device():
 def test_slice_errors(tensor):
     centers_to_keep = np.arange(1, 7, 2).reshape(-1, 1)
     samples = Labels(
-        names=["center"],
+        names=["atom"],
         values=centers_to_keep,
     )
 
@@ -575,7 +575,7 @@ def test_slice_errors(tensor):
 def test_slice_block_errors(tensor):
     centers_to_keep = np.arange(1, 7, 2).reshape(-1, 1)
     samples = Labels(
-        names=["center"],
+        names=["atom"],
         values=centers_to_keep,
     )
 

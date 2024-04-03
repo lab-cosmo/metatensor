@@ -9,10 +9,7 @@ from torch.nn import Module, Sigmoid  # noqa: E402
 
 from metatensor.learn.nn import ModuleMap  # noqa: E402
 
-from .utils import (  # noqa E402
-    TORCH_KWARGS,
-    random_single_block_no_components_tensor_map,
-)
+from .utils import random_single_block_no_components_tensor_map  # noqa: E402
 
 
 @pytest.fixture
@@ -41,8 +38,6 @@ def set_random_generator():
     in this file and the number of parameters of the test.
     """
     torch.random.manual_seed(122578741812)
-    torch.set_default_device(TORCH_KWARGS["device"])
-    torch.set_default_dtype(TORCH_KWARGS["dtype"])
 
 
 @pytest.mark.parametrize(

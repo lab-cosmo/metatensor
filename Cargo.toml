@@ -4,6 +4,7 @@ resolver = "2"
 members = [
     "metatensor-core",
     "metatensor-torch",
-    "metatensor",
+    "rust/metatensor",
+    "rust/metatensor-sys",
     "python",
 ]

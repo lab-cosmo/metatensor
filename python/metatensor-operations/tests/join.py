@@ -266,8 +266,8 @@ def test_join_samples_with_different_sample_names():
 def test_split_join_samples(tensor):
     """Test if split and joining along `samples` results in the same TensorMap."""
 
-    labels_1 = Labels(names=["structure"], values=np.arange(4).reshape(-1, 1))
-    labels_2 = Labels(names=["structure"], values=np.arange(4, 10).reshape(-1, 1))
+    labels_1 = Labels(names=["system"], values=np.arange(4).reshape(-1, 1))
+    labels_2 = Labels(names=["system"], values=np.arange(4, 10).reshape(-1, 1))
 
     split_tensors = metatensor.split(
         tensor=tensor, axis="samples", grouped_labels=[labels_1, labels_2]

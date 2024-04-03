@@ -61,7 +61,7 @@ print(radial_spectrum)
 # If we look at one of the block, we can see that is contains gradients with respect to
 # ``"positions"``:
 
-block = radial_spectrum.block(species_center=7, species_neighbor=7)
+block = radial_spectrum.block(center_type=7, neighbor_type=7)
 print(block)
 
 # %%
@@ -169,8 +169,8 @@ print(block.components)
 # %%
 #
 # If we look at the gradients with respect to positions, we see that they contain two
-# sets of components: the same ``direction`` component as the radial spectrum example
-# earlier; and the same ``spherical_harmonics_m`` as the values.
+# sets of components: the same ``xyz`` component as the radial spectrum example
+# earlier; and the same ``o3_mu`` as the values.
 
 gradient = block.gradient("positions")
 print(gradient)

@@ -11,6 +11,10 @@ API reference
   .. grid::
     :margin: 0 0 0 0
 
+    .. grid-item-version:: 0.3.0
+        :tag-prefix: metatensor-torch-v
+        :url-suffix: torch/reference/index.html
+
     .. grid-item-version:: 0.2.1
         :tag-prefix: metatensor-torch-v
         :url-suffix: torch/reference/index.html

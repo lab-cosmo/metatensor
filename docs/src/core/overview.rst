@@ -34,11 +34,11 @@ associated with ``key_1 = 0`` and ``key_2 = 1``, and so on.
 Different key dimensions can have different purposes, but some typical keys
 dimensions you'll encounter when working with atomistic data are the following:
 
-- **atomic species dimensions**: when using a one-hot encoding of different
-  atomic species (or atomic elements) in a structure, the resulting data is
-  sparse, containing implicit zeros if a given species is not present in a
-  structure. This is the case of the ``species_center`` and various
-  ``species_neighbor`` key dimensions produced by `rascaline`_.
+- **atomic types dimensions**: when using a one-hot encoding of different
+  atomic types (or atomic elements) in a structure, the resulting data is
+  sparse, containing implicit zeros if a given type is not present in a
+  structure. This is the case of the ``center_type`` and various
+  ``neighbor_type`` key dimensions produced by `rascaline`_.
 - **symmetry markers**: Another use case for metatensor is to store and
   manipulate equivariant data, i.e. data that transforms in a known, specific
   way when the corresponding atomic structure is transformed. This is typically
@@ -47,9 +47,9 @@ dimensions you'll encounter when working with atomistic data are the following:
   harmonics. When handling this kind of data, it is convenient to store and
   manipulate the data corresponding to different spherical harmonics (or
   generally different irreducible representations of the symmetry group)
-  separately. This is the case of the ``spherical_harmonics_l`` key dimension
-  produced by `rascaline`_: different blocks will contain the :math:`\ell = 1`
-  and :math:`\ell = 2` parts of an equivariant representation.
+  separately. This is the case of the ``o3_lambda`` key dimension produced by
+  `rascaline`_: different blocks will contain the :math:`\lambda = 1` and
+  :math:`\lambda = 2` parts of an equivariant representation.
 
 .. _rascaline: https://github.com/Luthaf/rascaline/
 
@@ -106,9 +106,9 @@ The samples store information about **what objects** does the data represent,
 while properties store information about **how** these objects are represented.
 Taking a couple of examples for clarity:
 
-- if we are storing the energy of a list of structures in a TensorBlock, the
-  samples would contain only a single ``"structure"`` dimension, and multiple
-  entries — one per structure — going from 0 to ``len(structures)``. The
+- if we are storing the energy of a list of systems in a TensorBlock, the
+  samples would contain only a single ``"system"`` dimension, and multiple
+  entries — one per structure — going from 0 to ``len(systems)``. The
   properties would contain a single ``"energy"`` dimension with a single entry,
   which value does not carry information;
 - if we are storing increasing powers of the bond lengths between pairs of atom
@@ -117,8 +117,8 @@ Taking a couple of examples for clarity:
   ``"second_atom"`` (:math:`j`); while the properties would contain the value of
   ``"k"``. The data array would contain the values of :math:`(r_{ij})^k`.
 - if we are storing an atom-centered machine learning representation, the
-  samples would contain the index of the atom ``"center"`` and the index of the
-  corresponding ``"structure"``; while the properties would contain information
+  samples would contain the index of the atom ``"atom"`` and the index of the
+  corresponding ``"system"``; while the properties would contain information
   about the e.g. the basis functions used to define the representation. The
   :ref:`Labels figure <fig-labels>` above contains an example of samples and
   properties that one would find in machine learning representation.
@@ -219,10 +219,10 @@ component of the forces.
 Another use-case for components is the storage of equivariant data, where a
 given irreducible representation might have multiple elements. For example, when
 handling spherical harmonics (which are the irreducible representation of the
-`group of 3D rotations`_ :math:`SO(3)`), all the spherical harmonics with the same
-:math:`\ell` and corresponding :math:`m` should be considered simultaneously:
-the different :math:`m` are **components** of a single irreducible
-representation.
+`group of 3D rotations`_ :math:`SO(3)`), all the spherical harmonics
+:math:`Y_\lambda^\mu` with the same angular momentum :math:`\lambda` and
+corresponding :math:`\mu` should be considered simultaneously: the different
+:math:`\mu` are **components** of a single irreducible representation.
 
 .. _group of 3D rotations: https://en.wikipedia.org/wiki/3D_rotation_group
 

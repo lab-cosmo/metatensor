@@ -110,10 +110,7 @@ workflows. You can also run only a subset of tests with one of these commands:
 - ``cargo test --package=metatensor-core`` to run the C/C++ tests only;
 
   - ``cargo test --test=run-cxx-tests`` will run the unit tests for the C/C++
-    API. If `valgrind`_ is installed, it will be used to check for memory
-    errors. You can disable this by setting the `METATENSOR_DISABLE_VALGRIND`
-    environment variable to 1 (`export METATENSOR_DISABLE_VALGRIND=1` for most
-    Linux/macOS shells);
+    API.
   - ``cargo test --test=check-cxx-install`` will build the C/C++ interfaces,
     install them and the associated CMake files and then try to build a basic
     project depending on this interface with CMake;
@@ -163,23 +160,26 @@ You can run only a subset of the tests with ``tox -e tests -- <test/file.py>``,
 replacing ``<test/file.py>`` with the path to the files you want to test, e.g.
 ``tox -e tests -- python/tests/operations/abs.py``.
 
-When running the metatensor-torch unit tests, you might get an error about CUDA
-not being available if you try to build the code against the default PyPI
-version of PyTorch. A possible workaround is to use the CPU-only version of
-PyTorch in the tests, by setting the ``PIP_EXTRA_INDEX_URL`` environnement
-variable to ``https://download.pytorch.org/whl/cpu``, for example in bash and
-related shells:
+Controlling tests behavior with environment variables
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. code-block:: bash
+There are a handful of environment variables that you can set to control the
+behavior of tests:
 
-    export PIP_EXTRA_INDEX_URL=https://download.pytorch.org/whl/cpu
-    tox -e torch-tests
-    # or
-    cargo test
-
-If you encounter hard to understand error messages when running tests with
-TorchScript, you can disable the Python to TorchScript compilation by setting
-``PYTORCH_JIT=0`` in your environment.
+- ``METATENSOR_DISABLE_VALGRIND=1``` will disable the use of `valgrind`_ for the
+  C++ tests. Valgrind is a tool that check for memory errors in native code, but
+  it makes the tests run quite a bit slower;
+- ``METATENSOR_TESTS_TORCH_VERSION`` allow you to run the tests against a
+  specific PyTorch version instead of the latest one. For example, setting it to
+  ``METATENSOR_TESTS_TORCH_VERSION=1.13.*`` will run the tests against PyTorch
+  1.13;
+- ``PIP_EXTRA_INDEX_URL`` can be used to pull PyTorch (or other dependencies)
+  from a different index. This can be useful on Linux if you have issues with
+  CUDA, since the default PyTorch version expects CUDA to be available. A
+  possible workaround is to use the CPU-only version of PyTorch in the tests, by
+  setting ``PIP_EXTRA_INDEX_URL=https://download.pytorch.org/whl/cpu``;
+- ``PYTORCH_JIT=0`` can be used to disable Python to TorchScript compilation of
+  code; producing error messages which should be easier to understand.
 
 .. _`cargo` : https://doc.rust-lang.org/cargo/
 .. _valgrind: https://valgrind.org/
@@ -187,17 +187,14 @@ TorchScript, you can disable the Python to TorchScript compilation by setting
 Inspecting Python code coverage
 -------------------------------
 
-The code coverage is reported at `codecov`_. You can also inspect the coverage locally.
-To get the full coverage first combine all reports and open produced html file in a
-browser
+The code coverage is reported at `codecov`_. You can also inspect the coverage
+locally. To get the full coverage first combine all reports and open produced
+html file in a browser
 
 .. code-block:: bash
 
     tox
-    coverage combine \
-        ./python/metatensor-core/.coverage \
-        ./python/metatensor-torch/.coverage \
-        ./python/metatensor-operations/.coverage
+    coverage combine .tox/*/.coverage
     coverage html
     firefox htmlcov/index.html
 

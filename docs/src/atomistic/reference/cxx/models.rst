@@ -5,6 +5,8 @@ Models
 
 .. doxygenfunction:: metatensor_torch::check_atomistic_model
 
+.. doxygenfunction:: metatensor_torch::unit_conversion_factor
+
 .. doxygentypedef:: metatensor_torch::ModelOutput
 
 .. doxygenclass:: metatensor_torch::ModelOutputHolder
@@ -18,4 +20,9 @@ Models
 .. doxygentypedef:: metatensor_torch::ModelEvaluationOptions
 
 .. doxygenclass:: metatensor_torch::ModelEvaluationOptionsHolder
+    :members:
+
+.. doxygentypedef:: metatensor_torch::ModelMetadata
+
+.. doxygenclass:: metatensor_torch::ModelMetadataHolder
     :members:

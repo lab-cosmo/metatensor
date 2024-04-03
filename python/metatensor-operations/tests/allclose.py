@@ -138,8 +138,8 @@ def test_self_allclose_grad():
     assert metatensor.allclose(tensor1, tensor1_e6, rtol=1e-5, atol=1e-5)
 
     message = (
-        r"blocks for key \(spherical_harmonics_l=0, species_center=1, "
-        r"species_neighbor=1\) are different: values are not allclose"
+        r"blocks for key \(o3_lambda=0, o3_sigma=1, center_type=1, "
+        r"neighbor_type=1\) are different: values are not allclose"
     )
     with pytest.raises(NotEqualError, match=message):
         metatensor.allclose_raise(tensor1, tensor1_e6)

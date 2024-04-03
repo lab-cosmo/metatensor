@@ -33,7 +33,7 @@ lot of duplicated effort. With metatensor, we want to provide a way for these
 libraries to communicate with one another, by giving everyone a *lingua franca*,
 a way to share data and metadata.
 
-.. figure:: ../static/images/goal-exchange.*
+.. figure:: /../static/images/goal-exchange.*
     :width: 400px
     :align: center
 
@@ -128,10 +128,10 @@ The final objective of metatensor is to allow using these custom models inside
 large scale molecular simulation engines. To do this, we integrate metatensor
 with `TorchScript <https://pytorch.org/docs/stable/jit.html>`_, and use the
 facilities of TorchScript to export the model from Python and then load and
-execute it inside the simulation engine. This is documented in
-:ref:`atomistic-models`.
+execute it inside the simulation engine. Have a look at the
+:ref:`atomistic-models` section for more information!
 
-.. figure:: ../static/images/goal-simulations.*
+.. figure:: /../static/images/goal-simulations.*
     :width: 500px
     :align: center
 

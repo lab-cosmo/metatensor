@@ -2,7 +2,13 @@ import warnings
 from typing import List, Optional
 
 from . import _dispatch
-from ._backend import TensorBlock, TensorMap, torch_jit_script
+from ._backend import (
+    Labels,
+    TensorBlock,
+    TensorMap,
+    torch_jit_annotate,
+    torch_jit_script,
+)
 from ._utils import (
     _check_blocks_raise,
     _check_same_gradients_raise,
@@ -36,7 +42,7 @@ def _lstsq_block(
     return TensorBlock(
         values=weights.T,
         samples=Y.properties,
-        components=[],
+        components=torch_jit_annotate(List[Labels], []),
         properties=X.properties,
     )
 
@@ -109,7 +115,7 @@ def lstsq(
     ...         [0.0, 1.0],
     ...     ]
     ... )
-    >>> samples = Labels("structure", np.array([[0], [1]]))
+    >>> samples = Labels("system", np.array([[0], [1]]))
     >>> components = []
     >>> properties = Labels("properties", np.array([[0], [1]]))
     >>> keys = Labels(names="key", values=np.array([[0]]))

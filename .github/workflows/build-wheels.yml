@@ -22,15 +22,19 @@ jobs:
       matrix:
         include:
           - name: x86_64 Linux
-            os: ubuntu-20.04
+            os: ubuntu-22.04
             rust-target: x86_64-unknown-linux-gnu
             cibw_arch: x86_64
+          - name: Aarch64 Linux
+            os: ubuntu-22.04
+            rust-target: aarch64-unknown-linux-gnu
+            cibw_arch: aarch64
           - name: x86_64 macOS
             os: macos-11
             rust-target: x86_64-apple-darwin
             cibw_arch: x86_64
           - name: M1 macOS
-            os: macos-11
+            os: macos-14
             rust-target: aarch64-apple-darwin
             cibw_arch: arm64
           - name: x86_64 Windows
@@ -57,18 +61,23 @@ jobs:
       - name: install dependencies
         run: python -m pip install cibuildwheel twine
 
+      - name: Set up QEMU for docker
+        if: matrix.os == 'ubuntu-22.04'
+        uses: docker/setup-qemu-action@v3
+
       - name: build manylinux with rust docker image
-        if: matrix.os == 'ubuntu-20.04'
-        run: docker build -t rustc-manylinux2014_x86_64 python/scripts/rustc-manylinux2014_x86_64
+        if: matrix.os == 'ubuntu-22.04'
+        run: docker build -t rustc-manylinux2014_${{ matrix.cibw_arch }} python/scripts/rustc-manylinux2014_${{ matrix.cibw_arch }}
 
       - name: build metatensor-core wheel
         run: python -m cibuildwheel python/metatensor-core
         env:
-          CIBW_BUILD: cp310-*
+          CIBW_BUILD: cp311-*
           CIBW_SKIP: "*musllinux*"
           CIBW_ARCHS: ${{ matrix.cibw_arch }}
           CIBW_BUILD_VERBOSITY: 2
           CIBW_MANYLINUX_X86_64_IMAGE: rustc-manylinux2014_x86_64
+          CIBW_MANYLINUX_AARCH64_IMAGE: rustc-manylinux2014_aarch64
 
       - name: check wheels with twine
         run: twine check wheelhouse/*
@@ -88,7 +97,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   build-others:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
         with:
@@ -101,11 +110,6 @@ jobs:
 
       - name: install dependencies
         run: python -m pip install wheel build twine
-
-      - name: create C++ tarballs
-        run: |
-          ./scripts/package-core.sh
-          ./scripts/package-torch.sh
 
       - name: build metatensor-core sdist
         run: python -m build python/metatensor-core --sdist --outdir=dist/
@@ -124,6 +128,11 @@ jobs:
 
       - name: check sdist and wheels with twine
         run: twine check dist/*.tar.gz dist/*.whl
+
+      - name: create C++ tarballs
+        run: |
+          ./scripts/package-core.sh dist/cxx/
+          ./scripts/package-torch.sh dist/cxx/
 
       - uses: actions/upload-artifact@v3
         with:

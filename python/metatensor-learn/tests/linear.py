@@ -9,10 +9,7 @@ torch = pytest.importorskip("torch")
 
 from metatensor.learn.nn import Linear  # noqa: E402
 
-from .utils import (  # noqa F402
-    TORCH_KWARGS,
-    random_single_block_no_components_tensor_map,
-)
+from .utils import random_single_block_no_components_tensor_map  # noqa: E402
 
 
 @pytest.fixture()
@@ -30,8 +27,6 @@ def set_random_generator():
     in this file and the number of parameters of the test.
     """
     torch.random.manual_seed(122578741812)
-    torch.set_default_device(TORCH_KWARGS["device"])
-    torch.set_default_dtype(TORCH_KWARGS["dtype"])
 
 
 def test_linear_single_block_tensor(single_block_tensor_torch):
@@ -104,12 +99,12 @@ def test_linear_from_weight(single_block_tensor_torch):
     weights = metatensor.slice(
         single_block_tensor_torch,
         axis="samples",
-        labels=Labels(["sample", "structure"], np.array([[0, 0], [1, 1]])),
+        labels=Labels(["sample", "system"], np.array([[0, 0], [1, 1]])),
     )
     bias = metatensor.slice(
         single_block_tensor_torch,
         axis="samples",
-        labels=Labels(["sample", "structure"], np.array([[3, 3]])),
+        labels=Labels(["sample", "system"], np.array([[3, 3]])),
     )
     module = Linear.from_weights(weights, bias)
     module(single_block_tensor_torch)

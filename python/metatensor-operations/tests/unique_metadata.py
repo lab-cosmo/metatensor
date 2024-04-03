@@ -70,17 +70,17 @@ def test_unique_metadata_block(large_tensor):
 
 
 def test_empty_block(real_tensor):
-    target_samples = Labels(names=["structure"], values=np.empty((0, 1)))
+    target_samples = Labels(names=["system"], values=np.empty((0, 1)))
     # slice block to be empty
     sliced_block = metatensor.slice_block(
         real_tensor.block(0),
         axis="samples",
-        labels=Labels(names=["structure"], values=np.array([[-1]])),
+        labels=Labels(names=["system"], values=np.array([[-1]])),
     )
     actual_samples = metatensor.unique_metadata_block(
         sliced_block,
         axis="samples",
-        names="structure",
+        names="system",
     )
     assert target_samples == actual_samples
     assert len(actual_samples) == 0
@@ -164,21 +164,21 @@ def test_unique_metadata_block_errors(real_tensor):
         "not <class 'metatensor.tensor.TensorMap'>"
     )
     with pytest.raises(TypeError, match=message):
-        metatensor.unique_metadata_block(real_tensor, "samples", ["structure"])
+        metatensor.unique_metadata_block(real_tensor, "samples", ["system"])
 
     message = (
         "`tensor` must be a metatensor TensorMap, "
         "not <class 'metatensor.block.TensorBlock'>"
     )
     with pytest.raises(TypeError, match=message):
-        metatensor.unique_metadata(real_tensor.block(0), "samples", ["structure"])
+        metatensor.unique_metadata(real_tensor.block(0), "samples", ["system"])
 
     message = "`axis` must be a string, not <class 'float'>"
     with pytest.raises(TypeError, match=message):
         metatensor.unique_metadata_block(
             real_tensor.block(0),
             axis=3.14,
-            names=["structure"],
+            names=["system"],
         )
 
     message = "`names` must be a list of strings, not <class 'float'>"
@@ -194,7 +194,7 @@ def test_unique_metadata_block_errors(real_tensor):
         metatensor.unique_metadata_block(
             real_tensor.block(0),
             axis="properties",
-            names=["structure", 3.14],
+            names=["system", 3.14],
         )
 
     message = "`gradient` must be a string, not <class 'float'>"
@@ -202,7 +202,7 @@ def test_unique_metadata_block_errors(real_tensor):
         metatensor.unique_metadata_block(
             real_tensor.block(0),
             axis="properties",
-            names=["structure"],
+            names=["system"],
             gradient=3.14,
         )
 
@@ -211,7 +211,7 @@ def test_unique_metadata_block_errors(real_tensor):
         metatensor.unique_metadata_block(
             real_tensor.block(0),
             axis="ciao",
-            names=["structure"],
+            names=["system"],
         )
 
     message = "'ciao' not found in the dimensions of these Labels"

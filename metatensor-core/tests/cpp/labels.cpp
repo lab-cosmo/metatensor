@@ -195,10 +195,11 @@ TEST_CASE("User data") {
 }
 
 void check_loaded_labels(metatensor::Labels& labels) {
-    CHECK(labels.names().size() == 3);
-    CHECK(labels.names()[0] == std::string("spherical_harmonics_l"));
-    CHECK(labels.names()[1] == std::string("center_species"));
-    CHECK(labels.names()[2] == std::string("neighbor_species"));
+    CHECK(labels.names().size() == 4);
+    CHECK(labels.names()[0] == std::string("o3_lambda"));
+    CHECK(labels.names()[1] == std::string("o3_sigma"));
+    CHECK(labels.names()[2] == std::string("center_type"));
+    CHECK(labels.names()[3] == std::string("neighbor_type"));
     CHECK(labels.count() == 27);
 }
 

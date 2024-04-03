@@ -9,7 +9,7 @@ sphinx-design       # helpers for nicer docs website (tabs, grids, cards, …)
 sphinxcontrib-details-directive # hide some information by default in HTML
 
 # required for autodoc
-numpy
+numpy <2.0
 torch
 
 # required for examples

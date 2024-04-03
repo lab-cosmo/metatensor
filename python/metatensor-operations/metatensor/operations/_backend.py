@@ -8,8 +8,24 @@
 # See metatensor-torch/metatensor/torch/operations.py for more information.
 #
 # Any change to this file MUST be also be made to `metatensor/torch/operations.py`.
+from typing import Union
 
-from metatensor import Labels, TensorBlock, TensorMap
+import numpy as np
+
+import metatensor
+
+
+try:
+    import torch
+
+    Array = Union[np.ndarray, torch.Tensor]
+except ImportError:
+    Array = np.ndarray
+
+
+Labels = metatensor.Labels
+TensorBlock = metatensor.TensorBlock
+TensorMap = metatensor.TensorMap
 
 
 def torch_jit_is_scripting():
@@ -27,13 +43,12 @@ def torch_jit_script(function):
     return function
 
 
-check_isinstance = isinstance
+def torch_jit_annotate(type, value):
+    """
+    This function takes the place of ``torch.jit.annotate`` when running in pure Python
+    mode (i.e. when using classes from metatensor-core).
+    """
+    return value
 
-__all__ = [
-    "Labels",
-    "TensorBlock",
-    "TensorMap",
-    "torch_jit_is_scripting",
-    "torch_jit_script",
-    "check_isinstance",
-]
+
+check_isinstance = isinstance

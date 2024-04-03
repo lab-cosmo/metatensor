@@ -218,7 +218,8 @@ TEST_CASE("TensorMap") {
 
 TEST_CASE("TensorMap serialization") {
     SECTION("loading file") {
-        // DATA_NPZ is defined by cmake and expand to the path of tests/data.npz
+        // DATA_NPZ is defined by cmake and expand to the path of
+        // `tests/data.npz`
         auto tensor = TensorMap::load(TEST_DATA_NPZ_PATH);
         check_loaded_tensor(tensor);
 
@@ -374,18 +375,19 @@ mts_status_t custom_create_array(const uintptr_t* shape_ptr, uintptr_t shape_cou
 
 void check_loaded_tensor(metatensor::TensorMap& tensor) {
     auto keys = tensor.keys();
-    CHECK(keys.names().size() == 3);
-    CHECK(keys.names()[0] == std::string("spherical_harmonics_l"));
-    CHECK(keys.names()[1] == std::string("center_species"));
-    CHECK(keys.names()[2] == std::string("neighbor_species"));
+    CHECK(keys.names().size() == 4);
+    CHECK(keys.names()[0] == std::string("o3_lambda"));
+    CHECK(keys.names()[1] == std::string("o3_sigma"));
+    CHECK(keys.names()[2] == std::string("center_type"));
+    CHECK(keys.names()[3] == std::string("neighbor_type"));
     CHECK(keys.count() == 27);
 
     auto block = tensor.block_by_id(21);
 
     auto samples = block.samples();
     CHECK(samples.names().size() == 2);
-    CHECK(samples.names()[0] == std::string("structure"));
-    CHECK(samples.names()[1] == std::string("center"));
+    CHECK(samples.names()[0] == std::string("system"));
+    CHECK(samples.names()[1] == std::string("atom"));
 
     auto values = block.values();
     CHECK(values.shape() == std::vector<size_t>{9, 5, 3});
@@ -394,7 +396,7 @@ void check_loaded_tensor(metatensor::TensorMap& tensor) {
     samples = gradient.samples();
     CHECK(samples.names().size() == 3);
     CHECK(samples.names()[0] == std::string("sample"));
-    CHECK(samples.names()[1] == std::string("structure"));
+    CHECK(samples.names()[1] == std::string("system"));
     CHECK(samples.names()[2] == std::string("atom"));
 
     values = gradient.values();

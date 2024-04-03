@@ -410,13 +410,41 @@ def test_to():
     assert converted.dtype == np.float32
     assert converted.gradient("g").dtype == np.float32
 
+    # check that the code handles both positional and keyword arguments
+    device = "cpu"
+    moved = block.to(device, dtype=np.float32)
+    moved = block.to(np.float32, device)
+    moved = block.to(np.float32, device=device)
+    moved = block.to(device, np.float32)
+
+    message = "can not give a device twice in `TensorBlock.to`"
+    with pytest.raises(ValueError, match=message):
+        moved = block.to("cpu", device="cpu")
+
+    message = "can not give a dtype twice in `TensorBlock.to`"
+    with pytest.raises(ValueError, match=message):
+        moved = block.to(np.float32, dtype=np.float32)
+
+    # string positional arguments are assumed to be devices
+    message = "can not move numpy array to non-cpu device: test"
+    with pytest.raises(ValueError, match=message):
+        moved = block.to("test")
+
+    message = "unexpected type in `TensorBlock.to`: <class 'numpy.ndarray'>"
+    with pytest.raises(TypeError, match=message):
+        moved = block.to(np.array([0]))
+
     if HAS_TORCH:
         block = converted.to(arrays="torch")
         assert isinstance(block.values, torch.Tensor)
         assert isinstance(block.gradient("g").values, torch.Tensor)
 
         devices = ["meta", torch.device("meta")]
-        if torch.backends.mps.is_available() and torch.backends.mps.is_built():
+        if (
+            hasattr(torch.backends, "mps")
+            and torch.backends.mps.is_available()
+            and torch.backends.mps.is_built()
+        ):
             devices.append("mps")
             devices.append(torch.device("mps"))
 

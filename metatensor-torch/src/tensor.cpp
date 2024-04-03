@@ -6,7 +6,7 @@
 #include "metatensor/torch/block.hpp"
 #include "metatensor/torch/misc.hpp"
 
-#include "internal/scalar_type_name.hpp"
+#include "internal/utils.hpp"
 
 using namespace metatensor_torch;
 
@@ -467,8 +467,7 @@ torch::Dtype TensorMapHolder::scalar_type() const {
 
 TorchTensorMap TensorMapHolder::to(
     torch::optional<torch::Dtype> dtype,
-    torch::optional<torch::Device> device,
-    torch::optional<std::string> arrays
+    torch::optional<torch::Device> device
 ) const {
     auto new_blocks = std::vector<TorchTensorBlock>();
     for (int64_t block_i=0; block_i<this->keys()->count(); block_i++) {
@@ -476,9 +475,34 @@ TorchTensorMap TensorMapHolder::to(
         // with the different dtype/device
         auto block = const_cast<metatensor::TensorMap&>(this->tensor_).block_by_id(block_i);
         auto torch_block = torch::make_intrusive<TensorBlockHolder>(std::move(block), torch::IValue());
-        new_blocks.emplace_back(torch_block->to(dtype, device, arrays));
+        new_blocks.emplace_back(torch_block->to(dtype, device));
     }
     return torch::make_intrusive<TensorMapHolder>(this->keys()->to(device), new_blocks);
+}
+
+
+TorchTensorMap TensorMapHolder::to_positional(
+    torch::IValue positional_1,
+    torch::IValue positional_2,
+    torch::optional<torch::Dtype> dtype,
+    torch::optional<torch::Device> device,
+    torch::optional<std::string> arrays
+) const {
+    if (arrays.value_or("torch") != "torch") {
+        C10_THROW_ERROR(ValueError,
+            "`arrays` must be None or 'torch', got '" + arrays.value() + "' instead"
+        );
+    }
+
+    auto [parsed_dtype, parsed_device] = to_arguments_parse(
+        positional_1,
+        positional_2,
+        dtype,
+        device,
+        "`TensorMap.to`"
+    );
+
+    return this->to(parsed_dtype, parsed_device);
 }
 
 

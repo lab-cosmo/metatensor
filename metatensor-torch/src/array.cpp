@@ -124,6 +124,12 @@ void TorchDataArray::move_samples_from(
     assert(input_tensor.dtype() == output_tensor.dtype());
     assert(input_tensor.device() == output_tensor.device());
 
+    if (input_tensor.device() == torch::kMeta) {
+        // tensors on the "meta" device contain no data to move around,
+        // and the code below crashes for some old PyTorch versions
+        return;
+    }
+
     // output[output_samples, ..., properties] = input[input_samples, ..., :]
     output_tensor.index_put_(
         {output_samples, Ellipsis, Slice(property_start, property_end)},

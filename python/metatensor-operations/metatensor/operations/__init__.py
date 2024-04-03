@@ -4,7 +4,7 @@ __version__ = importlib.metadata.version("metatensor-operations")
 
 
 from ._utils import NotEqualError  # noqa
-from .checks import checks_enabled, unsafe_disable_checks, unsafe_enable_checks  # noqa
+from ._checks import checks_enabled, unsafe_disable_checks, unsafe_enable_checks  # noqa
 
 from .abs import abs  # noqa
 from .add import add  # noqa

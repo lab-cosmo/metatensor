@@ -8,14 +8,21 @@ follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 <!-- Possible sections
 
-#### Added
+### Added
 
-#### Fixed
+### Fixed
 
-#### Changed
+### Changed
 
-#### Removed
+### Removed
 -->
+
+## [Version 0.2.1](https://github.com/lab-cosmo/metatensor/releases/tag/metatensor-operations-v0.2.1) - 2024-03-01
+
+### Changed
+
+- Use `torch.jit.script` by default on all operations when using the TorchScript
+  backend (i.e. `metatensor.torch`) (#504)
 
 ## [Version 0.2.0](https://github.com/lab-cosmo/metatensor/releases/tag/metatensor-operations-v0.2.0) - 2024-02-07
 

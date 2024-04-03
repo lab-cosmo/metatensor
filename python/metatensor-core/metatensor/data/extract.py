@@ -161,7 +161,7 @@ class ExternalCpuArray(np.ndarray):
         # keep the parent around when creating sub-views of this array
         self._parent = getattr(obj, "_parent", None)
 
-    def __array_wrap__(self, new):
+    def __array_wrap__(self, new, context=None, return_scalar=False):
         self_ptr = self.ctypes.data
         self_size = self.nbytes
 
