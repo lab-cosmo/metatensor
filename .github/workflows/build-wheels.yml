@@ -89,7 +89,7 @@ jobs:
           CIBW_BUILD: cp311-*
           CIBW_SKIP: "*musllinux*"
           CIBW_ARCHS: ${{ matrix.cibw-arch }}
-          CIBW_BUILD_VERBOSITY: 2
+          CIBW_BUILD_VERBOSITY: 1
           CIBW_MANYLINUX_X86_64_IMAGE: rustc-manylinux2014_x86_64
           CIBW_MANYLINUX_AARCH64_IMAGE: rustc-manylinux2014_aarch64
           CIBW_ENVIRONMENT: >
@@ -118,8 +118,6 @@ jobs:
           - {os: macos-13, arch: arm64}
           # no arm64-windows build
           - {os: windows-2019, arch: arm64}
-          # https://github.com/pytorch/pytorch/issues/125109
-          - {os: windows-2019, torch-version: '2.3'}
           # arm64-macos is only supported for torch >= 2.0
           - {os: macos-14, arch: arm64, torch-version: '1.12'}
           - {os: macos-14, arch: arm64, torch-version: '1.13'}
@@ -192,7 +190,7 @@ jobs:
           CIBW_BUILD: ${{ matrix.cibw-python}}
           CIBW_SKIP: "*musllinux*"
           CIBW_ARCHS: ${{ matrix.cibw-arch }}
-          CIBW_BUILD_VERBOSITY: 2
+          CIBW_BUILD_VERBOSITY: 1
           CIBW_MANYLINUX_X86_64_IMAGE: rustc-manylinux2014_x86_64
           CIBW_MANYLINUX_AARCH64_IMAGE: rustc-manylinux2014_aarch64
           # METATENSOR_NO_LOCAL_DEPS is set to 1 when building a tag of
