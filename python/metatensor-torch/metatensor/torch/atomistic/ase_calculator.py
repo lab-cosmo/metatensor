@@ -62,6 +62,7 @@ class MetatensorCalculator(ase.calculators.calculator.Calculator):
         extensions_directory=None,
         check_consistency=False,
         device=None,
+        properties_to_store: Optional[List[str]] = None,
     ):
         """
         :param model: model to use for the calculation. This can be a file path, a
@@ -73,6 +74,12 @@ class MetatensorCalculator(ase.calculators.calculator.Calculator):
             running, defaults to False.
         :param device: torch device to use for the calculation. If ``None``, we will try
             the options in the model's ``supported_device`` in order.
+        :param properties_to_store: list of model outputs to store as results of the ASE
+            calculator at every step. This is useful when you want to store properties
+            that are not used in the propagation of the dynamics and/or are not standard
+            ASE properties ('energy', 'forces', 'stress', 'stresses', 'dipole',
+            'charges', 'magmom', 'magmoms', 'free_energy', 'energies'). These properties
+            will be available as ``atoms.calc.results['<stored_property>']``.
         """
         super().__init__()
 
@@ -147,6 +154,9 @@ class MetatensorCalculator(ase.calculators.calculator.Calculator):
         # We do our own check to verify if a property is implemented in `calculate()`,
         # so we pretend to be able to compute all properties ASE knows about.
         self.implemented_properties = ALL_ASE_PROPERTIES
+        self.properties_to_store = (
+            properties_to_store if properties_to_store is not None else []
+        )
 
     def todict(self):
         if "model_path" not in self.parameters:
@@ -243,7 +253,9 @@ class MetatensorCalculator(ase.calculators.calculator.Calculator):
         )
 
         with record_function("ASECalculator::prepare_inputs"):
-            outputs = _ase_properties_to_metatensor_outputs(properties)
+            outputs = _ase_properties_to_metatensor_outputs(
+                properties + self.properties_to_store
+            )
             capabilities = self._model.capabilities()
             for name in outputs.keys():
                 if name not in capabilities.outputs:
@@ -257,11 +269,11 @@ class MetatensorCalculator(ase.calculators.calculator.Calculator):
             )
 
             do_backward = False
-            if "forces" in properties:
+            if "forces" in properties + self.properties_to_store:
                 do_backward = True
                 positions.requires_grad_(True)
 
-            if "stress" in properties:
+            if "stress" in properties + self.properties_to_store:
                 do_backward = True
 
                 scaling = torch.eye(3, requires_grad=True, dtype=self._dtype)
@@ -271,7 +283,7 @@ class MetatensorCalculator(ase.calculators.calculator.Calculator):
 
                 cell = cell @ scaling
 
-            if "stresses" in properties:
+            if "stresses" in properties + self.properties_to_store:
                 raise NotImplementedError("'stresses' are not implemented yet")
 
             run_options = ModelEvaluationOptions(
@@ -322,14 +334,14 @@ class MetatensorCalculator(ase.calculators.calculator.Calculator):
 
             self.results = {}
 
-            if "energies" in properties:
+            if "energies" in properties + self.properties_to_store:
                 energies_values = energies.detach().reshape(-1)
                 energies_values = energies_values.to(device="cpu").to(
                     dtype=torch.float64
                 )
                 self.results["energies"] = energies_values.numpy()
 
-            if "energy" in properties:
+            if "energy" in properties + self.properties_to_store:
                 energy_values = energy.detach()
                 energy_values = energy_values.to(device="cpu").to(dtype=torch.float64)
                 self.results["energy"] = energy_values.numpy()[0, 0]
@@ -339,17 +351,31 @@ class MetatensorCalculator(ase.calculators.calculator.Calculator):
                 energy.backward(-torch.ones_like(energy))
 
         with record_function("ASECalculator::convert_outputs"):
-            if "forces" in properties:
+            if "forces" in properties + self.properties_to_store:
                 forces_values = system.positions.grad.reshape(-1, 3)
                 forces_values = forces_values.to(device="cpu").to(dtype=torch.float64)
                 self.results["forces"] = forces_values.numpy()
 
-            if "stress" in properties:
+            if "stress" in properties + self.properties_to_store:
                 stress_values = -scaling.grad.reshape(3, 3) / atoms.cell.volume
                 stress_values = stress_values.to(device="cpu").to(dtype=torch.float64)
                 self.results["stress"] = _full_3x3_to_voigt_6_stress(
                     stress_values.numpy()
                 )
+
+            if "dipole" in properties + self.properties_to_store:
+                dipole_values = outputs["dipole"].block().values.detach().reshape(3)
+                dipole_values = dipole_values.to(device="cpu").to(dtype=torch.float64)
+                self.results["dipole"] = dipole_values.numpy()
+
+            if "energy_ensemble" in properties + self.properties_to_store:
+                energy_ensemble_values = (
+                    outputs["energy_ensemble"].block().values.detach().flatten()
+                )
+                energy_ensemble_values = energy_ensemble_values.to(device="cpu").to(
+                    dtype=torch.float64
+                )
+                self.results["energy_ensemble"] = energy_ensemble_values.numpy()
 
 
 def _find_best_device(devices: List[str]) -> torch.device:

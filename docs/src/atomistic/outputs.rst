@@ -119,3 +119,87 @@ The following gradients can be defined and requested with
     - ``["xyz_1", "xyz_2"]``
     - Both ``"xyz_1"`` and ``"xyz_2"`` have values ``[0, 1, 2]``, and correspond
       to the two axes of the 3x3 strain matrix :math:`\epsilon`.
+
+
+Energy ensemble
+^^^^^^^^^^^^^^^
+
+An ensemble of energies is associated with the ``"energy_ensemble"`` key in the
+model outputs, and must have the following metadata:
+
+.. list-table:: Metadata for energy ensemble output
+  :widths: 2 3 7
+  :header-rows: 1
+
+  * - Metadata
+    - Names
+    - Description
+
+  * - keys
+    - ``"_"``
+    - the energy ensemble keys must have a single dimension named ``"_"``, with a
+      single entry set to ``0``. The energy ensemble is always a
+      :py:class:`metatensor.torch.TensorMap` with a single block.
+
+  * - samples
+    - ``["system", "atom"]`` or ``["system"]``
+    - if doing ``per_atom`` output, the sample names must be ``["system",
+      "atom"]``, otherwise the sample names must be ``["system"]``.
+
+      ``"system"`` must range from 0 to the number of systems given as input to
+      the model. ``"atom"`` must range between 0 and the number of
+      atoms/particles in the corresponding system. If ``selected_atoms`` is
+      provided, then only the selected atoms for each system should be part of
+      the samples.
+
+  * - components
+    -
+    - the ensemble of energies must not have any components
+
+  * - properties
+    - ``"ensemble_member"``
+    - the energy ensemble must have a single property dimension named
+      ``"ensemble_member"``, with entries ranging from 0 to the number of
+      members of the ensemble.
+
+
+Dipole
+^^^^^^
+
+Electric dipole moments are represented by the ``"dipole"`` key in the
+model outputs, and must have the following metadata:
+
+.. list-table:: Metadata for dipole output
+  :widths: 2 3 7
+  :header-rows: 1
+
+  * - Metadata
+    - Names
+    - Description
+
+  * - keys
+    - ``"_"``
+    - the dipole keys must have a single dimension named ``"_"``, with a
+      single entry set to ``0``. The dipole is always a
+      :py:class:`metatensor.torch.TensorMap` with a single block.
+
+  * - samples
+    - ``["system", "atom"]`` or ``["system"]``
+    - if doing ``per_atom`` output, the sample names must be ``["system",
+      "atom"]``, otherwise the sample names must be ``["system"]``.
+
+      ``"system"`` must range from 0 to the number of systems given as input to
+      the model. ``"atom"`` must range between 0 and the number of
+      atoms/particles in the corresponding system. If ``selected_atoms`` is
+      provided, then only the selected atoms for each system should be part of
+      the samples.
+
+  * - components
+    - ``["xyz"]``
+    - the dipole must have a single component named ``"xyz"`` with values 0, 1,
+      2; indicating the components of the dipole moment along x, y, and z.
+
+  * - properties
+    - ``"dipole"``
+    - the energy must have a single property dimension named ``"dipole"``, with
+      a single entry set to ``0``.
