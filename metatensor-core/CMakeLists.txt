@@ -219,6 +219,8 @@ if (CARGO_VERSION_CHANGED)
 
         # Special case `msvcrt` to link with the debug version in Debug mode.
         list(TRANSFORM stripped_lib_list REPLACE "^msvcrt$" "\$<\$<CONFIG:Debug>:msvcrtd>")
+        # Don't try to pass a linker *flag* where CMake expects libraries
+        list(REMOVE_ITEM stripped_lib_list "/defaultlib:msvcrt")
 
         if (APPLE)
             # Prevent warnings about duplicated `System` in linked libraries
@@ -229,9 +231,9 @@ if (CARGO_VERSION_CHANGED)
         list(REMOVE_DUPLICATES stripped_lib_list)
         set(CARGO_DEFAULT_LIBRARIES "${stripped_lib_list}" CACHE INTERNAL "list of implicitly linked libraries")
 
-        if (${METATENSOR_MAIN_PROJECT})
+        # if (${METATENSOR_MAIN_PROJECT})
             message(STATUS "Cargo default link libraries are: ${CARGO_DEFAULT_LIBRARIES}")
-        endif()
+        # endif()
     else()
         message(FATAL_ERROR "could not find default static libs: `native-static-libs` not found in: `${cargo_static_libs_stderr}`")
     endif()
