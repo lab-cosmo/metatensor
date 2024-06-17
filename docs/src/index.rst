@@ -1,5 +1,11 @@
-Metatensor
-==========
+.. image:: /../static/images/metatensor-horizontal.png
+   :class: only-light sd-mb-4
+   :width: 600px
+
+.. image:: /../static/images/metatensor-horizontal-dark.png
+   :class: only-dark sd-mb-4
+   :width: 600px
+
 
 ``metatensor`` is a library for defining, manipulating, storing, and sharing
 arrays with many, potentially sparse, indices. Think numpy's ``ndarray`` or

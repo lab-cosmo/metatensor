@@ -12,6 +12,10 @@ API reference
   .. grid::
     :margin: 0 0 0 0
 
+    .. grid-item-version:: 0.2.2
+        :tag-prefix: metatensor-operations-v
+        :url-suffix: operations/reference/index.html
+
     .. grid-item-version:: 0.2.1
         :tag-prefix: metatensor-operations-v
         :url-suffix: operations/reference/index.html

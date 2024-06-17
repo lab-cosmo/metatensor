@@ -17,6 +17,15 @@ follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Removed
 -->
 
+## [Version 0.2.2](https://github.com/lab-cosmo/metatensor/releases/tag/metatensor-operations-v0.2.2) - 2024-06-19
+
+### Fixed
+
+- Fixed a bug in `metatensor.torch.sort` where the labels where not properly
+  sorted (#647)
+- Fix `metatensor.abs` when used with complex values (#553)
+
+
 ## [Version 0.2.1](https://github.com/lab-cosmo/metatensor/releases/tag/metatensor-operations-v0.2.1) - 2024-03-01
 
 ### Changed

@@ -511,7 +511,6 @@ def _ase_to_torch_data(atoms, dtype, device):
 
 
 def _full_3x3_to_voigt_6_stress(stress):
-    ase.stress.full_3x3_to_voigt_6_stress
     """
     Re-implementation of ``ase.stress.full_3x3_to_voigt_6_stress`` which does not do the
     stress symmetrization correctly (they do ``(stress[1, 2] + stress[1, 2]) / 2.0``)

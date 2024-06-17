@@ -13,7 +13,7 @@ it is very easy to setup and use.
 .. TODO: once we have more MD engine, add link to their doc here
 """
 
-# sphinx_gallery_thumbnail_number = 4
+# sphinx_gallery_thumbnail_number = 3
 
 from typing import Dict, List, Optional
 
@@ -25,6 +25,7 @@ import ase.units
 
 # tools for visualization
 import ase.visualize.plot
+import chemiscope
 import matplotlib.pyplot as plt
 
 # the usuals suspects
@@ -127,7 +128,7 @@ class HarmonicModel(torch.nn.Module):
 # ------------------------
 #
 # Now that we have a model for the energy of our system, let's create some initial
-# simulation state. We'll build a 3x3x3 super cell of diamond carbon. In pactise, you
+# simulation state. We'll build a 3x3x3 super cell of diamond carbon. In practice, you
 # could also read the initial state from a file.
 
 primitive = ase.build.bulk(name="C", crystalstructure="diamond", a=3.567)
@@ -234,12 +235,9 @@ for step in range(800):
 
 # %%
 #
-# We can use ASE and matplotlib to visualize the trajectory
-
-animation = ase.visualize.plot.animate(
-    trajectory, radii=0.5, interval=100, save_count=None
-)
-plt.show()
+# We can use `chemiscope <https://chemiscope.org>`_ to visualize the trajectory
+viewer_settings = {"bonds": False, "playbackDelay": 70}
+chemiscope.show(trajectory, mode="structure", settings={"structure": [viewer_settings]})
 
 # %%
 #

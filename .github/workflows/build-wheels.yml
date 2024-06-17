@@ -111,11 +111,11 @@ jobs:
       matrix:
         torch-version: ['1.12', '1.13', '2.0', '2.1', '2.2', '2.3']
         arch: ['arm64', 'x86_64']
-        os: ['ubuntu-22.04', 'macos-11', 'macos-14', 'windows-2019']
+        os: ['ubuntu-22.04', 'macos-13', 'macos-14', 'windows-2019']
         exclude:
           # remove mismatched arch for macOS
           - {os: macos-14, arch: x86_64}
-          - {os: macos-11, arch: arm64}
+          - {os: macos-13, arch: arm64}
           # no arm64-windows build
           - {os: windows-2019, arch: arm64}
           # https://github.com/pytorch/pytorch/issues/125109
@@ -124,7 +124,7 @@ jobs:
           - {os: macos-14, arch: arm64, torch-version: '1.12'}
           - {os: macos-14, arch: arm64, torch-version: '1.13'}
           # x86_64-macos is only supported for torch <2.3
-          - {os: macos-11, arch: x86_64, torch-version: '2.3'}
+          - {os: macos-13, arch: x86_64, torch-version: '2.3'}
         include:
           # add `cibw-arch` and `rust-target` to the different configurations
           - name: x86_64 Linux
@@ -138,7 +138,7 @@ jobs:
             rust-target: aarch64-unknown-linux-gnu
             cibw-arch: aarch64
           - name: x86_64 macOS
-            os: macos-11
+            os: macos-13
             arch: x86_64
             rust-target: x86_64-apple-darwin
             cibw-arch: x86_64
@@ -233,7 +233,7 @@ jobs:
             os: ubuntu-22.04
             arch: arm64
           - name: x86_64 macOS
-            os: macos-11
+            os: macos-13
             arch: x86_64
           - name: arm64 macOS
             os: macos-14
