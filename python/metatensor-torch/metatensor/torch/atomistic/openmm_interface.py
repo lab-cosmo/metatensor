@@ -1,29 +1,43 @@
+from typing import Iterable, List, Optional
+
 import torch
-from typing import Iterable, Optional
-from metatensor.torch.atomistic import load_atomistic_model, System, ModelOutput, ModelEvaluationOptions
+
 from metatensor.torch import Labels
-from typing import List
+from metatensor.torch.atomistic import (
+    ModelEvaluationOptions,
+    ModelOutput,
+    System,
+    load_atomistic_model,
+)
+
 
 try:
     import openmm
     import openmmtorch
-    from openmmml.mlpotential import MLPotential, MLPotentialImpl, MLPotentialImplFactory
+    from openmmml.mlpotential import (
+        MLPotential,
+        MLPotentialImpl,
+        MLPotentialImplFactory,
+    )
+
     HAS_OPENMM = True
-except ImportError as e:
+except ImportError:
+
     class MLPotential:
         pass
+
     class MLPotentialImpl:
         pass
+
     class MLPotentialImplFactory:
         pass
+
     HAS_OPENMM = False
 
 
 class MetatensorPotentialImplFactory(MLPotentialImplFactory):
 
-    def createImpl(
-        name: str, **args
-    ) -> MLPotentialImpl:
+    def createImpl(name: str, **args) -> MLPotentialImpl:
         # TODO: extensions_directory
         return MetatensorPotentialImpl(name, **args)
 
@@ -47,10 +61,8 @@ class MetatensorPotentialImpl(MLPotentialImpl):
                 "Could not import openmm. If you want to use metatensor with "
                 "openmm, please install openmm-ml with conda."
             )
-        
-        model = load_atomistic_model(
-            self.path  # TODO: extensions_directory
-        )
+
+        model = load_atomistic_model(self.path)  # TODO: extensions_directory
 
         # Get the atomic numbers of the ML region.
         all_atoms = list(topology.atoms())
@@ -79,9 +91,11 @@ class MetatensorPotentialImpl(MLPotentialImpl):
                 super(MetatensorForce, self).__init__()
 
                 self.model = model
-                self.register_buffer("atomic_numbers", torch.tensor(atomic_numbers, dtype=torch.int32))
+                self.register_buffer(
+                    "atomic_numbers", torch.tensor(atomic_numbers, dtype=torch.int32)
+                )
                 self.evaluation_options = ModelEvaluationOptions(
-                    length_unit='nm',
+                    length_unit="nm",
                     outputs={
                         "energy": ModelOutput(
                             quantity="energy",
@@ -92,7 +106,6 @@ class MetatensorPotentialImpl(MLPotentialImpl):
                     selected_atoms=selected_atoms,
                 )
 
-
             def forward(
                 self, positions: torch.Tensor, cell: Optional[torch.Tensor] = None
             ) -> torch.Tensor:
@@ -100,10 +113,14 @@ class MetatensorPotentialImpl(MLPotentialImpl):
                 selected_atoms = self.evaluation_options.selected_atoms
                 if selected_atoms is not None:
                     if selected_atoms.device != positions.device:
-                        self.evaluation_options.selected_atoms = selected_atoms.to(positions.device)
-                
+                        self.evaluation_options.selected_atoms = selected_atoms.to(
+                            positions.device
+                        )
+
                 if cell is None:
-                    cell = torch.zeros((3, 3), dtype=positions.dtype, device=positions.device)
+                    cell = torch.zeros(
+                        (3, 3), dtype=positions.dtype, device=positions.device
+                    )
 
                 # create System
                 system = System(
@@ -112,7 +129,13 @@ class MetatensorPotentialImpl(MLPotentialImpl):
                     cell=cell,
                 )
 
-                energy = self.model([system], self.evaluation_options, check_consistency=True)["energy"].block().values.reshape(())
+                energy = (
+                    self.model(
+                        [system], self.evaluation_options, check_consistency=True
+                    )["energy"]
+                    .block()
+                    .values.reshape(())
+                )
                 return energy
 
         metatensor_force = MetatensorForce(
