@@ -136,7 +136,9 @@ ModelOutput ModelOutputHolder::from_json(std::string_view json) {
 /******************************************************************************/
 
 std::unordered_set<std::string> KNOWN_OUTPUTS = {
-    "energy"
+    "energy",
+    "dipole",
+    "energy_ensemble"
 };
 
 void ModelCapabilitiesHolder::set_outputs(torch::Dict<std::string, ModelOutput> outputs) {
@@ -1031,6 +1033,29 @@ static std::unordered_map<std::string, Quantity> KNOWN_QUANTITIES = {
         // alternative names
         {"J", "Joule"},
         {"Ry", "Rydberg"},
+    }}},
+    {"energy_ensemble", Quantity{/* name */ "energy", /* baseline */ "eV", {
+        {"eV", 1.0},
+        {"meV", 1000.0},
+        {"Hartree", 0.03674932247495664},
+        {"kcal/mol", 23.060548012069496},
+        {"kJ/mol", 96.48533288249877},
+        {"Joule", 1.60218e-19},
+        {"Rydberg", 0.07349864435130857},
+    }, {
+        // alternative names
+        {"J", "Joule"},
+        {"Ry", "Rydberg"},
+    }}},
+    {"dipole", Quantity{/* name */ "dipole", /* baseline */ "D", {
+        {"Debye", 1.0},
+        {"Coulomb-meter", 1000.0},
+        {"atomic units", 0.03674932247495664},
+    }, {
+        // alternative names
+        {"D", "Debye"},
+        {"C-m", "Coulomb-meter"},
+        {"a.u.", "atomic units"},
     }}},
 };
 
