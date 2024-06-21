@@ -30,7 +30,7 @@ except ImportError:
     HAS_OPENMM = False
 
 
-def attach_metatensor_force(
+def get_metatensor_force(
     system: openmm.System,
     topology: openmm.app.Topology,
     path: str,
@@ -137,6 +137,4 @@ def attach_metatensor_force(
     force.setUsesPeriodicBoundaryConditions(isPeriodic)
     force.setForceGroup(forceGroup)
 
-    system.addForce(force)
-
-    return system
+    return force
