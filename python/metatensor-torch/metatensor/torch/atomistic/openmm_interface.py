@@ -12,9 +12,9 @@ from metatensor.torch.atomistic import (
 
 
 try:
-    import NNPOps
     import openmm
     import openmmtorch
+    from NNPOps.neighbors import getNeighborPairs
 
     HAS_OPENMM = True
 except ImportError:
@@ -116,16 +116,19 @@ def get_metatensor_force(
                 cell = system.cell
 
             # Get the neighbor pairs, shifts and edge indices.
-            neighbors, interatomic_vectors, _, _ = NNPOps.getNeighborPairs(
-                system.positions, self.requested_neighbor_list.engine_cutoff(), -1, cell
+            neighbors, interatomic_vectors, _, _ = getNeighborPairs(
+                system.positions,
+                self.requested_neighbor_list.engine_cutoff("nm"),
+                -1,
+                cell,
             )
             mask = neighbors[0] >= 0
             neighbors = neighbors[:, mask]
             interatomic_vectors = interatomic_vectors[mask, :]
 
             if self.requested_neighbor_list.full_list:
-                neighbors = torch.stack((neighbors, neighbors.flip(0)), dim=1)
-                interatomic_vectors = torch.stack(
+                neighbors = torch.concatenate((neighbors, neighbors.flip(0)), dim=1)
+                interatomic_vectors = torch.concatenate(
                     (interatomic_vectors, -interatomic_vectors)
                 )
 
@@ -141,7 +144,7 @@ def get_metatensor_force(
             else:
                 cell_shifts = torch.zeros(
                     (neighbors.shape[1], 3),
-                    dtype=self.dtype,
+                    dtype=torch.int32,
                     device=system.positions.device,
                 )
 
@@ -155,14 +158,14 @@ def get_metatensor_force(
                         "cell_shift_b",
                         "cell_shift_c",
                     ],
-                    values=torch.stack([neighbors.T, cell_shifts], dim=-1),
+                    values=torch.concatenate([neighbors.T, cell_shifts], dim=-1),
                 ),
                 components=[
                     Labels(
                         names=["xyz"],
                         values=torch.arange(
                             3, dtype=torch.int32, device=system.positions.device
-                        ),
+                        ).reshape(-1, 1),
                     )
                 ],
                 properties=Labels(
@@ -198,6 +201,7 @@ def get_metatensor_force(
                 positions=positions,
                 cell=cell,
             )
+            system = self._attach_neighbors(system)
 
             energy = (
                 self.model(
