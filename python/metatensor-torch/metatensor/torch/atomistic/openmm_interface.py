@@ -2,7 +2,7 @@ from typing import Iterable, List, Optional
 
 import torch
 
-from metatensor.torch import Labels
+from metatensor.torch import Labels, TensorBlock
 from metatensor.torch.atomistic import (
     ModelEvaluationOptions,
     ModelOutput,
@@ -12,6 +12,7 @@ from metatensor.torch.atomistic import (
 
 
 try:
+    import NNPOps
     import openmm
     import openmmtorch
 
@@ -37,12 +38,13 @@ def get_metatensor_force(
     extensions_directory: Optional[str] = None,
     forceGroup: int = 0,
     atoms: Optional[Iterable[int]] = None,
+    check_consistency: bool = False,
 ) -> openmm.System:
 
     if not HAS_OPENMM:
         raise ImportError(
-            "Could not import openmm. If you want to use metatensor with "
-            "openmm, please install openmm-ml with conda."
+            "Could not import openmm and/or nnpops. If you want to use metatensor with "
+            "openmm, please install openmm-torch and nnpops with conda."
         )
 
     model = load_atomistic_model(path, extensions_directory=extensions_directory)
@@ -69,6 +71,7 @@ def get_metatensor_force(
             model: torch.jit._script.RecursiveScriptModule,
             atomic_numbers: List[int],
             selected_atoms: Optional[Labels],
+            check_consistency: bool,
         ) -> None:
             super(MetatensorForce, self).__init__()
 
@@ -87,6 +90,91 @@ def get_metatensor_force(
                 },
                 selected_atoms=selected_atoms,
             )
+
+            requested_nls = self.model.requested_neighbor_lists()
+            if len(requested_nls) > 1:
+                raise ValueError(
+                    "The model requested more than one neighbor list. "
+                    "Currently, only models with a single neighbor list are supported "
+                    "by the OpenMM interface."
+                )
+            elif len(requested_nls) == 1:
+                self.requested_neighbor_list = requested_nls[0]
+            else:
+                # no neighbor list requested
+                self.requested_neighbor_list = None
+
+            self.check_consistency = check_consistency
+
+        def _attach_neighbors(self, system: System) -> System:
+
+            if self.requested_neighbor_list is None:
+                return system
+
+            cell: Optional[torch.Tensor] = None
+            if not torch.all(system.cell == 0.0):
+                cell = system.cell
+
+            # Get the neighbor pairs, shifts and edge indices.
+            neighbors, interatomic_vectors, _, _ = NNPOps.getNeighborPairs(
+                system.positions, self.requested_neighbor_list.engine_cutoff(), -1, cell
+            )
+            mask = neighbors[0] >= 0
+            neighbors = neighbors[:, mask]
+            interatomic_vectors = interatomic_vectors[mask, :]
+
+            if self.requested_neighbor_list.full_list:
+                neighbors = torch.stack((neighbors, neighbors.flip(0)), dim=1)
+                interatomic_vectors = torch.stack(
+                    (interatomic_vectors, -interatomic_vectors)
+                )
+
+            if cell is not None:
+                interatomic_vectors_unit_cell = (
+                    system.positions[interatomic_vectors[0]]
+                    - system.positions[interatomic_vectors[1]]
+                )
+                cell_shifts = (
+                    interatomic_vectors_unit_cell - interatomic_vectors
+                ) @ torch.linalg.inv(cell)
+                cell_shifts = torch.round(cell_shifts).to(torch.int32)
+            else:
+                cell_shifts = torch.zeros(
+                    (neighbors.shape[1], 3),
+                    dtype=self.dtype,
+                    device=system.positions.device,
+                )
+
+            neighbor_list = TensorBlock(
+                values=interatomic_vectors.reshape(-1, 3, 1),
+                samples=Labels(
+                    names=[
+                        "first_atom",
+                        "second_atom",
+                        "cell_shift_a",
+                        "cell_shift_b",
+                        "cell_shift_c",
+                    ],
+                    values=torch.stack([neighbors.T, cell_shifts], dim=-1),
+                ),
+                components=[
+                    Labels(
+                        names=["xyz"],
+                        values=torch.arange(
+                            3, dtype=torch.int32, device=system.positions.device
+                        ),
+                    )
+                ],
+                properties=Labels(
+                    names=["distance"],
+                    values=torch.tensor(
+                        [[0]], dtype=torch.int32, device=system.positions.device
+                    ),
+                ),
+            )
+
+            system.add_neighbor_list(self.requested_neighbor_list, neighbor_list)
+            return system
 
         def forward(
             self, positions: torch.Tensor, cell: Optional[torch.Tensor] = None
@@ -112,9 +200,11 @@ def get_metatensor_force(
             )
 
             energy = (
-                self.model([system], self.evaluation_options, check_consistency=True)[
-                    "energy"
-                ]
+                self.model(
+                    [system],
+                    self.evaluation_options,
+                    check_consistency=self.check_consistency,
+                )["energy"]
                 .block()
                 .values.reshape(())
             )
@@ -124,6 +214,7 @@ def get_metatensor_force(
         model,
         atomic_numbers,
         selected_atoms,
+        check_consistency,
     )
 
     # torchscript everything
