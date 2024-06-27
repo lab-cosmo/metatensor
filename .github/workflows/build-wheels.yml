@@ -118,8 +118,6 @@ jobs:
           - {os: macos-13, arch: arm64}
           # no arm64-windows build
           - {os: windows-2019, arch: arm64}
-          # https://github.com/pytorch/pytorch/issues/125109
-          - {os: windows-2019, torch-version: '2.3'}
           # arm64-macos is only supported for torch >= 2.0
           - {os: macos-14, arch: arm64, torch-version: '1.12'}
           - {os: macos-14, arch: arm64, torch-version: '1.13'}
