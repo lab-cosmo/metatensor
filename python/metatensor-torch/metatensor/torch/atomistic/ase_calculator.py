@@ -8,7 +8,7 @@ import numpy as np
 import torch
 from torch.profiler import record_function
 
-from .. import Labels, TensorBlock
+from .. import Labels, TensorBlock, TensorMap
 from . import (
     MetatensorAtomisticModel,
     ModelEvaluationOptions,
@@ -28,6 +28,13 @@ from ase.calculators.calculator import (  # isort: skip
     PropertyNotImplementedError,
     all_properties as ALL_ASE_PROPERTIES,
 )
+
+try:
+    import vesin
+
+    HAS_VESIN = True
+except ImportError:
+    HAS_VESIN = False
 
 
 if os.environ.get("METATENSOR_IMPORT_FOR_SPHINX", "0") == "0":
@@ -53,6 +60,10 @@ class MetatensorCalculator(ase.calculators.calculator.Calculator):
 
     This class can be initialized with any :py:class:`MetatensorAtomisticModel`, and
     used to run simulations using ASE's MD facilities.
+
+    Neighbor lists are computed using ASE's neighbor list utilities, unless the faster
+    `vesin <https://luthaf.fr/vesin/latest/index.html>`_ neighbor list library is
+    installed, in which case it will be used instead.
     """
 
     def __init__(
@@ -175,7 +186,7 @@ class MetatensorCalculator(ase.calculators.calculator.Calculator):
         atoms: ase.Atoms,
         outputs: Dict[str, ModelOutput],
         selected_atoms: Optional[Labels] = None,
-    ) -> Dict[str, TensorBlock]:
+    ) -> Dict[str, TensorMap]:
         """
         Run the model on the given ``atoms``, computing properties according to the
         ``outputs`` and ``selected_atoms`` options.
@@ -264,12 +275,14 @@ class MetatensorCalculator(ase.calculators.calculator.Calculator):
             if "stress" in properties:
                 do_backward = True
 
-                scaling = torch.eye(3, requires_grad=True, dtype=self._dtype)
+                strain = torch.eye(
+                    3, requires_grad=True, device=self._device, dtype=self._dtype
+                )
 
-                positions = positions @ scaling
+                positions = positions @ strain
                 positions.retain_grad()
 
-                cell = cell @ scaling
+                cell = cell @ strain
 
             if "stresses" in properties:
                 raise NotImplementedError("'stresses' are not implemented yet")
@@ -345,7 +358,7 @@ class MetatensorCalculator(ase.calculators.calculator.Calculator):
                 self.results["forces"] = forces_values.numpy()
 
             if "stress" in properties:
-                stress_values = -scaling.grad.reshape(3, 3) / atoms.cell.volume
+                stress_values = -strain.grad.reshape(3, 3) / atoms.cell.volume
                 stress_values = stress_values.to(device="cpu").to(dtype=torch.float64)
                 self.results["stress"] = _full_3x3_to_voigt_6_stress(
                     stress_values.numpy()
@@ -423,11 +436,19 @@ def _ase_properties_to_metatensor_outputs(properties):
 
 
 def _compute_ase_neighbors(atoms, options, dtype, device):
-    nl_i, nl_j, nl_S, nl_D = ase.neighborlist.neighbor_list(
-        "ijSD",
-        atoms,
-        cutoff=options.engine_cutoff(engine_length_unit="angstrom"),
-    )
+
+    if (np.all(atoms.pbc) or np.all(~atoms.pbc)) and HAS_VESIN:
+        nl_i, nl_j, nl_S, nl_D = vesin.ase_neighbor_list(
+            "ijSD",
+            atoms,
+            cutoff=options.engine_cutoff(engine_length_unit="angstrom"),
+        )
+    else:
+        nl_i, nl_j, nl_S, nl_D = ase.neighborlist.neighbor_list(
+            "ijSD",
+            atoms,
+            cutoff=options.engine_cutoff(engine_length_unit="angstrom"),
+        )
 
     selected = []
     for pair_i, (i, j, S) in enumerate(zip(nl_i, nl_j, nl_S)):
