@@ -7,9 +7,7 @@ OpenMM integration
 which can be used to load a :py:class:`MetatensorAtomisticModel` into an
 ``openmm.Force`` object able to calculate forces on an ``openmm.System``.
 
-.. autoclass:: metatensor.torch.atomistic.openmm_interface.get_metatensor_force
-    :show-inheritance:
-    :members:
+.. autofunction:: metatensor.torch.atomistic.openmm_force.get_metatensor_force
 
 In order to run simulations with ``metatensor.torch.atomistic`` and ``OpenMM``,
 we recommend installing ``OpenMM`` from conda, using

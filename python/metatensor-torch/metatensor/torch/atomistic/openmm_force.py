@@ -13,9 +13,9 @@ from metatensor.torch.atomistic import (
 
 
 try:
+    import NNPOps.neighbors
     import openmm
     import openmmtorch
-    from NNPOps.neighbors import getNeighborPairs
 
     HAS_OPENMM = True
 except ImportError:
@@ -38,9 +38,25 @@ def get_metatensor_force(
     path: str,
     extensions_directory: Optional[str] = None,
     forceGroup: int = 0,
-    atoms: Optional[Iterable[int]] = None,
+    selected_atoms: Optional[Iterable[int]] = None,
     check_consistency: bool = False,
-) -> openmm.System:
+) -> openmm.Force:
+    """
+    Create an OpenMM Force from a metatensor atomistic model.
+
+    :param system: The OpenMM System object.
+    :param topology: The OpenMM Topology object.
+    :param path: The path to the exported metatensor model.
+    :param extensions_directory: The path to the extensions for the model.
+    :param forceGroup: The force group to which the force should be added.
+    :param selected_atoms: The indices of the atoms on which non-zero forces should
+        be computed (e.g., the ML region). If None, forces will be computed for all
+        atoms.
+    :param check_consistency: Whether to check various consistency conditions inside
+        the model.
+
+    return: The OpenMM Force object.
+    """
 
     if not HAS_OPENMM:
         raise ImportError(
@@ -52,15 +68,15 @@ def get_metatensor_force(
 
     # Get the atomic numbers of the ML region.
     all_atoms = list(topology.atoms())
-    atomic_numbers = [atom.element.atomic_number for atom in all_atoms]
+    atomic_types = [atom.element.atomic_number for atom in all_atoms]
 
-    if atoms is None:
+    if selected_atoms is None:
         selected_atoms = None
     else:
         selected_atoms = Labels(
             names=["system", "atom"],
             values=torch.tensor(
-                [[0, selected_atom] for selected_atom in atoms],
+                [[0, selected_atom] for selected_atom in selected_atoms],
                 dtype=torch.int32,
             ),
         )
@@ -69,8 +85,8 @@ def get_metatensor_force(
 
         def __init__(
             self,
-            model: torch.jit._script.RecursiveScriptModule,
-            atomic_numbers: List[int],
+            model,
+            atomic_types: List[int],
             selected_atoms: Optional[Labels],
             check_consistency: bool,
         ) -> None:
@@ -78,7 +94,7 @@ def get_metatensor_force(
 
             self.model = model
             self.register_buffer(
-                "atomic_numbers", torch.tensor(atomic_numbers, dtype=torch.int32)
+                "atomic_types", torch.tensor(atomic_types, dtype=torch.int32)
             )
             self.evaluation_options = ModelEvaluationOptions(
                 length_unit="nm",
@@ -125,26 +141,23 @@ def get_metatensor_force(
 
             # create System
             system = System(
-                types=self.atomic_numbers,
+                types=self.atomic_types,
                 positions=positions,
                 cell=cell,
             )
             system = _attach_neighbors(system, self.requested_neighbor_list)
 
-            energy = (
-                self.model(
-                    [system],
-                    self.evaluation_options,
-                    check_consistency=self.check_consistency,
-                )["energy"]
-                .block()
-                .values.reshape(())
+            outputs = self.model(
+                [system],
+                self.evaluation_options,
+                check_consistency=self.check_consistency,
             )
+            energy = outputs["energy"].block().values.reshape(())
             return energy
 
     metatensor_force = MetatensorForce(
         model,
-        atomic_numbers,
+        atomic_types,
         selected_atoms,
         check_consistency,
     )
@@ -175,11 +188,11 @@ def _attach_neighbors(
         cell = system.cell
 
     # Get the neighbor pairs, shifts and edge indices.
-    neighbors, interatomic_vectors, _, _ = getNeighborPairs(
-        system.positions,
-        requested_nl_options.engine_cutoff("nm"),
-        -1,
-        cell,
+    neighbors, interatomic_vectors, _, _ = NNPOps.neighbors.getNeighborPairs(
+        positions=system.positions,
+        cutoff=requested_nl_options.engine_cutoff("nm"),
+        max_num_pairs=-1,
+        box_vectors=cell,
     )
     mask = neighbors[0] >= 0
     neighbors = neighbors[:, mask]
