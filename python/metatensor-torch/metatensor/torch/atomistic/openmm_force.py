@@ -8,6 +8,7 @@ from metatensor.torch.atomistic import (
     ModelOutput,
     System,
     load_atomistic_model,
+    NeighborListOptions
 )
 
 
@@ -106,79 +107,6 @@ def get_metatensor_force(
 
             self.check_consistency = check_consistency
 
-        def _attach_neighbors(self, system: System) -> System:
-
-            if self.requested_neighbor_list is None:
-                return system
-
-            cell: Optional[torch.Tensor] = None
-            if not torch.all(system.cell == 0.0):
-                cell = system.cell
-
-            # Get the neighbor pairs, shifts and edge indices.
-            neighbors, interatomic_vectors, _, _ = getNeighborPairs(
-                system.positions,
-                self.requested_neighbor_list.engine_cutoff("nm"),
-                -1,
-                cell,
-            )
-            mask = neighbors[0] >= 0
-            neighbors = neighbors[:, mask]
-            interatomic_vectors = interatomic_vectors[mask, :]
-
-            if self.requested_neighbor_list.full_list:
-                neighbors = torch.concatenate((neighbors, neighbors.flip(0)), dim=1)
-                interatomic_vectors = torch.concatenate(
-                    (interatomic_vectors, -interatomic_vectors)
-                )
-
-            if cell is not None:
-                interatomic_vectors_unit_cell = (
-                    system.positions[interatomic_vectors[0]]
-                    - system.positions[interatomic_vectors[1]]
-                )
-                cell_shifts = (
-                    interatomic_vectors_unit_cell - interatomic_vectors
-                ) @ torch.linalg.inv(cell)
-                cell_shifts = torch.round(cell_shifts).to(torch.int32)
-            else:
-                cell_shifts = torch.zeros(
-                    (neighbors.shape[1], 3),
-                    dtype=torch.int32,
-                    device=system.positions.device,
-                )
-
-            neighbor_list = TensorBlock(
-                values=interatomic_vectors.reshape(-1, 3, 1),
-                samples=Labels(
-                    names=[
-                        "first_atom",
-                        "second_atom",
-                        "cell_shift_a",
-                        "cell_shift_b",
-                        "cell_shift_c",
-                    ],
-                    values=torch.concatenate([neighbors.T, cell_shifts], dim=-1),
-                ),
-                components=[
-                    Labels(
-                        names=["xyz"],
-                        values=torch.arange(
-                            3, dtype=torch.int32, device=system.positions.device
-                        ).reshape(-1, 1),
-                    )
-                ],
-                properties=Labels(
-                    names=["distance"],
-                    values=torch.tensor(
-                        [[0]], dtype=torch.int32, device=system.positions.device
-                    ),
-                ),
-            )
-
-            system.add_neighbor_list(self.requested_neighbor_list, neighbor_list)
-            return system
-
         def forward(
             self, positions: torch.Tensor, cell: Optional[torch.Tensor] = None
         ) -> torch.Tensor:
@@ -201,7 +129,7 @@ def get_metatensor_force(
                 positions=positions,
                 cell=cell,
             )
-            system = self._attach_neighbors(system)
+            system = _attach_neighbors(system, self.requested_neighbor_list)
 
             energy = (
                 self.model(
@@ -233,3 +161,79 @@ def get_metatensor_force(
     force.setForceGroup(forceGroup)
 
     return force
+
+
+def _attach_neighbors(system: System, requested_nl_options: NeighborListOptions) -> System:
+
+    if requested_nl_options is None:
+        return system
+
+    cell: Optional[torch.Tensor] = None
+    if not torch.all(system.cell == 0.0):
+        cell = system.cell
+
+    # Get the neighbor pairs, shifts and edge indices.
+    neighbors, interatomic_vectors, _, _ = getNeighborPairs(
+        system.positions,
+        requested_nl_options.engine_cutoff("nm"),
+        -1,
+        cell,
+    )
+    mask = neighbors[0] >= 0
+    neighbors = neighbors[:, mask]
+    neighbors = neighbors.flip(0)  # [neighbor, center] -> [center, neighbor]
+    interatomic_vectors = interatomic_vectors[mask, :]
+
+    if requested_nl_options.full_list:
+        neighbors = torch.concatenate((neighbors, neighbors.flip(0)), dim=1)
+        interatomic_vectors = torch.concatenate(
+            (interatomic_vectors, -interatomic_vectors)
+        )
+
+    if cell is not None:
+        interatomic_vectors_unit_cell = (
+            system.positions[neighbors[1]]
+            - system.positions[neighbors[0]]
+        )
+        cell_shifts = (
+            interatomic_vectors_unit_cell - interatomic_vectors
+        ) @ torch.linalg.inv(cell)
+        print(cell_shifts)
+        cell_shifts = torch.round(cell_shifts).to(torch.int32)
+    else:
+        cell_shifts = torch.zeros(
+            (neighbors.shape[1], 3),
+            dtype=torch.int32,
+            device=system.positions.device,
+        )
+
+    neighbor_list = TensorBlock(
+        values=interatomic_vectors.reshape(-1, 3, 1),
+        samples=Labels(
+            names=[
+                "first_atom",
+                "second_atom",
+                "cell_shift_a",
+                "cell_shift_b",
+                "cell_shift_c",
+            ],
+            values=torch.concatenate([neighbors.T, cell_shifts], dim=-1),
+        ),
+        components=[
+            Labels(
+                names=["xyz"],
+                values=torch.arange(
+                    3, dtype=torch.int32, device=system.positions.device
+                ).reshape(-1, 1),
+            )
+        ],
+        properties=Labels(
+            names=["distance"],
+            values=torch.tensor(
+                [[0]], dtype=torch.int32, device=system.positions.device
+            ),
+        ),
+    )
+
+    system.add_neighbor_list(requested_nl_options, neighbor_list)
+    return system
