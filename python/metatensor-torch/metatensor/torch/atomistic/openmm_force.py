@@ -20,14 +20,16 @@ try:
     HAS_OPENMM = True
 except ImportError:
 
-    class MLPotential:
-        pass
+    class openmm:
+        class System:
+            pass
 
-    class MLPotentialImpl:
-        pass
+        class Force:
+            pass
 
-    class MLPotentialImplFactory:
-        pass
+        class app:
+            class Topology:
+                pass
 
     HAS_OPENMM = False
 
