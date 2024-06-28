@@ -58,6 +58,20 @@ def _check_all_np_ndarray(arrays):
             )
 
 
+def sum(array, axis: Optional[int] = None):
+    """
+    Returns the sum of the elements in the array at the axis.
+
+    It is equivalent of np.sum(array, axis=axis) and torch.sum(tensor, dim=axis)
+    """
+    if isinstance(array, TorchTensor):
+        return torch.sum(array, dim=axis)
+    elif isinstance(array, np.ndarray):
+        return np.sum(array, axis=axis).astype(array.dtype)
+    else:
+        raise TypeError(UNKNOWN_ARRAY_TYPE)
+
+
 def abs(array):
     """
     Returns the absolute value of the elements in the array.
