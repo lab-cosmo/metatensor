@@ -6,9 +6,9 @@ from metatensor.torch import Labels, TensorBlock
 from metatensor.torch.atomistic import (
     ModelEvaluationOptions,
     ModelOutput,
+    NeighborListOptions,
     System,
     load_atomistic_model,
-    NeighborListOptions
 )
 
 
@@ -163,7 +163,9 @@ def get_metatensor_force(
     return force
 
 
-def _attach_neighbors(system: System, requested_nl_options: NeighborListOptions) -> System:
+def _attach_neighbors(
+    system: System, requested_nl_options: NeighborListOptions
+) -> System:
 
     if requested_nl_options is None:
         return system
@@ -192,13 +194,11 @@ def _attach_neighbors(system: System, requested_nl_options: NeighborListOptions)
 
     if cell is not None:
         interatomic_vectors_unit_cell = (
-            system.positions[neighbors[1]]
-            - system.positions[neighbors[0]]
+            system.positions[neighbors[1]] - system.positions[neighbors[0]]
         )
         cell_shifts = (
             interatomic_vectors_unit_cell - interatomic_vectors
         ) @ torch.linalg.inv(cell)
-        print(cell_shifts)
         cell_shifts = torch.round(cell_shifts).to(torch.int32)
     else:
         cell_shifts = torch.zeros(
