@@ -21,6 +21,7 @@ from . import (
 
 
 import ase  # isort: skip
+import ase.md  # isort: skip
 import ase.neighborlist  # isort: skip
 import ase.calculators.calculator  # isort: skip
 from ase.calculators.calculator import (  # isort: skip
