@@ -381,7 +381,7 @@ class MetatensorCalculator(ase.calculators.calculator.Calculator):
 
     def request_properties_every_n_steps(
         self,
-        dyn: ase.md.MolecularDynamics,
+        dyn: ase.md.md.MolecularDynamics,
         properties: List[str],
         n: int,
     ):
