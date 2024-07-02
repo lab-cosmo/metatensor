@@ -1,5 +1,17 @@
+import numpy as np
+
 from . import _dispatch
-from ._backend import Labels, TensorBlock, torch_jit_script
+from ._backend import Labels, TensorBlock, torch_jit_is_scripting, torch_jit_script
+
+
+try:
+    import torch
+
+    TorchScriptClass = torch.ScriptClass
+except ImportError:
+
+    class TorchScriptClass:
+        pass
 
 
 @torch_jit_script
@@ -50,22 +62,37 @@ def block_from_array(array) -> TensorBlock:
             must have at least two dimensions. Too few provided: {n_dimensions}"
         )
 
+    if torch_jit_is_scripting():
+        # we are using metatensor-torch
+        labels_array_like = torch.empty(0)
+    else:
+        if isinstance(Labels, TorchScriptClass):
+            # we are using metatensor-torch
+            labels_array_like = torch.empty(0)
+        else:
+            # we are using metatensor-core
+            labels_array_like = np.empty(0)
+
     samples = Labels(
         names=["sample"],
-        values=_dispatch.int_array_like(list(range(shape[0])), array).reshape(-1, 1),
+        values=_dispatch.int_array_like(
+            list(range(shape[0])), labels_array_like
+        ).reshape(-1, 1),
     )
     components = [
         Labels(
             names=[f"component_{component_index+1}"],
-            values=_dispatch.int_array_like(list(range(axis_size)), array).reshape(
-                -1, 1
-            ),
+            values=_dispatch.int_array_like(
+                list(range(axis_size)), labels_array_like
+            ).reshape(-1, 1),
         )
         for component_index, axis_size in enumerate(shape[1:-1])
     ]
     properties = Labels(
         names=["property"],
-        values=_dispatch.int_array_like(list(range(shape[-1])), array).reshape(-1, 1),
+        values=_dispatch.int_array_like(
+            list(range(shape[-1])), labels_array_like
+        ).reshape(-1, 1),
     )
 
     device = _dispatch.get_device(array)
