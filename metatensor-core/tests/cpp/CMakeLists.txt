@@ -12,6 +12,11 @@ if (${CMAKE_CURRENT_SOURCE_DIR} STREQUAL ${CMAKE_SOURCE_DIR})
     endif()
 endif()
 
+if (MINGW)
+    # CI can't find libsdc++, so we statically link it
+    set(CMAKE_EXE_LINKER_FLAGS "-static-libstdc++")
+endif()
+
 add_subdirectory(../../ metatensor)
 get_target_property(METATENSOR_IMPORTED_LOCATION metatensor::shared IMPORTED_LOCATION)
 get_filename_component(METATENSOR_DIR ${METATENSOR_IMPORTED_LOCATION} DIRECTORY)

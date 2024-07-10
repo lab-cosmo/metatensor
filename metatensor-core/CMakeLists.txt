@@ -146,14 +146,42 @@ endif()
 set(CARGO_TARGET_DIR ${CMAKE_CURRENT_BINARY_DIR}/target)
 set(CARGO_BUILD_ARG "${CARGO_BUILD_ARG};--target-dir=${CARGO_TARGET_DIR}")
 
-# Handle cross compilation with RUST_BUILD_TARGET
-if ("${RUST_BUILD_TARGET}" STREQUAL "")
-    if (CARGO_VERSION_RAW MATCHES "host: ([a-zA-Z0-9_\\-]*)\n")
-        set(RUST_HOST_TARGET "${CMAKE_MATCH_1}")
+if (CARGO_VERSION_RAW MATCHES "host: ([a-zA-Z0-9_\\-]*)\n")
+    set(RUST_HOST_TARGET "${CMAKE_MATCH_1}")
+    if (RUST_HOST_TARGET MATCHES "([a-zA-Z0-9_]*)\\-")
+        set(RUST_HOST_ARCH "${CMAKE_MATCH_1}")
     else()
-        message(FATAL_ERROR "failed to determine host target, output was: ${CARGO_VERSION_RAW}")
+        message(FATAL_ERROR "failed to determine host CPU arch, target was: ${RUST_HOST_TARGET}")
+    endif()
+else()
+    message(FATAL_ERROR "failed to determine host target, output was: ${CARGO_VERSION_RAW}")
+endif()
+
+if (WIN32)
+    # on Windows, we need to use the same ABI in both CMake and cargo. If the
+    # user did not explicitly request a target, we can try to set it ourself,
+    # otherwise we just check that it matches what we expect.
+    if (MSVC)
+        if ("${RUST_BUILD_TARGET}" STREQUAL "")
+            set(RUST_BUILD_TARGET "${RUST_HOST_ARCH}-pc-windows-msvc")
+            message(STATUS "Setting rust target to ${RUST_BUILD_TARGET}")
+        elseif(NOT "${RUST_BUILD_TARGET}" MATCHES "-pc-windows-msvc")
+            message(FATAL_ERROR "CMake is building with MSVC but the Rust target is ${RUST_BUILD_TARGET}")
+        endif()
     endif()
 
+    if (MINGW)
+        if ("${RUST_BUILD_TARGET}" STREQUAL "")
+            set(RUST_BUILD_TARGET "${RUST_HOST_ARCH}-pc-windows-gnu")
+            message(STATUS "Setting rust target to ${RUST_BUILD_TARGET}")
+        elseif(NOT "${RUST_BUILD_TARGET}" MATCHES "-pc-windows-gnu")
+            message(FATAL_ERROR "CMake is building with MinGW but the Rust target is ${RUST_BUILD_TARGET}")
+        endif()
+    endif()
+endif()
+
+# Handle cross compilation with RUST_BUILD_TARGET
+if ("${RUST_BUILD_TARGET}" STREQUAL "")
     if (${METATENSOR_MAIN_PROJECT})
         message(STATUS "Compiling to host (${RUST_HOST_TARGET})")
     endif()
@@ -168,7 +196,6 @@ else()
     set(CARGO_BUILD_ARG "${CARGO_BUILD_ARG};--target=${RUST_BUILD_TARGET}")
     set(CARGO_OUTPUT_DIR "${CARGO_TARGET_DIR}/${RUST_BUILD_TARGET}/${CARGO_BUILD_TYPE}")
 endif()
-
 
 # Get the list of libraries linked by default by cargo/rustc to add when linking
 # to metatensor::static
