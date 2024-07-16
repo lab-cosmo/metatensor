@@ -13,6 +13,7 @@ The following functions operate on :c:type:`mts_labels_t`:
 - :c:func:`mts_labels_position`: get the position of an entry in the labels
 - :c:func:`mts_labels_union`: get the union of two labels
 - :c:func:`mts_labels_intersection`: get the intersection of two labels
+- :c:func:`mts_labels_select`: select entries in labels that match a selection
 - :c:func:`mts_labels_set_user_data`: store some data inside the labels for later retrieval
 - :c:func:`mts_labels_user_data`: retrieve data stored earlier in the labels
 
@@ -29,6 +30,8 @@ The following functions operate on :c:type:`mts_labels_t`:
 .. doxygenfunction:: mts_labels_union
 
 .. doxygenfunction:: mts_labels_intersection
+
+.. doxygenfunction:: mts_labels_select
 
 .. doxygenfunction:: mts_labels_set_user_data
 

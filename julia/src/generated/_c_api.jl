@@ -152,6 +152,14 @@ function mts_labels_intersection(first::mts_labels_t, second::mts_labels_t, resu
     )
 end
 
+function mts_labels_select(labels::mts_labels_t, selection::mts_labels_t, selected::Ptr{Int64}, selected_count::Ptr{UIntptr})
+    ccall((:mts_labels_select, libmetatensor), 
+        mts_status_t,
+        (mts_labels_t, mts_labels_t, Ptr{Int64}, Ptr{UIntptr},),
+        labels, selection, selected, selected_count
+    )
+end
+
 function mts_labels_free(labels::Ptr{mts_labels_t})
     ccall((:mts_labels_free, libmetatensor), 
         mts_status_t,

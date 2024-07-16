@@ -19,9 +19,17 @@ a changelog](https://keepachangelog.com/en/1.1.0/) format. This project follows
 
 ### metatensor-core C++
 
+#### Added
+
+- `Labels::select` to sub-select entries in labels
+
 ### metatensor-core C
 
+- `mts_labels_select` to sub-select entries in labels
+
 ### metatensor-core Python
+
+- `Labels.select` to sub-select entries in labels
 
 ### metatensor-core Julia
 

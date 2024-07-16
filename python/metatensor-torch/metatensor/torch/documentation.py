@@ -579,6 +579,21 @@ class Labels:
             used in the output, the mapping for them is set to ``-1``.
         """
 
+    def select(self, selection: "Labels") -> torch.Tensor:
+        """
+        Select entries in these :py:class:`Labels` that match the ``selection``.
+
+        The selection's names must be a subset of the names of these labels.
+
+        All entries in these :py:class:`Labels` that match one of the entry in the
+        ``selection`` for all the selection's dimension will be picked. Any entry in the
+        ``selection`` but not in these :py:class:`Labels` will be ignored.
+
+        :param selection: description of the entries to select
+        :return: 1-dimensional tensor containing the integer indices of selected
+            entries
+        """
+
     def print(self, max_entries: int, indent: int) -> str:
         """print these :py:class:`Labels` to a string
 

@@ -499,7 +499,7 @@ TorchLabels LabelsHolder::set_union(const TorchLabels& other) const {
     auto device = this->values_.device();
     if (device != other->values_.device()) {
         C10_THROW_ERROR(ValueError,
-            "device mismatch in union: got '" + device.str() +
+            "device mismatch in `Labels.union`: got '" + device.str() +
             "' and '" + other->values_.device().str() + "'"
         );
     }
@@ -518,7 +518,7 @@ std::tuple<TorchLabels, torch::Tensor, torch::Tensor> LabelsHolder::union_and_ma
     auto device = this->values_.device();
     if (device != other->values_.device()) {
         C10_THROW_ERROR(ValueError,
-            "device mismatch in union: got '" + device.str() +
+            "device mismatch in `Labels.union_and_mapping`: got '" + device.str() +
             "' and '" + other->values_.device().str() + "'"
         );
     }
@@ -552,7 +552,7 @@ TorchLabels LabelsHolder::set_intersection(const TorchLabels& other) const {
     auto device = this->values_.device();
     if (device != other->values_.device()) {
         C10_THROW_ERROR(ValueError,
-            "device mismatch in intersection: got '" + device.str() +
+            "device mismatch in `Labels.intersection`: got '" + device.str() +
             "' and '" + other->values_.device().str() + "'"
         );
     }
@@ -571,7 +571,7 @@ std::tuple<TorchLabels, torch::Tensor, torch::Tensor> LabelsHolder::intersection
     auto device = this->values_.device();
     if (device != other->values_.device()) {
         C10_THROW_ERROR(ValueError,
-            "device mismatch in intersection: got '" + device.str() +
+            "device mismatch in `Labels.intersection_and_mapping`: got '" + device.str() +
             "' and '" + other->values_.device().str() + "'"
         );
     }
@@ -593,6 +593,36 @@ std::tuple<TorchLabels, torch::Tensor, torch::Tensor> LabelsHolder::intersection
         first_mapping.to(device),
         second_mapping.to(device)
     );
+}
+
+torch::Tensor LabelsHolder::select(const TorchLabels& selection) const {
+    if (!labels_.has_value() || !selection->labels_.has_value()) {
+        C10_THROW_ERROR(ValueError,
+            "can not call this function on Labels view, call to_owned first"
+        );
+    }
+
+    auto device = this->values_.device();
+    if (device != selection->values_.device()) {
+        C10_THROW_ERROR(ValueError,
+            "device mismatch in `Labels.select`: got '" + device.str() +
+            "' and '" + selection->values_.device().str() + "'"
+        );
+    }
+
+    auto options = torch::TensorOptions().dtype(torch::kInt64).device(torch::kCPU);
+    auto selected = torch::zeros({this->count()}, options);
+    auto selected_count = static_cast<size_t>(selected.size(0));
+
+    labels_->select(
+        selection->labels_.value(),
+        selected.data_ptr<int64_t>(),
+        &selected_count
+    );
+
+    selected.resize_({static_cast<int64_t>(selected_count)});
+
+    return selected;
 }
 
 struct LabelsPrintData {

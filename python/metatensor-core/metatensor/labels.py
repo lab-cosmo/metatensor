@@ -6,7 +6,7 @@ from typing import BinaryIO, List, Optional, Sequence, Tuple, Union, overload
 
 import numpy as np
 
-from ._c_api import mts_labels_t
+from ._c_api import c_uintptr_t, mts_labels_t
 from ._c_lib import _get_library
 from .utils import _ptr_to_const_ndarray
 
@@ -955,6 +955,34 @@ class Labels:
         )
 
         return Labels._from_mts_labels_t(output), first_mapping, second_mapping
+
+    def select(self, selection: "Labels") -> np.ndarray:
+        """
+        Select entries in these :py:class:`Labels` that match the ``selection``.
+
+        The selection's names must be a subset of the names of these labels.
+
+        All entries in these :py:class:`Labels` that match one of the entry in the
+        ``selection`` for all the selection's dimension will be picked. Any entry in the
+        ``selection`` but not in these :py:class:`Labels` will be ignored.
+
+        :param selection: description of the entries to select
+        :return: 1-dimensional ndarray containing the integer indices of selected
+            entries
+        """
+        selected = np.zeros((len(self)), dtype=np.int64)
+        selected_count = c_uintptr_t(len(self))
+
+        self._lib.mts_labels_select(
+            self._as_mts_labels_t(),
+            selection._as_mts_labels_t(),
+            selected.ctypes.data_as(ctypes.POINTER(ctypes.c_int64)),
+            ctypes.pointer(selected_count),
+        )
+
+        selected.resize(selected_count.value, refcheck=False)
+
+        return selected
 
     def print(self, max_entries: int, indent: int = 0) -> str:
         """print these :py:class:`Labels` to a string

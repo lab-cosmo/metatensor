@@ -410,3 +410,25 @@ def test_values_reference():
     values = Labels(names=["_"], values=np.array(data).reshape(-1, 1)).values
 
     assert np.all(values.reshape(-1) == data)
+
+
+def test_select():
+    labels = Labels(["aa", "bb"], np.array([[1, 1], [1, 2], [3, 2], [2, 1]]))
+    selection = Labels(["aa"], np.array([[1], [2], [5]]))
+
+    assert np.all(labels.select(selection) == [0, 1, 3])
+
+    # selection with the same names
+    selection = Labels(["aa", "bb"], np.array([[1, 1], [2, 1], [5, 1], [1, 2]]))
+    assert np.all(labels.select(selection) == [0, 3, 1])
+
+    # empty selection
+    selection = Labels.empty(["aa"])
+    assert np.all(labels.select(selection) == [])
+
+    # invalid selection names
+    selection = Labels.empty(["aaaa"])
+
+    message = "invalid parameter: 'aaaa' in selection is not part of these Labels"
+    with pytest.raises(MetatensorError, match=message):
+        labels.select(selection)
