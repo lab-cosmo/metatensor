@@ -39,6 +39,38 @@ inline std::string scalar_type_name(torch::ScalarType scalar_type) {
     }
 }
 
+/// Convert a string from `scalar_type_name` to a `torch::ScalarType`
+inline torch::ScalarType scalar_type_from_name(std::string name) {
+    if (name == "torch.int8") {
+        return torch::ScalarType::Char;
+    } else if (name == "torch.int16") {
+        return torch::ScalarType::Short;
+    } else if (name == "torch.int32") {
+        return torch::ScalarType::Int;
+    } else if (name == "torch.int64") {
+        return torch::ScalarType::Long;
+    } else if (name == "torch.float16") {
+        return torch::ScalarType::Half;
+    } else if (name == "torch.float32") {
+        return torch::ScalarType::Float;
+    } else if (name == "torch.float64") {
+        return torch::ScalarType::Double;
+    } else if (name == "torch.complex32") {
+        return torch::ScalarType::ComplexHalf;
+    } else if (name == "torch.complex64") {
+        return torch::ScalarType::ComplexFloat;
+    } else if (name == "torch.complex128") {
+        return torch::ScalarType::ComplexDouble;
+    } else if (name == "torch.bool") {
+        return torch::ScalarType::Bool;
+    } else {
+        throw std::runtime_error(
+            "Found unknown scalar type name `" + name + "` while " +
+            "converting it to a torch scalar type."
+        );
+    }
+}
+
 /// Parse the arguments to the `to` function
 inline std::tuple<torch::optional<torch::Dtype>, torch::optional<torch::Device>>
 to_arguments_parse(

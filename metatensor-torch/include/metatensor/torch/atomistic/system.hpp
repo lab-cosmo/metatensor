@@ -255,6 +255,12 @@ public:
     /// Implementation of `__str__` and `__repr__` for Python
     std::string str() const;
 
+    /// Serialize a `System` to a JSON string.
+    std::string to_json() const;
+
+    /// Load a serialized `System` from a JSON string.
+    static System from_json(std::string_view json);
+
 private:
     struct nl_options_compare {
         bool operator()(const NeighborListOptions& a, const NeighborListOptions& b) const {
