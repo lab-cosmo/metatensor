@@ -109,7 +109,7 @@ jobs:
     name: ${{ matrix.name }} (torch v${{ matrix.torch-version }})
     strategy:
       matrix:
-        torch-version: ['1.12', '1.13', '2.0', '2.1', '2.2', '2.3']
+        torch-version: ['1.12', '1.13', '2.0', '2.1', '2.2', '2.3', '2.4']
         arch: ['arm64', 'x86_64']
         os: ['ubuntu-22.04', 'macos-13', 'macos-14', 'windows-2019']
         exclude:
@@ -120,11 +120,13 @@ jobs:
           - {os: windows-2019, arch: arm64}
           # https://github.com/pytorch/pytorch/issues/125109
           - {os: windows-2019, torch-version: '2.3'}
+          - {os: windows-2019, torch-version: '2.4'}
           # arm64-macos is only supported for torch >= 2.0
           - {os: macos-14, arch: arm64, torch-version: '1.12'}
           - {os: macos-14, arch: arm64, torch-version: '1.13'}
           # x86_64-macos is only supported for torch <2.3
           - {os: macos-13, arch: x86_64, torch-version: '2.3'}
+          - {os: macos-13, arch: x86_64, torch-version: '2.4'}
         include:
           # add `cibw-arch` and `rust-target` to the different configurations
           - name: x86_64 Linux
@@ -159,6 +161,7 @@ jobs:
           - {torch-version: '2.1',  python-version: '3.11', cibw-python: 'cp311-*'}
           - {torch-version: '2.2',  python-version: '3.12', cibw-python: 'cp312-*'}
           - {torch-version: '2.3',  python-version: '3.12', cibw-python: 'cp312-*'}
+          - {torch-version: '2.4',  python-version: '3.12', cibw-python: 'cp312-*'}
     steps:
       - uses: actions/checkout@v4
         with:

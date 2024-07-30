@@ -844,7 +844,7 @@ LabelsEntryHolder::LabelsEntryHolder(TorchLabels labels, int64_t index):
 #if TORCH_VERSION_MAJOR >= 2 && TORCH_VERSION_MINOR >= 4
         throw torch::IndexError(ss.str(), /*backtrace=*/nullptr);
 #else
-        throw torch::IndexError(ss.str(), /*backtrace=*/"");
+        throw torch::IndexError(ss.str(), /*backtrace=*/"<no backtrace>");
 #endif
 
 #endif
