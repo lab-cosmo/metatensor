@@ -179,6 +179,15 @@ public:
     /// output.
     std::tuple<TorchLabels, torch::Tensor, torch::Tensor> intersection_and_mapping(const TorchLabels& other) const;
 
+    /// Select entries in these `Labels` that match the `selection`.
+    ///
+    /// The selection's names must be a subset of the names of these labels.
+    ///
+    /// All entries in these `Labels` that match one of the entry in the
+    /// `selection` for all the selection's dimension will be picked. Any entry
+    /// in the `selection` but not in these `Labels` will be ignored.
+    torch::Tensor select(const TorchLabels& selection) const;
+
     /// Load serialized Labels from the given path
     static TorchLabels load(const std::string& path);
 

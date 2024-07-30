@@ -116,6 +116,35 @@ TEST_CASE("Set operations") {
         expected = std::vector<int64_t>{-1, 0, -1};
         CHECK(second_mapping == expected);
     }
+
+    SECTION("select") {
+        // selection with a subset of names
+        auto labels = Labels({"aa", "bb"}, {{1, 1}, {1, 2}, {3, 2}, {2, 1}});
+        auto selection = Labels({"aa"}, {{1}, {2}, {5}});
+
+        auto selected = labels.select(selection);
+        CHECK(selected.size() == 3);
+        CHECK(selected == std::vector<int64_t>{0, 1, 3});
+
+        // selection with the same names
+        selection = Labels({"aa", "bb"}, {{1, 1}, {2, 1}, {5, 1}, {1, 2}});
+
+        selected = labels.select(selection);
+        CHECK(selected.size() == 3);
+        CHECK(selected == std::vector<int64_t>{0, 3, 1});
+
+        // empty selection
+        selection = Labels({"aa"}, {});
+
+        selected = labels.select(selection);
+        CHECK(selected.size() == 0);
+
+        // invalid selection names
+        selection = Labels({"aaa"}, {{1}});
+        CHECK_THROWS_WITH(labels.select(selection),
+            "invalid parameter: 'aaa' in selection is not part of these Labels"
+        );
+    }
 }
 
 struct UserData {

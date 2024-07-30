@@ -383,6 +383,13 @@ extern "C" {
         second_mapping_count: usize,
     ) -> mts_status_t;
     #[must_use]
+    pub fn mts_labels_select(
+        labels: mts_labels_t,
+        selection: mts_labels_t,
+        selected: *mut i64,
+        selected_count: *mut usize,
+    ) -> mts_status_t;
+    #[must_use]
     pub fn mts_labels_free(labels: *mut mts_labels_t) -> mts_status_t;
     #[must_use]
     pub fn mts_register_data_origin(

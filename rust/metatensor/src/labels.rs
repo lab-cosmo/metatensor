@@ -420,6 +420,31 @@ impl Labels {
         };
     }
 
+    /// Select entries in these `Labels` that match the `selection`.
+    ///
+    /// The selection's names must be a subset of the names of these labels.
+    ///
+    /// All entries in these `Labels` that match one of the entry in the
+    /// `selection` for all the selection's dimension will be picked. Any entry
+    /// in the `selection` but not in these `Labels` will be ignored.
+    pub fn select(&self, selection: &Labels) -> Result<Vec<i64>, Error> {
+        let mut selected = vec![-1; self.count()];
+        let mut selected_count = selected.len();
+
+        unsafe {
+            check_status(crate::c_api::mts_labels_select(
+                self.as_mts_labels_t(),
+                selection.as_mts_labels_t(),
+                selected.as_mut_ptr(),
+                &mut selected_count
+            ))?;
+        }
+
+        selected.resize(selected_count, 0);
+
+        return Ok(selected);
+    }
+
     pub(crate) fn values(&self) -> &[LabelValue] {
         if self.count() == 0 || self.size() == 0 {
             return &[]
@@ -841,5 +866,32 @@ mod tests {
 
         assert_eq!(first_mapping, [-1, 0]);
         assert_eq!(second_mapping, [-1, 0, -1]);
+    }
+
+    #[test]
+    fn selection() {
+        // selection with a subset of names
+        let labels = Labels::new(["aa", "bb"], &[[1, 1], [1, 2], [3, 2], [2, 1]]);
+        let selection = Labels::new(["aa"], &[[1], [2], [5]]);
+
+        let selected = labels.select(&selection).unwrap();
+        assert_eq!(selected, [0, 1, 3]);
+
+        // selection with the same names
+        let selection = Labels::new(["aa", "bb"], &[[1, 1], [2, 1], [5, 1], [1, 2]]);
+        let selected = labels.select(&selection).unwrap();
+        assert_eq!(selected, [0, 3, 1]);
+
+        // empty selection
+        let selection = Labels::empty(vec!["aa"]);
+        let selected = labels.select(&selection).unwrap();
+        assert_eq!(selected, []);
+
+        // invalid selection names
+        let selection = Labels::empty(vec!["aaa"]);
+        let err = labels.select(&selection).unwrap_err();
+        assert_eq!(err.message,
+            "invalid parameter: 'aaa' in selection is not part of these Labels"
+        );
     }
 }

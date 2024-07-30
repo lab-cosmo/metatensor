@@ -448,6 +448,32 @@ mts_status_t mts_labels_intersection(struct mts_labels_t first,
                                      uintptr_t second_mapping_count);
 
 /**
+ * Select entries in the `labels` that match the `selection`.
+ *
+ * The selection's names must be a subset of the name of the `labels` names.
+ *
+ * All entries in the `labels` that match one of the entry in the `selection`
+ * for all the selection's dimension will be picked. Any entry in the
+ * `selection` but not in the `labels` will be ignored.
+ *
+ * @param labels Labels on which to run the selection
+ * @param selection definition of the selection criteria. Multiple entries are
+ *        interpreted as a logical `or` operation.
+ * @param selected on input, a pointer to an array with space for
+ *        `*selected_count` entries. On output, the first `*selected_count`
+ *        values will contain the index in `labels` of selected entries.
+ * @param selected_count on input, size of the `selected` array. On output,
+ *        this will contain the number of selected entries.
+ * @returns The status code of this operation. If the status is not
+ *          `MTS_SUCCESS`, you can use `mts_last_error()` to get the full
+ *          error message.
+ */
+mts_status_t mts_labels_select(struct mts_labels_t labels,
+                               struct mts_labels_t selection,
+                               int64_t *selected,
+                               uintptr_t *selected_count);
+
+/**
  * Decrease the reference count of `labels`, and release the corresponding
  * memory once the reference count reaches 0.
  *

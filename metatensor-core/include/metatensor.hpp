@@ -1316,9 +1316,6 @@ public:
     ///        a pointer to an array containing `other.count()` elements, to be
     ///        filled by this function. Otherwise it should be a `nullptr`.
     /// @param second_mapping_count number of elements in `second_mapping`
-    /// @returns The status code of this operation. If the status is not
-    ///          `MTS_SUCCESS`, you can use `mts_last_error()` to get the full
-    ///          error message.
     Labels set_union(
         const Labels& other,
         int64_t* first_mapping = nullptr,
@@ -1359,9 +1356,6 @@ public:
     ///        entries in `other` to the positions in the union, this should be
     ///        a vector containing `other.count()` elements, to be filled by
     ///        this function. Otherwise it should be an empty vector.
-    /// @returns The status code of this operation. If the status is not
-    ///          `MTS_SUCCESS`, you can use `mts_last_error()` to get the full
-    ///          error message.
     Labels set_union(
         const Labels& other,
         std::vector<int64_t>& first_mapping,
@@ -1411,9 +1405,6 @@ public:
     ///        `nullptr`. If an entry in `other` is not used in the
     ///        intersection, the mapping will be set to -1.
     /// @param second_mapping_count number of elements in `second_mapping`
-    /// @returns The status code of this operation. If the status is not
-    ///          `MTS_SUCCESS`, you can use `mts_last_error()` to get the full
-    ///          error message.
     Labels set_intersection(
         const Labels& other,
         int64_t* first_mapping = nullptr,
@@ -1458,9 +1449,6 @@ public:
     ///        filled by this function. Otherwise it should be an empty vector.
     ///        If an entry in `other` is not used in the intersection, the
     ///        mapping will be set to -1.
-    /// @returns The status code of this operation. If the status is not
-    ///          `MTS_SUCCESS`, you can use `mts_last_error()` to get the full
-    ///          error message.
     Labels set_intersection(
         const Labels& other,
         std::vector<int64_t>& first_mapping,
@@ -1485,6 +1473,44 @@ public:
             second_mapping_ptr,
             second_mapping_count
         );
+    }
+
+    /// Select entries in these `Labels` that match the `selection`.
+    ///
+    /// The selection's names must be a subset of the names of these labels.
+    ///
+    /// All entries in these `Labels` that match one of the entry in the
+    /// `selection` for all the selection's dimension will be picked. Any entry
+    /// in the `selection` but not in these `Labels` will be ignored.
+    ///
+    /// @param selection definition of the selection criteria. Multiple entries
+    ///        are interpreted as a logical `or` operation.
+    /// @param selected on input, a pointer to an array with space for
+    ///        `*selected_count` entries. On output, the first `*selected_count`
+    ///        values will contain the index in `labels` of selected entries.
+    /// @param selected_count on input, size of the `selected` array. On output,
+    ///        this will contain the number of selected entries.
+    void select(const Labels& selection, int64_t* selected, size_t *selected_count) const {
+        details::check_status(mts_labels_select(
+            labels_,
+            selection.labels_,
+            selected,
+            selected_count
+        ));
+    }
+
+    /// Select entries in these `Labels` that match the `selection`.
+    ///
+    /// This function does the same thing as the one above, but allocates and
+    /// return the list of selected indexes in a `std::vector`
+    std::vector<int64_t> select(const Labels& selection) const {
+        auto selected_count = this->count();
+        auto selected = std::vector<int64_t>(selected_count, -1);
+
+        this->select(selection, selected.data(), &selected_count);
+
+        selected.resize(selected_count);
+        return selected;
     }
 
     /*!

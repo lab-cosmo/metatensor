@@ -371,10 +371,11 @@ def test_union():
     # check that union preserves devices
     first = first.to("meta")
 
-    message = "device mismatch in union: got 'meta' and 'cpu'"
+    message = "device mismatch in `Labels.union`: got 'meta' and 'cpu'"
     with pytest.raises(ValueError, match=message):
         first.union(second)
 
+    message = "device mismatch in `Labels.union_and_mapping`: got 'meta' and 'cpu'"
     with pytest.raises(ValueError, match=message):
         first.union_and_mapping(second)
 
@@ -407,10 +408,13 @@ def test_intersection():
     # check that intersection preserves devices
     first = first.to("meta")
 
-    message = "device mismatch in intersection: got 'meta' and 'cpu'"
+    message = "device mismatch in `Labels.intersection`: got 'meta' and 'cpu'"
     with pytest.raises(ValueError, match=message):
         first.intersection(second)
 
+    message = (
+        "device mismatch in `Labels.intersection_and_mapping`: got 'meta' and 'cpu'"
+    )
     with pytest.raises(ValueError, match=message):
         first.intersection_and_mapping(second)
 
@@ -475,6 +479,28 @@ def test_dimensions_manipulation():
     match = r"out of range index 3 for labels dimensions \(3\)"
     with pytest.raises(IndexError, match=match):
         label.permute([0, 1, 3])
+
+
+def test_select():
+    labels = Labels(["aa", "bb"], torch.tensor([[1, 1], [1, 2], [3, 2], [2, 1]]))
+    selection = Labels(["aa"], torch.tensor([[1], [2], [5]]))
+
+    assert torch.all(labels.select(selection) == torch.tensor([0, 1, 3]))
+
+    # selection with the same names
+    selection = Labels(["aa", "bb"], torch.tensor([[1, 1], [2, 1], [5, 1], [1, 2]]))
+    assert torch.all(labels.select(selection) == torch.tensor([0, 3, 1]))
+
+    # empty selection
+    selection = Labels.empty(["aa"])
+    assert torch.all(labels.select(selection) == torch.tensor([]))
+
+    # invalid selection names
+    selection = Labels.empty(["aaaa"])
+
+    message = "invalid parameter: 'aaaa' in selection is not part of these Labels"
+    with pytest.raises(RuntimeError, match=message):
+        labels.select(selection)
 
 
 # define a wrapper class to make sure the types TorchScript uses for of all
@@ -560,6 +586,9 @@ class LabelsWrap:
         self, other: Labels
     ) -> Tuple[Labels, torch.Tensor, torch.Tensor]:
         return self._c.intersection_and_mapping(other=other)
+
+    def select(self, selection: Labels) -> torch.Tensor:
+        return self._c.select(selection=selection)
 
     def append(self, name: str, values: torch.Tensor) -> Labels:
         return self._c.append(name=name, values=values)

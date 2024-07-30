@@ -492,6 +492,63 @@ impl Labels {
 
         return Ok(builder.finish());
     }
+
+    /// Select entries in these `Labels` that match the `selection`.
+    ///
+    /// The selection's names must be a subset of the name of these `Labels`
+    /// names.
+    ///
+    /// All entries in `self` that match one of the entry in the selection for
+    /// all the selection's dimension will be picked. Any entry in the selection
+    /// but not in `self` will be ignored.
+    ///
+    /// On input, selected should have space for `self.count()` elements. On
+    /// output, it will contain the indexes in `self` that match the selection.
+    /// This function returns the number of selected entries, i.e. the number of
+    /// valid indexes in `selected`.
+    pub fn select(&self, selection: &Labels, selected: &mut [i64]) -> Result<usize, Error> {
+        assert!(selected.len() == self.count());
+        selected.fill(-1);
+
+        let mut n_selected = 0;
+        if selection.names == self.names {
+            for entry in selection {
+                #[allow(clippy::cast_possible_wrap)]
+                if let Some(position) = self.position(entry) {
+                    selected[n_selected] = position as i64;
+                    n_selected += 1;
+                }
+            }
+        } else {
+            let mut dimensions_to_match = Vec::new();
+            for name in &selection.names {
+                let i = match self.names.iter().position(|n| n == name) {
+                    Some(index) => index,
+                    None => {
+                        return Err(Error::InvalidParameter(format!(
+                            "'{}' in selection is not part of these Labels", name.as_str()
+                        )))
+                    }
+                };
+                dimensions_to_match.push(i);
+            }
+
+            let mut candidate = vec![LabelValue::new(0); dimensions_to_match.len()];
+            for (entry_i, entry) in self.iter().enumerate() {
+                for (i, &d) in dimensions_to_match.iter().enumerate() {
+                    candidate[i] = entry[d];
+                }
+
+                #[allow(clippy::cast_possible_wrap)]
+                if selection.contains(&candidate) {
+                    selected[n_selected] = entry_i as i64;
+                    n_selected += 1;
+                }
+            }
+        }
+
+        return Ok(n_selected);
+    }
 }
 
 /// iterator over `Labels` entries

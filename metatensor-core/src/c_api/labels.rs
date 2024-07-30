@@ -528,6 +528,66 @@ pub unsafe extern fn mts_labels_intersection(
     })
 }
 
+/// Select entries in the `labels` that match the `selection`.
+///
+/// The selection's names must be a subset of the name of the `labels` names.
+///
+/// All entries in the `labels` that match one of the entry in the `selection`
+/// for all the selection's dimension will be picked. Any entry in the
+/// `selection` but not in the `labels` will be ignored.
+///
+/// @param labels Labels on which to run the selection
+/// @param selection definition of the selection criteria. Multiple entries are
+///        interpreted as a logical `or` operation.
+/// @param selected on input, a pointer to an array with space for
+///        `*selected_count` entries. On output, the first `*selected_count`
+///        values will contain the index in `labels` of selected entries.
+/// @param selected_count on input, size of the `selected` array. On output,
+///        this will contain the number of selected entries.
+/// @returns The status code of this operation. If the status is not
+///          `MTS_SUCCESS`, you can use `mts_last_error()` to get the full
+///          error message.
+#[no_mangle]
+pub unsafe extern fn mts_labels_select(
+    labels: mts_labels_t,
+    selection: mts_labels_t,
+    selected: *mut i64,
+    selected_count: *mut usize,
+) -> mts_status_t {
+    catch_unwind(|| {
+        check_pointers_non_null!(selected, selected_count);
+
+        if !labels.is_rust() {
+            return Err(Error::InvalidParameter(
+                "these `labels` do not support mts_labels_select, call mts_labels_create first".into()
+            ));
+        }
+
+        if !selection.is_rust() {
+            return Err(Error::InvalidParameter(
+                "the `selection` do not support mts_labels_select, call mts_labels_create first".into()
+            ));
+        }
+
+        if *selected_count != labels.count {
+            return Err(Error::InvalidParameter(format!(
+                "`selected_count` ({}) must match the number of elements \
+                in `labels` ({}) but doesn't",
+                *selected_count,
+                labels.count,
+            )));
+        }
+
+        let labels = &*labels.internal_ptr_.cast::<Labels>();
+        let selection = &*selection.internal_ptr_.cast::<Labels>();
+        let selected = std::slice::from_raw_parts_mut(selected, *selected_count);
+
+        *selected_count = labels.select(selection, selected)?;
+
+        Ok(())
+    })
+}
+
 /// Decrease the reference count of `labels`, and release the corresponding
 /// memory once the reference count reaches 0.
 ///

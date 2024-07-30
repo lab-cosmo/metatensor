@@ -16,23 +16,16 @@ def drop_blocks(tensor: TensorMap, keys: Labels, copy: bool = False) -> TensorMa
     """
     Drop specified key/block pairs from a TensorMap.
 
-    :param tensor:
-        the TensorMap to drop the key-block pair from.
+    :param tensor: the :py:class:`TensorMap` to drop the key-block pair from.
 
-    :param keys:
-        a :py:class:`Labels` object containing the keys of the blocks to drop
+    :param keys: selection of keys to remove from the input ``tensor``. This can
+        contain any subset of the names of the tensor's keys.
 
-    :param copy:
-        if :py:obj:`True`, the returned :py:class:`TensorMap` is constructed by
-        copying the blocks from the input `tensor`. If :py:obj:`False`
-        (default), the values of the blocks in the output :py:class:`TensorMap`
-        reference the same data as the input `tensor`. The latter can be useful
-        for limiting memory usage, but should be used with caution when
-        manipulating the underlying data.
-
-    :return:
-        the input :py:class:`TensorMap` with the specified key/block pairs
-        dropped.
+    :param copy: if :py:obj:`True`, the returned :py:class:`TensorMap` is constructed by
+        copying the blocks from the input `tensor`. If :py:obj:`False` (default), the
+        values of the blocks in the output :py:class:`TensorMap` reference the same data
+        as the input `tensor`. The latter can be useful for limiting memory usage, but
+        should be used with caution when manipulating the underlying data.
     """
     # Check arg types
     if not torch_jit_is_scripting():
@@ -49,13 +42,7 @@ def drop_blocks(tensor: TensorMap, keys: Labels, copy: bool = False) -> TensorMa
 
     # Find the indices of keys to remove
     tensor_keys = tensor.keys
-    _, to_remove, used_in_intersection = tensor_keys.intersection_and_mapping(keys)
-    to_remove_indices: List[int] = (_dispatch.where(to_remove != -1)[0]).tolist()
-
-    not_present_in_tensor = _dispatch.where(used_in_intersection == -1)[0]
-    if len(not_present_in_tensor) != 0:
-        key = keys.entry(not_present_in_tensor[0])
-        raise ValueError(f"{key.print()} is not present in this tensor")
+    to_remove_indices: List[int] = tensor_keys.select(keys).tolist()
 
     # Create the new TensorMap
     new_blocks: List[TensorBlock] = []
@@ -97,13 +84,13 @@ def drop_blocks(tensor: TensorMap, keys: Labels, copy: bool = False) -> TensorMa
             new_blocks.append(new_block)
 
     if len(new_keys_values) != 0:
-        new_keys = Labels(keys.names, _dispatch.stack(new_keys_values, 0))
+        new_keys = Labels(tensor_keys.names, _dispatch.stack(new_keys_values, 0))
     else:
-        # note: if we're dropping, there must be at least one block
-        # otherwise, we will already have raised an error
         new_keys = Labels(
-            names=keys.names,
-            values=_dispatch.empty_like(tensor.block(0).values, (0, len(keys.names))),
+            names=tensor_keys.names,
+            values=_dispatch.empty_like(
+                tensor_keys.values, (0, len(tensor_keys.names))
+            ),
         )
 
     return TensorMap(keys=new_keys, blocks=new_blocks)
