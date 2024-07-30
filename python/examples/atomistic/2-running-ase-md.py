@@ -131,7 +131,7 @@ class HarmonicModel(torch.nn.Module):
 #
 # Now that we have a model for the energy of our system, let's create some initial
 # simulation state. We'll build a 3x3x3 super cell of diamond carbon. In practice, you
-# could also read the initial state from a file.
+# could also read the initial state from a file using :py:func:`ase.io.read`.
 
 primitive = ase.build.bulk(name="C", crystalstructure="diamond", a=3.567)
 
