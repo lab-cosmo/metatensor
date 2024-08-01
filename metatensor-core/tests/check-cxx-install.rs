@@ -69,7 +69,6 @@ fn check_cxx_install() {
 fn check_cmake_subdirectory() {
     let _guard = LOCK.lock().expect("mutex was poisoned");
 
-
     // Same test as above, but building metatensor in the same CMake project as
     // the test executable
     const CARGO_TARGET_TMPDIR: &str = env!("CARGO_TARGET_TMPDIR");

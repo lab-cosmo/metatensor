@@ -12,9 +12,16 @@ concurrency:
 
 jobs:
   rust-tests:
-    runs-on: ${{ matrix.os }}
     name: ${{ matrix.os }} / Rust ${{ matrix.rust-version }}${{ matrix.extra-name }}
+    runs-on: ${{ matrix.os }}
     container: ${{ matrix.container }}
+    defaults:
+      run:
+        shell: "bash"
+    env:
+      CMAKE_CXX_COMPILER: ${{ matrix.cxx }}
+      CMAKE_C_COMPILER: ${{ matrix.cc }}
+      CMAKE_GENERATOR: ${{ matrix.cmake-generator }}
     strategy:
       matrix:
         include:
@@ -23,6 +30,9 @@ jobs:
             rust-version: stable
             rust-target: x86_64-unknown-linux-gnu
             extra-name: ", no features"
+            cxx: g++
+            cc: gcc
+            cmake-generator: Unix Makefiles
 
           # test with all features (i.e static build + ndarray)
           - os: ubuntu-20.04
@@ -31,6 +41,9 @@ jobs:
             cargo-test-flags: --release --all-features
             do-valgrind: true
             extra-name: ", all features, release"
+            cxx: g++
+            cc: gcc
+            cmake-generator: Unix Makefiles
 
           # check the build on a stock Ubuntu 20.04, which uses cmake 3.16, and
           # with our minimal supported rust version
@@ -40,24 +53,36 @@ jobs:
             rust-target: x86_64-unknown-linux-gnu
             cargo-build-flags: --features=rayon
             extra-name: ", cmake 3.16"
+            cxx: g++
+            cc: gcc
+            cmake-generator: Unix Makefiles
 
           - os: macos-14
             rust-version: stable
             rust-target: aarch64-apple-darwin
             cargo-test-flags: --features=rayon
             extra-name: ""
+            cxx: clang++
+            cc: clang
+            cmake-generator: Unix Makefiles
 
           - os: windows-2019
             rust-version: stable
             rust-target: x86_64-pc-windows-msvc
             cargo-build-flags: --features=rayon
             extra-name: " / MSVC"
+            cxx: cl.exe
+            cc: cl.exe
+            cmake-generator: Visual Studio 16 2019
 
           - os: windows-2019
             rust-version: stable
             rust-target: x86_64-pc-windows-gnu
             cargo-build-flags: --features=rayon
             extra-name: " / MinGW"
+            cxx: g++.exe
+            cc: gcc.exe
+            cmake-generator: MinGW Makefiles
     steps:
       - name: install dependencies in container
         if: matrix.container == 'ubuntu:20.04'
@@ -99,7 +124,8 @@ jobs:
           echo "CMAKE_CXX_COMPILER_LAUNCHER=sccache" >> $GITHUB_ENV
 
       - name: run tests
-        run: cargo test --package metatensor --package metatensor-core --target ${{ matrix.rust-target }} ${{ matrix.cargo-build-flags }}
+        run: |
+          cargo test --package metatensor --package metatensor-core --target ${{ matrix.rust-target }} ${{ matrix.cargo-build-flags }}
 
       - name: check the code can be compiled as a standalone crate
         if: matrix.os != 'windows-2019'

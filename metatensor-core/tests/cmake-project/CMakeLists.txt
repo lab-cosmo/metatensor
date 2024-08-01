@@ -6,6 +6,12 @@ project(metatensor-test-cmake-project C CXX)
 
 option(USE_CMAKE_SUBDIRECTORY OFF)
 
+if (MINGW)
+    # CI can't find libsdc++, so we statically link it
+    set(CMAKE_EXE_LINKER_FLAGS "-static-libstdc++")
+endif()
+
+
 if (USE_CMAKE_SUBDIRECTORY)
     message(STATUS "Using metatensor with add_subdirectory")
     # build metatensor as part of this project
