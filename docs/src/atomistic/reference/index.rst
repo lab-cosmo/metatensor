@@ -38,6 +38,7 @@ atomistic systems as input of a machine learning model with
     systems
     models/index
     ase
+    openmm
 
 
 C++ API reference
