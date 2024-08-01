@@ -22,16 +22,16 @@ jobs:
             torch-version: "1.12.*"
           - os: ubuntu-20.04
             python-version: "3.9"
-            torch-version: "2.3.*"
+            torch-version: "2.4.*"
           - os: ubuntu-20.04
             python-version: "3.12"
-            torch-version: "2.3.*"
+            torch-version: "2.4.*"
           - os: macos-14
             python-version: "3.12"
-            torch-version: "2.3.*"
+            torch-version: "2.4.*"
           - os: windows-2019
             python-version: "3.12"
-            torch-version: "2.3.*"
+            torch-version: "2.4.*"
     steps:
       - uses: actions/checkout@v4
         with:

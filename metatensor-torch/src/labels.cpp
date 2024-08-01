@@ -1,5 +1,6 @@
 #include <cassert>
 
+#include <torch/version.h>
 #include <torch/torch.h>
 
 #include <metatensor.hpp>
@@ -839,7 +840,13 @@ LabelsEntryHolder::LabelsEntryHolder(TorchLabels labels, int64_t index):
         std::ostringstream ss;
         ss << "out of range for tensor of size " << labels_->values().sizes();
         ss << " at dimension 0";
-        throw torch::IndexError(ss.str(), "<no backtrace>");
+
+#if TORCH_VERSION_MAJOR >= 2 && TORCH_VERSION_MINOR >= 4
+        throw torch::IndexError(ss.str(), /*backtrace=*/nullptr);
+#else
+        throw torch::IndexError(ss.str(), /*backtrace=*/"<no backtrace>");
+#endif
+
 #endif
     }
 
