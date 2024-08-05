@@ -76,7 +76,7 @@ class ModelInterface(torch.nn.Module):
         selected_atoms: Optional[Labels],
     ) -> Dict[str, TensorMap]:
         """
-        This function should run the model for the given ``systems``, returning the
+        This method should run the model for the given ``systems``, returning the
         requested ``outputs``. If ``selected_atoms`` is a set of :py:class:`Labels`,
         only the corresponding atoms should be included as "main" atoms in the
         calculation and the output.
@@ -110,17 +110,17 @@ class ModelInterface(torch.nn.Module):
 
     def requested_neighbor_lists(self) -> List[NeighborListOptions]:
         """
-        Optional function declaring which neighbors list this model requires.
+        Optional method declaring which neighbors list this model requires.
 
-        This function can be defined on either the root model or any of it's
-        sub-modules. A single module can request multiple neighbors list simultaneously
-        if it needs them.
+        This method can be defined on either the root model or any of it's sub-modules.
+        A single module can request multiple neighbors list simultaneously if it needs
+        them.
 
         It is then the responsibility of the code calling the model to:
 
-        1. call this function (or more generally
-           :py:meth:`MetatensorAtomisticModel.requested_neighbor_lists`) to get the
-           list of requests;
+        1. call this method (or more generally
+           :py:meth:`MetatensorAtomisticModel.requested_neighbor_lists`) to get the list
+           of the requested neighbor lists.;
         2. compute all neighbor lists corresponding to these requests and add them to
            the systems before calling the model.
         """

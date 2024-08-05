@@ -185,6 +185,8 @@ standardized outputs are documented in :ref:`this page
 <atomistic-models-outputs>`.
 
 
+.. _model-dataflow:
+
 Data flow between the model and engine
 --------------------------------------
 
