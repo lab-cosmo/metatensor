@@ -839,7 +839,7 @@ LabelsEntryHolder::LabelsEntryHolder(TorchLabels labels, int64_t index):
         std::ostringstream ss;
         ss << "out of range for tensor of size " << labels_->values().sizes();
         ss << " at dimension 0";
-        throw torch::IndexError(ss.str(), "<no backtrace>");
+        throw torch::IndexError(c10::SourceLocation{}, ss.str());
 #endif
     }
 
