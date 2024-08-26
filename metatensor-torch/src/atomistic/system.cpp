@@ -77,7 +77,7 @@ std::string NeighborListOptionsHolder::str() const {
         ", full_list=" + (full_list_ ? "True" : "False") + ")";
 }
 
-std::string NeighborListOptionsHolder::to_json() const {
+static nlohmann::json neighbor_list_options_to_json(const NeighborListOptionsHolder& self) {
     nlohmann::json result;
 
     result["class"] = "NeighborListOptions";
@@ -86,12 +86,17 @@ std::string NeighborListOptionsHolder::to_json() const {
     // round-tripping of the data
     static_assert(sizeof(double) == sizeof(int64_t));
     int64_t int_cutoff = 0;
-    std::memcpy(&int_cutoff, &this->cutoff_, sizeof(double));
+    double cutoff = self.cutoff();
+    std::memcpy(&int_cutoff, &cutoff, sizeof(double));
     result["cutoff"] = int_cutoff;
-    result["full_list"] = this->full_list_;
-    result["length_unit"] = this->length_unit_;
+    result["full_list"] = self.full_list();
+    result["length_unit"] = self.length_unit();
 
-    return result.dump(/*indent*/4, /*indent_char*/' ', /*ensure_ascii*/ true);
+    return result;
+}
+
+std::string NeighborListOptionsHolder::to_json() const {
+    return neighbor_list_options_to_json(*this).dump(/*indent*/4, /*indent_char*/' ', /*ensure_ascii*/ true);
 }
 
 NeighborListOptions NeighborListOptionsHolder::from_json(const std::string& json) {
@@ -787,4 +792,166 @@ std::string SystemHolder::str() const {
     }
 
     return result.str();
+}
+
+template<typename scalar_t>
+nlohmann::json tensor_to_vector_string(const torch::Tensor& tensor) {
+    torch::Tensor contiguous_cpu_tensor = tensor.cpu().contiguous();
+    scalar_t* pointer = contiguous_cpu_tensor.data<scalar_t>();
+    size_t size = static_cast<size_t>(contiguous_cpu_tensor.numel());
+    nlohmann::json result = std::vector<scalar_t>(pointer, pointer + size);
+    return result;
+}
+
+template<typename scalar_t>
+torch::Tensor tensor_from_vector_string(nlohmann::json data) {
+    if (!data.contains("dtype") || !data["dtype"].is_string()) {
+        throw std::runtime_error("expected 'dtype' in JSON for tensor, did not find it");
+    }
+    auto dtype = data["dtype"].get<std::string>();
+    auto torch_dtype = scalar_type_from_name(dtype);
+
+    if (!data.contains("sizes")) {
+        throw std::runtime_error("expected 'sizes' in JSON for tensor, did not find it");
+    }
+    auto sizes = data["sizes"].get<std::vector<int64_t>>();
+
+    if (!data.contains("values")) {
+        throw std::runtime_error("expected 'values' in JSON for tensor, did not find it");
+    }
+    auto values = data["values"].get<std::vector<scalar_t>>();
+
+    auto options = torch::TensorOptions().dtype(torch_dtype);
+    auto tensor = torch::empty(sizes, options);
+    auto* tensor_data = tensor.data<scalar_t>();
+    std::copy(values.begin(), values.end(), tensor_data);
+    return tensor;
+}
+
+nlohmann::json tensor_to_json(const torch::Tensor& tensor) {
+    nlohmann::json result;
+    result["dtype"] = scalar_type_name(tensor.scalar_type());
+    result["sizes"] = tensor.sizes().vec();
+    result["values"] = AT_DISPATCH_ALL_TYPES(tensor.scalar_type(), "tensor_to_vector", ([&] {
+        return tensor_to_vector_string<scalar_t>(tensor);
+    }));
+    return result;
+}
+
+torch::Tensor tensor_from_json(const nlohmann::json& data) {
+    if (!data.contains("dtype") || !data["dtype"].is_string()) {
+        throw std::runtime_error("expected 'dtype' in JSON for tensor, did not find it");
+    }
+    auto dtype = data["dtype"].get<std::string>();
+    auto torch_dtype = scalar_type_from_name(dtype);
+
+    return AT_DISPATCH_ALL_TYPES(torch_dtype, "tensor_from_vector", ([&] {
+        return tensor_from_vector_string<scalar_t>(data);
+    }));
+}
+
+nlohmann::json neighbor_list_block_to_json(const TensorBlockHolder& block) {
+    // Specific to NLs. This means that we don't have to do gradients and
+    // worry save/load metadata outside of the samples.
+    nlohmann::json result;
+    result["samples"] = tensor_to_json(block.samples()->values());
+    result["values"] = tensor_to_json(block.values());
+    return result;
+}
+
+TensorBlockHolder neighbor_list_block_from_json(const nlohmann::json& data) {
+    if (!data.contains("samples")) {
+        throw std::runtime_error("expected 'samples' in JSON for neighbor list block, did not find it");
+    }
+    auto samples_values = tensor_from_json(data["samples"]);
+
+    auto names = std::vector<std::string>({"first_atom", "second_atom", "cell_shift_a", "cell_shift_b", "cell_shift_c"});
+    auto samples = torch::make_intrusive<LabelsHolder>(
+        /*names=*/std::move(names),
+        /*values=*/std::move(samples_values)
+    );
+    auto components = LabelsHolder::create({"xyz"}, {{0}, {1}, {2}});
+    auto properties = LabelsHolder::create({"distance"}, {{0}});
+
+    if (!data.contains("values")) {
+        throw std::runtime_error("expected 'values' in JSON for neighbor list block, did not find it");
+    }
+    auto values = tensor_from_json(data["values"]);
+
+    return TensorBlockHolder(
+        /*values=*/values,
+        /*samples=*/samples,
+        /*components=*/{components},
+        /*properties=*/properties
+    );
+}
+
+std::string SystemHolder::to_json() const {
+    nlohmann::json result;
+
+    result["class"] = "System";
+    result["positions"] = tensor_to_json(this->positions());
+    result["cell"] = tensor_to_json(this->cell());
+    result["types"] = tensor_to_json(this->types());
+
+    result["neighbor_lists"] = std::vector<nlohmann::json>();
+    for (auto nl_option: this->known_neighbor_lists()) {
+        auto nl_data = this->get_neighbor_list(nl_option);
+
+        auto nl_json = nlohmann::json();
+        nl_json["options"] = neighbor_list_options_to_json(*nl_option);
+        nl_json["data"] = neighbor_list_block_to_json(*nl_data);
+        result["neighbor_lists"].emplace_back(nl_json);
+    }
+
+    return result.dump(/*indent*/4, /*indent_char*/' ', /*ensure_ascii*/ true);
+}
+
+System SystemHolder::from_json(const std::string_view json) {
+    auto data = nlohmann::json::parse(json);
+
+    if (!data.is_object()) {
+        throw std::runtime_error("invalid JSON data for System, expected an object");
+    }
+
+    if (!data.contains("class") || !data["class"].is_string()) {
+        throw std::runtime_error("expected 'class' in JSON for System, did not find it");
+    }
+
+    if (data["class"] != "System") {
+        throw std::runtime_error("'class' in JSON for System must be 'System'");
+    }
+
+    if (!data.contains("positions")) {
+        throw std::runtime_error("expected 'positions' in JSON for System, did not find it");
+    }
+    auto positions = tensor_from_json(data["positions"]);
+
+    if (!data.contains("cell")) {
+        throw std::runtime_error("expected 'cell' in JSON for System, did not find it");
+    }
+    auto cell = tensor_from_json(data["cell"]);
+
+    if (!data.contains("types")) {
+        throw std::runtime_error("expected 'types' in JSON for System, did not find it");
+    }
+    auto types = tensor_from_json(data["types"]);
+
+    auto system = torch::make_intrusive<SystemHolder>(types, positions, cell);
+
+    for (const auto& nl_data: data["neighbor_lists"]) {
+        if (!nl_data.contains("options") || !nl_data["options"].is_object()) {
+            throw std::runtime_error("expected 'options' in JSON for neighbor list, did not find it");
+        }
+        auto options = NeighborListOptionsHolder::from_json(nl_data["options"].dump());
+
+        if (!nl_data.contains("data") || !nl_data["data"].is_object()) {
+            throw std::runtime_error("expected 'data' in JSON for neighbor list, did not find it");
+        }
+        auto block = neighbor_list_block_from_json(nl_data["data"]);
+
+        system->add_neighbor_list(options, torch::make_intrusive<TensorBlockHolder>(std::move(block)));
+    }
+
+    return system;
 }

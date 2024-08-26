@@ -1,3 +1,5 @@
+import os
+
 import pytest
 import torch
 from packaging import version
@@ -477,3 +479,44 @@ def test_to(system, neighbors):
 @torch.jit.script
 def check_dtype(system: System, dtype: torch.dtype):
     assert system.dtype == dtype
+
+
+@pytest.mark.parametrize("dtype", [torch.float32, torch.float64])
+@pytest.mark.parametrize("nl_size", [10, 100, 1000])
+def test_save_load(tmpdir, dtype, nl_size):
+    system = System(
+        types=torch.tensor([1, 2, 3, 4]),
+        positions=torch.rand((4, 3), dtype=dtype),
+        cell=torch.rand((3, 3), dtype=dtype),
+    )
+    system.add_neighbor_list(
+        NeighborListOptions(cutoff=3.5, full_list=False),
+        TensorBlock(
+            values=torch.rand(nl_size, 3, 1, dtype=dtype),
+            samples=Labels(
+                [
+                    "first_atom",
+                    "second_atom",
+                    "cell_shift_a",
+                    "cell_shift_b",
+                    "cell_shift_c",
+                ],
+                torch.arange(nl_size * 5, dtype=torch.int64).reshape(nl_size, 5),
+            ),
+            components=[Labels.range("xyz", 3)],
+            properties=Labels.range("distance", 1),
+        ),
+    )
+
+    torch.save(system, os.path.join(tmpdir, "system.pt"))
+    system_loaded = torch.load(os.path.join(tmpdir, "system.pt"))
+    assert torch.equal(system.types, system_loaded.types)
+    assert torch.equal(system.positions, system_loaded.positions)
+    assert torch.equal(system.cell, system_loaded.cell)
+    neigbor_list = system.get_neighbor_list(
+        NeighborListOptions(cutoff=3.5, full_list=False)
+    )
+    neighbor_list_loaded = system_loaded.get_neighbor_list(
+        NeighborListOptions(cutoff=3.5, full_list=False)
+    )
+    assert metatensor.torch.equal_block(neigbor_list, neighbor_list_loaded)

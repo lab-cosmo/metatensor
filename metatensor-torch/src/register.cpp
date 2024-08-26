@@ -363,7 +363,14 @@ TORCH_LIBRARY(metatensor, m) {
             {torch::arg("name")}
         )
         .def("known_data", &SystemHolder::known_data)
-        ;
+        .def_pickle(
+            [](const System& self) -> std::string {
+                return self->to_json();
+            },
+            [](const std::string& data) -> System {
+                return SystemHolder::from_json(data);
+            }
+        );
 
 
     m.class_<ModelMetadataHolder>("ModelMetadata")
