@@ -365,7 +365,7 @@ class MetatensorCalculator(ase.calculators.calculator.Calculator):
         )
         energy = outputs["energy"]
 
-        with record_function("ASECalculator::convert_outputs"):
+        with record_function("ASECalculator::sum_energies"):
             if run_options.outputs["energy"].per_atom:
                 assert len(energy) == 1
                 assert energy.sample_names == ["system", "atom"]
@@ -382,6 +382,11 @@ class MetatensorCalculator(ase.calculators.calculator.Calculator):
             energy = energy.block().values
             assert energy.shape == (1, 1)
 
+        with record_function("ASECalculator::run_backward"):
+            if do_backward:
+                energy.backward()
+
+        with record_function("ASECalculator::convert_outputs"):
             self.results = {}
 
             if calculate_energies:
@@ -396,11 +401,6 @@ class MetatensorCalculator(ase.calculators.calculator.Calculator):
                 energy_values = energy_values.to(device="cpu").to(dtype=torch.float64)
                 self.results["energy"] = energy_values.numpy()[0, 0]
 
-        if do_backward:
-            with record_function("ASECalculator::run_backward"):
-                energy.backward()
-
-        with record_function("ASECalculator::convert_outputs"):
             if calculate_forces:
                 forces_values = -system.positions.grad.reshape(-1, 3)
                 forces_values = forces_values.to(device="cpu").to(dtype=torch.float64)
